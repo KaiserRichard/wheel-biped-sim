@@ -145,4 +145,4 @@ These commands were run with Python 3.11, MuJoCo 3.3.7, NumPy, SciPy, and pytest
 - `media/`: simulation clips, listed under Videos.
 - `docs/`: design notes and CSV summaries of delay and Simscape failures.
 
-All CSV measurements are labeled MEASURED, ASSUMED, or UNKNOWN in documentation. Follow the same convention when adding results.
+Summary CSVs under `docs/` are labeled MEASURED, ASSUMED, or UNKNOWN. Follow the same convention when adding results.

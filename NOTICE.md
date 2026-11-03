@@ -2,11 +2,11 @@
 
 ## DM-jump
 
-This project is a personal refactor that builds on Trần Nguyên Bình's DM-jump, which its repository states is MIT licensed. The robot concept, modelling approach and test scenarios come from that work. The code here was rewritten and reorganized: a per-file comparison of the Python files against DM-jump's `sim/fivebar` sources found at most about 6% of non-comment lines in common. Upstream copyright notice: `Copyright (c) 2024-2026 Trần Nguyên Bình`.
+This project is a personal refactor that builds on Trần Nguyên Bình's DM-jump, which its repository states is MIT licensed. The robot concept, modelling approach and test scenarios come from that work. The code here was rewritten and reorganized. A one-off comparison of this repository's Python files against DM-jump's `sim/fivebar` Python found few identical lines, but that comparison isn't included here and didn't cover the MATLAB files, so treat this repository as derived from DM-jump. Upstream copyright notice: `Copyright (c) 2024-2026 Trần Nguyên Bình`.
 
 ## dmBots/wheel-legged
 
-The project acknowledges dmBots/wheel-legged, which is MIT licensed. No dmBots source file or binary is copied into this tree. Upstream copyright notice: `Copyright (c) 2025 seek`.
+The project acknowledges dmBots/wheel-legged, which is MIT licensed. Its model was used as a cross-check, and `media/figures/simulink-dmbots-model.png` shows its Simulink diagram. No dmBots source file is knowingly included, though no complete comparison was made. Upstream copyright notice: `Copyright (c) 2025 seek`.
 
 ## CAD meshes
 
