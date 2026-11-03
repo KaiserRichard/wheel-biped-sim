@@ -25,7 +25,9 @@ def scan():
         rel = path.relative_to(ROOT).as_posix()
         if blocked_path.lower() in rel.lower():
             problems.append(f"prohibited path: {rel}")
-        if path.suffix.lower() in {".npz", ".jpg", ".jpeg", ".png", ".webp"}:
+        # Plots made by this project live in media/figures; a photograph anywhere else is still blocked.
+        is_figure = rel.startswith("media/figures/") and path.suffix.lower() == ".png"
+        if path.suffix.lower() in {".npz", ".jpg", ".jpeg", ".png", ".webp"} and not is_figure:
             problems.append(f"prohibited binary data or image: {rel}")
         if "__pycache__" in path.parts or path.suffix.lower() == ".pyc":
             continue
@@ -39,8 +41,11 @@ def scan():
             except OSError:
                 problems.append(f"unreadable compressed trace: {rel}")
                 continue
-        is_video = path.suffix.lower() in {".mp4", ".gif"}
-        if is_video:
+        is_video = path.suffix.lower() in {".mp4", ".gif"} or is_figure
+        if path.suffix.lower() == ".gif":
+            # A GIF made here is all pixels, whose random bytes can look like text. Only its comment blocks hold text.
+            text = "\n".join(value.decode("ascii", errors="ignore") for value in re.findall(rb"\x21\xfe[\x01-\xff]([\x20-\x7e]+)", raw))
+        elif is_video:
             # Scan printable container strings without treating compressed video frames as text.
             text = "\n".join(
                 value.decode("ascii", errors="ignore")

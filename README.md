@@ -8,6 +8,50 @@ A CPU MuJoCo study of a wheel-biped robot: two driven wheels support a body, and
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI tools were used heavily in building and refactoring it. See [NOTICE.md](NOTICE.md).
 
+## Quick look
+
+Everything here is simulation. Previews are shortened; full clips are listed under Videos.
+
+### CAD robot in MuJoCo
+
+The CAD model turning on the spot. This is a MuJoCo render of meshes exported from SolidWorks, not a SolidWorks screen recording.
+
+<img src="media/preview/cad-model-turntable.gif" width="480" alt="CAD model turning on the spot">
+
+| | | |
+| --- | --- | --- |
+| <img src="media/preview/cad-stand.gif" width="260" alt="Stand with a push"><br>Stand with a push | <img src="media/preview/cad-drive.gif" width="260" alt="Drive"><br>Drive | <img src="media/preview/cad-turn.gif" width="260" alt="Turn"><br>Turn |
+| <img src="media/preview/cad-leg-height.gif" width="260" alt="Leg height"><br>Leg height | <img src="media/preview/cad-jump.gif" width="260" alt="Jump"><br>Jump | <img src="media/preview/cad-obstacle.gif" width="260" alt="8 cm obstacle"><br>8 cm obstacle |
+| <img src="media/preview/mass-8.5kg-one-sided-ramp.gif" width="260" alt="8.5 kg, one-sided ramp"><br>8.5 kg, one-sided ramp | <img src="media/preview/mass-8.5kg-drop.gif" width="260" alt="8.5 kg, 0.245 m drop"><br>8.5 kg, 0.245 m drop | <img src="media/preview/cad-obstacle-2ms-falls.gif" width="260" alt="2 ms delay: falls"><br>2 ms delay: falls |
+
+### MATLAB and Simulink
+
+From saved MATLAB results. Simscape balance of our own CAD robot still fails, so it is not shown as a success here; see Results and limits.
+
+<img src="media/figures/gains.png" width="640" alt="LQR gains against leg length, from the MATLAB derivation. Design model.">
+
+*LQR gains against leg length, from the MATLAB derivation. Design model.*
+
+<img src="media/figures/poles.png" width="640" alt="Closed-loop poles across the gain schedule. Linear model.">
+
+*Closed-loop poles across the gain schedule. Linear model.*
+
+<img src="media/figures/margins.png" width="640" alt="Delay and disk margins against leg length, with frozen contact and no estimator. Linear model.">
+
+*Delay and disk margins against leg length, with frozen contact and no estimator. Linear model.*
+
+<img src="media/figures/hip_boundary.png" width="640" alt="MATLAB hip-mode model: first unstable delay against sync damping. Gaps mean no instability found in the range searched.">
+
+*MATLAB hip-mode model: first unstable delay against sync damping. Gaps mean no instability found in the range searched.*
+
+<img src="media/figures/simscape.png" width="640" alt="dmBots' Simscape model: pitch with their gains, with gains from the rebuilt equations (the curves overlap), and with no control.">
+
+*dmBots' Simscape model: pitch with their gains, with gains from the rebuilt equations (the curves overlap), and with no control.*
+
+<img src="media/figures/simulink-dmbots-model.png" width="640" alt="Top level of dmBots' Simulink model (MIT), used for the cross-check above.">
+
+*Top level of dmBots' Simulink model (MIT), used for the cross-check above.*
+
 ## Results and limits
 
 All results here are simulation results. No motors have been powered. Geometry, inertias, mass distribution, friction, motor limits, sensor noise, and delays are assumptions unless a result says otherwise. The animation above is from a simulation run, not a hardware recording.
