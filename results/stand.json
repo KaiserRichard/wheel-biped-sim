@@ -1,0 +1,16 @@
+{
+  "status": "MEASURED",
+  "script": "scripts/stand.py",
+  "seed": 0,
+  "output_trace": "results/stand.csv",
+  "metrics": {
+    "fell": false,
+    "phi_rms_deg": 3.4109116802476384e-05,
+    "phi_peak_after_push_deg": 0.7526199293534351,
+    "x_drift_m": 6.191059219305136e-05,
+    "x_peak_push_m": 0.18453980054891986,
+    "final_phi_deg": 0.0002506908095516354,
+    "peak_wheel_nm": 0.7701205651599771,
+    "pass": true
+  }
+}

@@ -1,0 +1,7 @@
+# MEASURED by scripts/recount_delay.py from port.py receipts; source files are built_obstacle_s{5..9}_d{0,2,4,6,8}_c0_baseline.json. Delay settings are ASSUMED.
+delay_ms,passes,trials,status
+0,5,5,MEASURED
+2,0,5,MEASURED
+4,0,5,MEASURED
+6,0,5,MEASURED
+8,0,5,MEASURED

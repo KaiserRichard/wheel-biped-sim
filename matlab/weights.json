@@ -1,0 +1,15 @@
+{
+  "Q": [
+    30,
+    15,
+    30,
+    2,
+    120,
+    3
+  ],
+  "R": [
+    3,
+    1
+  ],
+  "_status": "ASSUMED LQR state and input weights for a simulation model."
+}

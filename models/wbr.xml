@@ -1,0 +1,99 @@
+<!-- ASSUMED inputs from models/design.json; no physical-mass validation is represented here. -->
+<mujoco model="wbr_own">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.001" integrator="implicitfast" gravity="0 0 -9.81" cone="elliptic" impratio="10"/>
+  <visual><global offwidth="1920" offheight="1080"/><quality shadowsize="4096"/></visual>
+  <asset>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".78 .8 .82" rgb2=".62 .65 .68"/>
+    <material name="floor" texture="grid" texrepeat="8 8" reflectance=".05"/>
+    <texture type="skybox" builtin="gradient" rgb1=".55 .7 .85" rgb2=".95 .97 1" width="256" height="256"/>
+  </asset>
+  <worldbody>
+    <light pos="1 -2 4" dir="-.2 .4 -1" diffuse=".85 .85 .85"/>
+    <geom name="floor" type="plane" size="40 40 .1" material="floor" contype="1" conaffinity="1" friction="0.8 0.01 0.001"/>
+    
+    <body name="torso" pos="0 0 0.3">
+      <freejoint name="root"/>
+      <inertial pos="0.0 0 0.03" mass="3.03" diaginertia="0.022 0.016 0.03"/>
+      <geom type="box" size=".09 0.12 .035" pos="0.0 0 0.03" contype="0" conaffinity="0" rgba=".82 .84 .88 1"/>
+      <site name="imu" pos="0 0 0" size=".005"/>
+      <body name="u_front_L" pos="0.03 0.15 0">
+        <joint name="hip_front_L" type="hinge" axis="0 -1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.05" mass="0.05" diaginertia="4.1766667e-05 1e-07 4.1766667e-05"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+      <body name="l_front_L" pos="0 0 -0.1">
+        <joint name="knee_front_L" type="hinge" axis="0 -1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.09" mass="0.06" diaginertia="0.0001621 1e-07 0.0001621"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.18" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+        <site name="foot_L" pos="0 0 -0.18" size="0.005"/>
+        <body name="wheel_L" pos="0 0 -0.18">
+          <joint name="wheel_L" type="hinge" axis="0 1 0" damping="0.0005"/>
+          <inertial pos="0 0 0" mass="0.46" diaginertia="0.0007829583333333334 0.00147 0.0007829583333333334"/>
+          <geom name="wheel_L" type="cylinder" size="0.08 0.0175" zaxis="0 1 0" contype="1" conaffinity="1" condim="4" friction="0.8 0.01 0.001" rgba=".1 .1 .1 1"/>
+          <geom type="box" size="0.055999999999999994 0.018500000000000003 .004" contype="0" conaffinity="0" rgba=".85 .55 .15 1"/>
+        </body>
+      </body>
+      </body>
+      <body name="u_rear_L" pos="-0.03 0.15 0">
+        <joint name="hip_rear_L" type="hinge" axis="0 1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.05" mass="0.05" diaginertia="4.1766667e-05 1e-07 4.1766667e-05"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+      <body name="l_rear_L" pos="0 0 -0.1">
+        <joint name="knee_rear_L" type="hinge" axis="0 1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.09" mass="0.06" diaginertia="0.0001621 1e-07 0.0001621"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.18" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+        <site name="foot_rear_L" pos="0 0 -0.18" size="0.004"/>
+      </body>
+      </body>
+      <body name="u_front_R" pos="0.03 -0.15 0">
+        <joint name="hip_front_R" type="hinge" axis="0 -1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.05" mass="0.05" diaginertia="4.1766667e-05 1e-07 4.1766667e-05"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+      <body name="l_front_R" pos="0 0 -0.1">
+        <joint name="knee_front_R" type="hinge" axis="0 -1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.09" mass="0.06" diaginertia="0.0001621 1e-07 0.0001621"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.18" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+        <site name="foot_R" pos="0 0 -0.18" size="0.005"/>
+        <body name="wheel_R" pos="0 0 -0.18">
+          <joint name="wheel_R" type="hinge" axis="0 1 0" damping="0.0005"/>
+          <inertial pos="0 0 0" mass="0.46" diaginertia="0.0007829583333333334 0.00147 0.0007829583333333334"/>
+          <geom name="wheel_R" type="cylinder" size="0.08 0.0175" zaxis="0 1 0" contype="1" conaffinity="1" condim="4" friction="0.8 0.01 0.001" rgba=".1 .1 .1 1"/>
+          <geom type="box" size="0.055999999999999994 0.018500000000000003 .004" contype="0" conaffinity="0" rgba=".85 .55 .15 1"/>
+        </body>
+      </body>
+      </body>
+      <body name="u_rear_R" pos="-0.03 -0.15 0">
+        <joint name="hip_rear_R" type="hinge" axis="0 1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.05" mass="0.05" diaginertia="4.1766667e-05 1e-07 4.1766667e-05"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+      <body name="l_rear_R" pos="0 0 -0.1">
+        <joint name="knee_rear_R" type="hinge" axis="0 1 0" damping="0.001"/>
+        <inertial pos="0 0 -0.09" mass="0.06" diaginertia="0.0001621 1e-07 0.0001621"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.18" size="0.006" contype="0" conaffinity="0" rgba=".25 .3 .4 1"/>
+        <site name="foot_rear_R" pos="0 0 -0.18" size="0.004"/>
+      </body>
+      </body>
+    </body>
+  </worldbody>
+  <equality>
+    <connect name="close_L" site1="foot_L" site2="foot_rear_L" solref="0.002 1" solimp="0.99 0.999 0.0005"/>
+    <connect name="close_R" site1="foot_R" site2="foot_rear_R" solref="0.002 1" solimp="0.99 0.999 0.0005"/>
+  </equality>
+  <contact>
+    <exclude body1="wheel_L" body2="torso"/>
+    <exclude body1="wheel_R" body2="torso"/>
+  </contact>
+  <actuator>
+    <motor name="hip_front_L" joint="hip_front_L" ctrlrange="-11.0 11.0" ctrllimited="true"/>
+    <motor name="hip_rear_L" joint="hip_rear_L" ctrlrange="-11.0 11.0" ctrllimited="true"/>
+    <motor name="wheel_L" joint="wheel_L" ctrlrange="-2.0 2.0" ctrllimited="true"/>
+    <motor name="hip_front_R" joint="hip_front_R" ctrlrange="-11.0 11.0" ctrllimited="true"/>
+    <motor name="hip_rear_R" joint="hip_rear_R" ctrlrange="-11.0 11.0" ctrllimited="true"/>
+    <motor name="wheel_R" joint="wheel_R" ctrlrange="-2.0 2.0" ctrllimited="true"/>
+  </actuator>
+  <sensor>
+    <framequat name="torso_quat" objtype="site" objname="imu"/>
+    <gyro name="torso_gyro" site="imu"/>
+    <accelerometer name="torso_acc" site="imu"/>
+  </sensor>
+</mujoco>

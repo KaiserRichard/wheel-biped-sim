@@ -1,0 +1,74 @@
+{
+  "units": "SI",
+  "body": {
+    "mass": 2.031457106238415,
+    "inertia_diag": [
+      0.009177735110168787,
+      0.004316609355303909,
+      0.012313321657374424
+    ],
+    "com_offset_xz": [
+      0.00265373721167746,
+      -0.0020292031709795502
+    ]
+  },
+  "fivebar": {
+    "hip_spacing": 0.07900003157632506,
+    "upper_length": 0.07249993968718672,
+    "lower_length": 0.14000000823631453,
+    "upper_mass": 0.04392141953378169,
+    "lower_mass": 0.046609446880070154,
+    "leg_height_min": 0.08,
+    "leg_height_max": 0.16
+  },
+  "wheel": {
+    "mass": 0.6652273224650394,
+    "radius": 0.0603,
+    "inertia_axial": 0.0009095682861004058,
+    "width": 0.036
+  },
+  "track_width": 0.3134999252050108,
+  "hip_motor": {
+    "peak_torque": 7.0,
+    "continuous_torque": null,
+    "max_speed": null
+  },
+  "wheel_motor": {
+    "peak_torque": 2.0,
+    "continuous_torque": null,
+    "max_speed": null
+  },
+  "friction": 1.0,
+  "gravity": 9.81,
+  "notes": {
+    "status": "ASSUMED",
+    "reason": "Numerical geometry and inertias from assembly export. Material densities and purchased masses unverified; not weighed hardware.",
+    "assumed_lump_kg": 1.4685428937615859
+  },
+  "_provenance": {
+    "body.mass": "CAD",
+    "body.inertia_diag": "CAD",
+    "body.com_offset_xz": "CAD",
+    "fivebar.hip_spacing": "CAD",
+    "fivebar.upper_length": "CAD",
+    "fivebar.lower_length": "CAD",
+    "fivebar.upper_mass": "CAD",
+    "fivebar.lower_mass": "CAD",
+    "fivebar.leg_height_min": "ASSUMED conservative interval within compiled joint limits; see mapping.json",
+    "fivebar.leg_height_max": "ASSUMED conservative interval within compiled joint limits; see mapping.json",
+    "wheel.mass": "CAD",
+    "wheel.radius": "CAD",
+    "wheel.inertia_axial": "CAD",
+    "wheel.width": "CAD",
+    "track_width": "CAD",
+    "hip_motor.peak_torque": "firmware",
+    "hip_motor.continuous_torque": "UNKNOWN",
+    "hip_motor.max_speed": "UNKNOWN",
+    "wheel_motor.peak_torque": "firmware",
+    "wheel_motor.continuous_torque": "UNKNOWN",
+    "wheel_motor.max_speed": "UNKNOWN",
+    "friction": "ASSUMED",
+    "gravity": "ASSUMED"
+  },
+  "_status": "MEASURED extraction of compiled reference CAD model, not physical robot measurements."
+}

@@ -1,0 +1,49 @@
+{
+  "_status": "ASSUMED primitive design candidate. Numerical masses, inertias, motor limits, and tuning values are placeholders pending physical validation.",
+  "units": "SI",
+  "body": {
+    "mass": 3.03,
+    "inertia_diag": [
+      0.022,
+      0.016,
+      0.03
+    ],
+    "com_offset_xz": [
+      0.0,
+      0.03
+    ]
+  },
+  "fivebar": {
+    "hip_spacing": 0.06,
+    "upper_length": 0.1,
+    "lower_length": 0.18,
+    "upper_mass": 0.05,
+    "lower_mass": 0.06,
+    "leg_height_min": 0.11,
+    "leg_height_max": 0.255
+  },
+  "wheel": {
+    "mass": 0.46,
+    "radius": 0.08,
+    "inertia_axial": 0.00147,
+    "width": 0.035
+  },
+  "track_width": 0.3,
+  "hip_motor": {
+    "peak_torque": 11.0,
+    "continuous_torque": 4.0,
+    "max_speed": 23.67
+  },
+  "wheel_motor": {
+    "peak_torque": 2.0,
+    "continuous_torque": 1.0,
+    "max_speed": 33.51
+  },
+  "friction": 0.8,
+  "gravity": 9.81,
+  "notes": {"status": "ASSUMED", "reason": "No physical mass or motor testing is included."},
+  "provenance": {
+    "status": "ASSUMED",
+    "reason": "Primitive design geometry, masses and tuning are engineering hypotheses; not weighed hardware."
+  }
+}

@@ -1,0 +1,133 @@
+<!-- MEASURED geometry extraction; physical masses and motor limits remain ASSUMED. -->
+<mujoco model="wheel biped assembly primitives">
+  
+  <compiler angle="radian" inertiafromgeom="false" autolimits="true" />
+  <option timestep=".001" gravity="0 0 -9.81" integrator="implicitfast" solver="Newton" iterations="100" tolerance="1e-10" cone="elliptic" />
+  <size njmax="2000" nconmax="200" />
+  <visual>
+    <global offwidth="1280" offheight="960" azimuth="135" elevation="-20" />
+    <map znear=".005" zfar="20" />
+    <headlight diffuse=".5 .5 .5" ambient=".3 .3 .3" specular=".3 .3 .3" />
+  </visual>
+  <asset>
+    <texture name="sky" type="skybox" builtin="gradient" rgb1=".22 .30 .42" rgb2=".75 .83 .90" width="512" height="3072" />
+    <texture name="floor_tex" type="2d" builtin="checker" rgb1=".20 .24 .29" rgb2=".32 .37 .43" width="512" height="512" />
+    <material name="floor_mat" texture="floor_tex" texrepeat="12 12" texuniform="true" reflectance=".12" />
+    <material name="chassis_mat" rgba=".72 .76 .81 1" shininess=".5" specular=".4" />
+    <material name="motor_mat" rgba=".12 .14 .17 1" shininess=".5" specular=".4" />
+    <material name="tyre_mat" rgba=".035 .04 .045 1" shininess=".5" specular=".4" />
+    <material name="upper_mat" rgba=".95 .29 .08 1" shininess=".5" specular=".4" />
+    <material name="lower_mat" rgba=".04 .48 .65 1" shininess=".5" specular=".4" />
+    <material name="hub_mat" rgba=".32 .36 .40 1" shininess=".5" specular=".4" />
+    </asset>
+  <default>
+    <joint damping=".012" armature=".00002" />
+    <geom friction="1 .005 .0001" solref=".008 1" solimp=".95 .99 .001" margin="0" />
+  </default>
+  <worldbody>
+    <geom name="floor" type="plane" size="6 6 .1" material="floor_mat" />
+    <light name="key" pos="1 -2 3" dir="-1 2 -3" diffuse=".8 .8 .8" castshadow="true" />
+    <light name="fill" pos="-1 1 2" dir="1 -1 -2" diffuse=".5 .5 .6" />
+    <camera name="overview" mode="targetbody" target="chassis" pos=".65 -.85 .48" fovy="42" />
+    <camera name="front" mode="targetbody" target="chassis" pos=".9 0 .27" fovy="42" />
+    <camera name="rear" mode="targetbody" target="chassis" pos="-.7 .7 .38" fovy="42" />
+    <body name="chassis" pos="0 0 0.0823002431462949">
+      <freejoint name="floating_base" />
+      
+      <body name="left_front_upper" pos="0.039500099590052 0.113749999999559 0.0364998750588717">
+        <joint name="left_front_motor" type="hinge" axis="0 1 0" limited="true" range="-1.4 1.4" />
+        <body name="left_front_lower" pos="0.0613996669346546 0.0104999252056589 0.0385528488565916">
+          <joint name="left_front_knee" type="hinge" axis="0 1 0" limited="true" range="-2.4 2.4" />
+          <site name="left_front_closure" pos="-0.100899573292841 0.0324999999998001 -0.0970529670617583" size=".002" rgba="1 0 0 0" />
+          <body name="left_wheel" pos="-0.100899573292841 0.0324999999998001 -0.0970529670617583">
+            <joint name="left_wheel" type="hinge" axis="0 1 0" damping=".001" armature=".00001" />
+            <geom name="left_wheel_collision" type="cylinder" size=".0603 .018" quat=".7071067811865476 .7071067811865476 0 0" rgba="0 0 0 0" group="3" />
+            <geom name="left_wheel_hub_cap" type="cylinder" size=".0341 .0181" quat=".7071067811865476 .7071067811865476 0 0" material="hub_mat" contype="0" conaffinity="0" />
+            <inertial mass="0.6652273224650394" pos="-1.19677936672939e-08 5.71166591331607e-05 1.03479876473189e-08" fullinertia="0.000529083598249653 0.000909568286100401 0.000529083599804365 -1.08597541824673e-10 8.81867760105808e-12 -1.62162611734081e-10" />
+            </body>
+          <inertial mass="0.04879929475100257" pos="-0.0508499299143249 -0.00338112312250864 -0.0488726236852612" fullinertia="9.21013121041401e-05 0.000188732656344182 9.92676030753531e-05 -2.1497617227381e-07 -9.2444247972518e-05 -2.13060676411423e-07" />
+          </body>
+        <inertial mass="0.0522827130512038" pos="0.0237678097403107 -0.00120917485374904 0.0149317879879802" fullinertia="2.45566988378198e-05 5.85140075700327e-05 4.64300668666713e-05 -1.00148084979204e-05 -2.26719291315794e-05 -6.28968500172165e-06" />
+        </body>
+      <body name="left_rear_upper" pos="-0.039499931986263 0.0992501720371496 0.0364999149166151">
+        <joint name="left_rear_motor" type="hinge" axis="0 1 0" limited="true" range="-1.4 1.4" />
+        <body name="left_rear_lower" pos="-0.0613998135889958 0.0104997531681664 0.0385526136947544">
+          <joint name="left_rear_knee" type="hinge" axis="0 1 0" limited="true" range="-2.4 2.4" />
+          <site name="left_rear_closure" pos="0.100899938807124 0.0469999999997017 -0.0970527717576644" size=".002" rgba="1 0 0 0" />
+          <inertial mass="0.04441959900913773" pos="0.0462823951606991 -0.00208586519035198 -0.0444730579195555" fullinertia="8.08400425350742e-05 0.000165558336308007 8.71628273104545e-05 -2.96913268640551e-06 8.13144264008827e-05 2.85182151480325e-06" />
+          </body>
+        <inertial mass="0.03556012601635958" pos="-0.0336122935838914 0.00399695731293155 0.021107286164192" fullinertia="1.50787180598382e-05 3.96621070245734e-05 3.01717024191792e-05 4.26124331894768e-06 1.56402953105467e-05 -2.67558554880492e-06" />
+        </body>
+      <body name="right_front_upper" pos="0.0395000000000003 -0.0992500000000008 0.0364999999999997">
+        <joint name="right_front_motor" type="hinge" axis="0 1 0" limited="true" range="-1.4 1.4" />
+        <body name="right_front_lower" pos="0.0613998538757104 -0.0104999999999985 0.0385526645517722">
+          <joint name="right_front_knee" type="hinge" axis="0 1 0" limited="true" range="-2.4 2.4" />
+          <site name="right_front_closure" pos="-0.100899853875711 -0.0469999999999935 -0.0970526645517719" size=".002" rgba="1 0 0 0" />
+          <body name="right_wheel" pos="-0.100899853875711 -0.0469999999999935 -0.0970526645517719">
+            <joint name="right_wheel" type="hinge" axis="0 1 0" damping=".001" armature=".00001" />
+            <geom name="right_wheel_collision" type="cylinder" size=".0603 .018" quat=".7071067811865476 .7071067811865476 0 0" rgba="0 0 0 0" group="3" />
+            <geom name="right_wheel_hub_cap" type="cylinder" size=".0341 .0181" quat=".7071067811865476 .7071067811865476 0 0" material="hub_mat" contype="0" conaffinity="0" />
+            <inertial mass="0.6652273224650394" pos="1.2092176045027e-08 -5.71166590783156e-05 1.05049979444438e-08" fullinertia="0.000529083598250171 0.000909568286100702 0.000529083599803546 -1.29465420030808e-10 -8.8186748477707e-12 1.35820697030456e-10" />
+            </body>
+          <inertial mass="0.04441959900913773" pos="-0.0462824171244687 0.00208612866833623 -0.0444730856470014" fullinertia="8.08400554710776e-05 0.000165558307695363 8.71628429870946e-05 -2.96954070497298e-06 -8.13144120276752e-05 -2.85221409698357e-06" />
+          </body>
+        <inertial mass="0.03556012601635958" pos="0.0336123022874389 -0.00399682609308112 0.0211072971521152" fullinertia="1.50786995013721e-05 3.96621402935819e-05 3.01716877086369e-05 4.26114678957201e-06 -1.56403128511653e-05 2.6755254005387e-06" />
+        </body>
+      <body name="right_rear_upper" pos="-0.0394999999999986 -0.113750000000001 0.0364999999999985">
+        <joint name="right_rear_motor" type="hinge" axis="0 1 0" limited="true" range="-1.4 1.4" />
+        <body name="right_rear_lower" pos="-0.0613996266482311 -0.010499999999992 0.0385528997106637">
+          <joint name="right_rear_knee" type="hinge" axis="0 1 0" limited="true" range="-2.4 2.4" />
+          <site name="right_rear_closure" pos="0.10089962664823 -0.0325 -0.0970528997106622" size=".002" rgba="1 0 0 0" />
+          <inertial mass="0.04879929475100257" pos="0.0508499051307174 0.00338114657438283 -0.0488726549703208" fullinertia="9.2101313036466e-05 0.000188732656579234 9.92676019079753e-05 -2.14932481641787e-07 9.24442480993326e-05 2.13016057201312e-07" />
+          </body>
+        <inertial mass="0.0522827130512038" pos="-0.0237678123738203 0.00120916414141928 0.0149317846635462" fullinertia="2.45567424551877e-05 5.8513998531697e-05 4.64300322876392e-05 -1.001482012268e-05 2.26719429642478e-05 6.28970115588829e-06" />
+        </body>
+      <inertial mass="2.031457106238415" pos="0.00265373721167746 1.5332899978765e-07 0.0344707443228917" fullinertia="0.00917773511057682 0.00431660935530389 0.0123133216569663 1.30931955899781e-06 -6.45669509543787e-05 -9.88076287215375e-09" />
+      <geom name="chassis_collision" type="box" pos="0 0 .0325" size=".068 .073 .0325" rgba="0 0 0 0" group="3" />
+      <geom name="motor_sleeve_122" type="cylinder" pos="0.0395000009536798 0.0686248825611908 0.0364996732680434" size=".02855 .02665" quat=".7071067811865476 .7071067811865476 0 0" material="motor_mat" contype="0" conaffinity="0" />
+      <geom name="motor_sleeve_152" type="cylinder" pos="-0.0394999990495684 0.0686248825611908 0.0364996732680269" size=".02855 .02665" quat=".7071067811865476 .7071067811865476 0 0" material="motor_mat" contype="0" conaffinity="0" />
+      <geom name="motor_sleeve_201" type="cylinder" pos="-0.0394999999484256 -0.0686248825612691 0.0364996733731786" size=".02855 .02665" quat=".7071067811865476 .7071067811865476 0 0" material="motor_mat" contype="0" conaffinity="0" />
+      <geom name="motor_sleeve_203" type="cylinder" pos="0.0394999990495684 -0.0686248825611908 0.0364996732680269" size=".02855 .02665" quat=".7071067811865476 .7071067811865476 0 0" material="motor_mat" contype="0" conaffinity="0" />
+      <camera name="d435i" pos="0.0833 0 0.055" xyaxes="-0 -1 -0 0.173615752581142 0 0.984813469879288" fovy="58" />
+      <site name="model_base_imu_site" pos="0.00265373721167746 1.5332899978765e-07 0.0344707443228917" size=".003" rgba=".9 .9 .1 0" />
+    </body>
+  </worldbody>
+  <equality>
+    <connect name="left_fivebar" body1="left_front_lower" body2="left_rear_lower" anchor="-0.100899573292841 0.0324999999998001 -0.0970529670617583" solref=".002 1" solimp=".99 .9999 .0001" />
+    <connect name="right_fivebar" body1="right_front_lower" body2="right_rear_lower" anchor="-0.100899853875711 -0.0469999999999935 -0.0970526645517719" solref=".002 1" solimp=".99 .9999 .0001" />
+  </equality>
+  <actuator>
+    
+    <motor name="left_front_motor_torque" joint="left_front_motor" gear="1" ctrllimited="true" ctrlrange="-7 7" />
+    <motor name="left_rear_motor_torque" joint="left_rear_motor" gear="1" ctrllimited="true" ctrlrange="-7 7" />
+    <motor name="left_wheel_torque" joint="left_wheel" gear="1" ctrllimited="true" ctrlrange="-2 2" />
+    <motor name="right_front_motor_torque" joint="right_front_motor" gear="1" ctrllimited="true" ctrlrange="-7 7" />
+    <motor name="right_rear_motor_torque" joint="right_rear_motor" gear="1" ctrllimited="true" ctrlrange="-7 7" />
+    <motor name="right_wheel_torque" joint="right_wheel" gear="1" ctrllimited="true" ctrlrange="-2 2" />
+  </actuator>
+  <sensor>
+    <framequat name="model_base_orientation" objtype="site" objname="model_base_imu_site" />
+    <gyro name="model_base_angular_velocity" site="model_base_imu_site" />
+    <accelerometer name="model_base_specific_force" site="model_base_imu_site" />
+    <jointpos name="left_front_motor_position" joint="left_front_motor" />
+    <jointvel name="left_front_motor_velocity" joint="left_front_motor" />
+    <jointpos name="left_front_knee_position" joint="left_front_knee" />
+    <jointvel name="left_front_knee_velocity" joint="left_front_knee" />
+    <jointpos name="left_wheel_position" joint="left_wheel" />
+    <jointvel name="left_wheel_velocity" joint="left_wheel" />
+    <jointpos name="left_rear_motor_position" joint="left_rear_motor" />
+    <jointvel name="left_rear_motor_velocity" joint="left_rear_motor" />
+    <jointpos name="left_rear_knee_position" joint="left_rear_knee" />
+    <jointvel name="left_rear_knee_velocity" joint="left_rear_knee" />
+    <jointpos name="right_front_motor_position" joint="right_front_motor" />
+    <jointvel name="right_front_motor_velocity" joint="right_front_motor" />
+    <jointpos name="right_front_knee_position" joint="right_front_knee" />
+    <jointvel name="right_front_knee_velocity" joint="right_front_knee" />
+    <jointpos name="right_wheel_position" joint="right_wheel" />
+    <jointvel name="right_wheel_velocity" joint="right_wheel" />
+    <jointpos name="right_rear_motor_position" joint="right_rear_motor" />
+    <jointvel name="right_rear_motor_velocity" joint="right_rear_motor" />
+    <jointpos name="right_rear_knee_position" joint="right_rear_knee" />
+    <jointvel name="right_rear_knee_velocity" joint="right_rear_knee" />
+  </sensor>
+</mujoco>

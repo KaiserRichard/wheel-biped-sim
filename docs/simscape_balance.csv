@@ -1,0 +1,4 @@
+# MEASURED by check.py in the archived MATLAB Simscape validation; source output acceptance.json. The model did not pass the fixed balance criterion.
+metric,value,unit,status
+peak_pitch,89.8903707414,deg,MEASURED
+peak_roll,179.999850841,deg,MEASURED

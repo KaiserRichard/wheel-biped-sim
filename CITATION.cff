@@ -1,0 +1,6 @@
+cff-version: 1.2.0
+message: "If you use this project, cite it as software."
+title: "Wheel-biped simulation"
+type: software
+version: 0.1.0
+license: MIT
