@@ -14,13 +14,14 @@ def generate_launch_description():
         "enable_color": True, "enable_depth": True,
         "enable_infra1": False, "enable_infra2": False,
         "pointcloud.enable": False,
+        "color_qos": "DEFAULT", "depth_qos": "DEFAULT",
     }])
     odom = Node(package="rtabmap_odom", executable="rgbd_odometry", namespace="rtabmap", output="screen", parameters=[{
         "frame_id": "camera_link", "subscribe_depth": True,
-        "approx_sync": False, "Odom/Strategy": "0",
+        "approx_sync": False, "Odom/Strategy": "0", "qos": 1, "qos_camera_info": 1,
     }], remappings=[("rgb/image", "/camera/camera/color/image_raw"), ("rgb/camera_info", "/camera/camera/color/camera_info"), ("depth/image", "/camera/camera/aligned_depth_to_color/image_raw")])
     mapper = Node(package="rtabmap_slam", executable="rtabmap", namespace="rtabmap", output="screen", parameters=[{
         "frame_id": "camera_link", "subscribe_depth": True,
-        "approx_sync": False, "RGBD/CreateOccupancyGrid": "true",
+        "approx_sync": False, "RGBD/CreateOccupancyGrid": "true", "qos": 1, "qos_camera_info": 1,
     }], arguments=["-d"], remappings=[("rgb/image", "/camera/camera/color/image_raw"), ("rgb/camera_info", "/camera/camera/color/camera_info"), ("depth/image", "/camera/camera/aligned_depth_to_color/image_raw")])
     return LaunchDescription([DeclareLaunchArgument("fps", default_value="15"), camera, odom, mapper])
