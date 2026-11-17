@@ -1,4 +1,4 @@
-"""Seeded sensor boundary. All noise specifications below are ASSUMED, not BMI088 claims.
+"""Seeded sensor boundary. All noise specifications below are ASSUMED, not IMU sensor claims.
 
 Units SI. Independent Gaussian samples and Brownian bias drift, no calibration.
 MuJoCo's accelerometer returns specific force at the existing torso IMU site.
