@@ -122,13 +122,26 @@ Everything below is simulation, played back from saved runs. Nothing here is foo
 Use Python with NumPy, SciPy, MuJoCo 3.3.7, and pytest. These commands were run on CPU:
 
 ```bash
+export PYTHONDONTWRITEBYTECODE=1
 python check.py
-python -m pytest -q
+python -m pytest -q -p no:cacheprovider
 python models/generate.py
 python scripts/stand.py --seed 0
 ```
 
 These commands were run with Python 3.11, MuJoCo 3.3.7, NumPy, SciPy, and pytest available on CPU. The first command reruns the publish scan and stand and obstacle parity. The scenario command writes CSV and JSON beneath `results/`; it does not create compressed array dumps. To install the package and test runner in a clean environment, use `python -m pip install -e . pytest`.
+
+## Synthetic log import and identification rehearsal
+
+[analyses/logsysid](analyses/logsysid/README.md) contains a standard-library log codec/importer and seeded identification rehearsal. Use Python 3.11+; no MATLAB or additional Python packages are needed for this analysis:
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+(cd analyses/logsysid && python -m unittest discover -s tests -v)
+(cd analyses/logsysid && python verify_package.py)
+```
+
+The bundled CSV and all recovery results are synthetic/simulation only. They do not show real-robot data import, measured sensor performance, physical motor calibration or hardware acceptance. Hardware applicability is UNKNOWN; contact friction and battery resistance are UNASSESSED. P2 reduced-model screening and its CAD-derived inputs are deferred pending clearance.
 
 ## Project layout
 

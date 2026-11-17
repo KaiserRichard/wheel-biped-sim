@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "measurement_domain": "synthetic",
+  "hardware_acceptance": "OPEN: no real stationary log supplied",
+  "python": "3.11.18",
+  "generated_local": "2026-11-17 19:28:24",
+  "runtime_s": 87.05736136436462,
+  "runs": [
+    {
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0
+    },
+    {
+      "args": [
+        "rehearsal.py"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "sha256": {
+    "rehearsal.py": "011e8152c90688f5e597418bca4cdcf1198d505c6c924fbe1c87f400aede68cd",
+    "verify_package.py": "99191dd6f646453eba422a4a4b21e7d529ad38b7b3b7281642dbb03b9fa1e7ca",
+    "EXPERIMENTS.md": "e9647fa1a1ee9858624ea57a2825043cd9cb09c7b2c51cf429890c9cbdeab5e0",
+    "IDENTIFIABILITY.md": "6928d44b2b7462d2331a5cf23d7a2d5192ecbfdf83ab43cbd763dbb19cfd04c5",
+    "LOG_SPEC.md": "b1120a3a3f25ac2b0e8b7fa31a51c40ee5102076012f4fab6ffed585730c266e",
+    "README.md": "ff8fa0ffe8fcffdcb32cc11fae92f8373726eb8c07de9d80cf1156aac1248c99",
+    "REHEARSAL.md": "4f6539bb3b19ff4738872598d1ea052b04002d611ec5349e634bbdc67ed9e470",
+    "ident/allan.py": "83437d7c8184d0d6e56823828aca6a3ed395c4fabace518b99bd7e6c8e5a5f16",
+    "ident/delay.py": "07cd36726c610758279d7a5dba90927c717b49d015207e2ecf3bdeaccd4335c6",
+    "ident/linalg.py": "fefd14c559905c5ce8c3df573354aa0440846885e2d63400bbdf171988fd60e6",
+    "ident/motor.py": "49dc2777bf69bed7b9dfeb1360e54febc68b12e48302655b4aba7688188e0e9e",
+    "ident/__init__.py": "ee388f7ce89cc96f5d1e5b133abdad7f633362b873b2b694fcc5126d1c6654aa",
+    "wbrlog/codec.py": "6c8b4d491e5e78b6ed04914b779c8dedf3f8e9dd4189ed591311a1a262f06853",
+    "wbrlog/dm.py": "e8c53b8a7a263c8d8da82550db6b6e6d816a84b61957c649b5c8f2955cf62adf",
+    "wbrlog/importer.py": "b57bc914ee70f4e7e94e32c91e19e2c79a023fb36001ee935514d3e26a346d82",
+    "wbrlog/spec.py": "6262aedb036723f047cf743f46b83b6a3f258393d3a6ec755fb8c92ca3c77a06",
+    "wbrlog/studio.py": "63e73b213a1c010d3d977ea80f9c4e4ddd90c46d5da1243d61aa22d51c79bd2d",
+    "wbrlog/synth.py": "6b3b17cf3edc11b38c64f914748c1ca46eea65b3e04ef0c5c9d72437291081ac",
+    "wbrlog/__init__.py": "6826cb697e919395df44d826449e05d5343a2d0dcaff2fe68f65181a8d94d3e0",
+    "wbrlog/__main__.py": "3a6853e28d7b087e38b75ec9d25b33a8bea085752218d79a6168f76092171447",
+    "tests/test_format.py": "aa0861cfde9e4eccf6f933c1b95b9b8afa80b9e3527d4fb2862f72058cb3b36f",
+    "tests/test_ident.py": "98011a380cfcaba32031787a4392013822ede2fcc36436bd033c3ca86216302c",
+    "tests/test_importer.py": "0686432140fb7aa4906229d14035a795aa8fca52b09311e8fd15b032aa002cbc",
+    "tests/test_robustness.py": "7b2af3e9b978f56aacb29931ce0ee2119a922392c7547b744d4d9e065fed74f9",
+    "m13_loop3_estimation.csv": "2997553b055555d80158bf4fd777ae350c16221c0ddda1e0db6d752ee2a81c94",
+    "rehearsal_results.json": "35018e411f16162031c3298e7ca8dc65ae965158064d9d1909fcbfa352934e77",
+    "SOURCE_MANIFEST.json": "4c14b5700f5c4fc4c9f9c594f1b608435e04c970ac5d1b8b0217871d143e5a92"
+  }
+}

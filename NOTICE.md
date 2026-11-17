@@ -19,3 +19,7 @@ Files in `media/` are simulation clips rendered from saved runs of this project.
 ## MIT license text
 
 The two upstream projects are identified above for attribution. The repository's own MIT license applies to its original files only.
+
+## P3 analysis slice
+
+The log codec/importer, identification formulas, tests and synthetic rehearsal are imported as a reviewed file snapshot, without private Git history. Human ownership and existing upstream attribution are retained; AI assistance included Claude and Codex. No upstream firmware source is added in this slice. See [analysis provenance](docs/provenance/analyses.md) and the relative source manifest under `analyses/logsysid/` for original and sanitized hashes and limitations. No real-robot logs are included. This preparation does not establish permission for future hardware data or withheld source material.

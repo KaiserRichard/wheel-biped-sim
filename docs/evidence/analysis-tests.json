@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-17",
+  "measurement_domain": "synthetic",
+  "hardware_acceptance": "OPEN: no real stationary log supplied",
+  "python": "3.11.18",
+  "runs": [
+    {
+      "cwd": ".",
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_contracts.py tests/test_parity.py",
+      "passed": 14,
+      "xfailed": 1,
+      "failed": 0
+    },
+    {
+      "cwd": ".",
+      "command": "python -m pytest -q -p no:cacheprovider tests/test_publish_check.py",
+      "passed": 66,
+      "failed": 0
+    },
+    {
+      "cwd": "analyses/logsysid",
+      "command": "python -m unittest discover -s tests -v",
+      "tests_run": 45,
+      "passed": 45,
+      "failed": 0
+    },
+    {
+      "cwd": "analyses/logsysid",
+      "command": "python verify_package.py",
+      "tests_run": 45,
+      "status": "PASS",
+      "full_rehearsal": true
+    }
+  ],
+  "audit_probes": {
+    "total": 13,
+    "rejected": 13
+  },
+  "prior_audit_limits": {
+    "p3": "45 tests and full synthetic rehearsal passed before sanitation; rerun here after conversion.",
+    "p2": "Excluded. Historical package-only run had three missing-dependency errors. No P2 dependency fix or pass is claimed in batch 1."
+  },
+  "environment": "Existing local Python/test dependencies; no fresh network installation. Temporary/cache/log outputs are outside the public payload.",
+  "receipt": {
+    "path": "analyses/logsysid/verification.json",
+    "sha256": "1aff5f7af46612568faf4fa24eb8547c094a9163b4aca4b0be5785628aa91640"
+  }
+}
