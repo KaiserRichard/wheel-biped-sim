@@ -1,7 +1,13 @@
 # Publish scan
 
-`publish_check.py` scans every file in this project tree. It checks for thesis source files, private home paths, contact details, IP addresses, secret-like strings, internal workflow terms and identifiers, excluded camera captures, raster images, and compressed numeric dumps.
+Set `PYTHONDONTWRITEBYTECODE=1` for Python commands and disable pytest caching with `-p no:cacheprovider` so checks do not create prohibited cache files. Run `python publish_check.py` from the repository root before publishing. It scans the whole working tree, including untracked files, with no source/test exemptions; Git internals are excluded. Run its regression cases with `python -m pytest -q -p no:cacheprovider tests/test_publish_check.py`.
 
-Result: passed after scanning the project files. The only media file is the selected MP4 simulation clip. Reference data are CSV text files. CAD meshes were omitted because a redistribution license was not verified.
+The gate rejects personal Unix/Windows/WSL paths, email/IP details, credential assignments and standalone provider token shapes, contextual student/licence identifiers, account labels, named sensor models, internal workflow terms, prohibited documents, CAD/mesh/model inputs, binary data, environments, generated caches and symlinks. Sensor patterns are maintained together in `IMU_MODEL_PATTERNS`. Explicit software versions, dates, upstream names and MIT notices are accepted. The documented MIT packet bit-width sequence is distinguished from internal workflow labels.
 
-Run with `python publish_check.py` before publishing.
+The existing gallery contains **20 MP4s, 11 GIFs and six PNGs**. The six pre-existing PNGs are pinned by exact relative path and SHA-256 in `PNG_ALLOWLIST`; adding or changing a PNG requires separate provenance, metadata/pixel review and an explicit list update. A directory name alone grants no exception. No new media are added in batch 1. These existing bytes are retained from the public baseline, not newly certified for redistribution.
+
+PNG text metadata (including compressed text), MP4 container metadata and GIF comments are inspected. Compressed pixel/video samples are not treated as text. There is no OCR or frame-by-frame review. The gate is a policy screen, not an exhaustive secret scanner, history scanner or rights certificate. Existing public media rights remain an owner-review item.
+
+Text has a 10 MiB inspection limit. No new GZIP files are allow-listed in this P3-only slice; future approved compressed fixtures must be named explicitly and inspected with a decompressed-size bound. NPZ remains blocked. JSON receipts/manifests must use relative paths without parent traversal. P3's supplied CSV is a simulation export; sanitized manifests retain separate original and released hashes. P2 fixtures are deferred.
+
+The external publication script is outside this repository. It was not run or changed by this batch. Its independent shell gate must be reviewed before later publication; its current fixed copy source does not point to this staging tree. Run all tests and the scan against the exact approved tree before any later push.
