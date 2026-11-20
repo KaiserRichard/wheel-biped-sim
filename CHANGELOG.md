@@ -1,5 +1,9 @@
 # Changelog
 
+## 20 November 2026
+
+- Add the MATLAB studio M14 result: a 16 s mission on 11 friction × actuator-delay fixtures passes all 777 gates with the delay-aware balance controller (R4). Adds a summary page, a per-fixture CSV and four figures with pinned hashes. Simulation only; studio source not yet released.
+
 ## Unreleased — 17 November 2026
 
 - Harden the publication gate and add positive/negative regression cases for every audit probe, plus filename, metadata, token, receipt, cache and symlink checks.

@@ -1,0 +1,12 @@
+fixture,friction,added_delay_ms,reached_s,fall,pitch_peak_deg
+corner1_mu050_d0ms,0.5,0,16,false,3.053
+corner2_mu050_d2ms,0.5,2,16,false,3.105
+corner3_mu050_d5ms,0.5,5,16,false,2.984
+corner4_mu080_d0ms,0.8,0,16,false,3.045
+corner5_mu080_d2ms,0.8,2,16,false,3.038
+corner6_mu080_d5ms,0.8,5,16,false,3.078
+corner7_mu100_d0ms,1.0,0,16,false,2.995
+corner8_mu100_d2ms,1.0,2,16,false,3.095
+corner9_mu100_d5ms,1.0,5,16,false,3.128
+nominal_h1,nominal,0,16,false,3.014
+nominal_h2,nominal,0,16,false,3.014

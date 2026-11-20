@@ -52,6 +52,10 @@ PNG_ALLOWLIST = {
     'media/figures/poles.png': 'd145498949cbe4f10d180c89d089b32ba8bdacc63f00a9958fcf9bcfa58d76da',
     'media/figures/simscape.png': 'd7bc6c9025fd26e37c2f83c1be014c8ec2933821a2b8607478f3ecff9be8cc57',
     'media/figures/simulink-dmbots-model.png': '924d5dd1ae0d05f28ca5bf19521d1edd3bdf42caaddd2652753ea007f0de3b05',
+    'media/figures/m14-gate-history.png': '6342b5a89470958e66cb164ccfe1c39baea1863011eaace4c665e5d390993870',
+    'media/figures/m14-nominal-mission.png': '59c66a64954e926f128d1a1b708dc3e8ad647d98c6fe12ef92a8df32664defac',
+    'media/figures/m14-pitch-all-fixtures.png': '7f0613d86da149014150c42880fbbdd4d7171c9ac5f5a583d64c111a6bfa4ba7',
+    'media/figures/m14-startup-fix.png': '8feb0eb5d78c8dd7a72ae13f553ddc6976b835242862729aafa09c4dc29e175b',
 }
 # No compressed additions are approved in this P3-only batch.
 GZIP_ALLOWLIST = frozenset()
