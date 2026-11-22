@@ -1,0 +1,6 @@
+cohort,controller,transport_min_ms,transport_max_ms,push_ms,pass_count,trial_count,wilson_low_pct,wilson_high_pct,fall_count
+main,S5,3,6,30,79,200,33.0,46.4,25
+extended,S5,6,9,30,23,50,33.0,59.6,5
+matched,G1 B05,,,20,0,40,0.0,8.8,2
+matched,G1 V1+B15,,,20,0,40,0.0,8.8,2
+matched,S5,3,6,20,17,40,28.5,57.8,6

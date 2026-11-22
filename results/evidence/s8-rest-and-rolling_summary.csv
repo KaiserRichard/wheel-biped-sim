@@ -1,0 +1,5 @@
+test,cohort_or_law,sample_count,s7_pass_count,s8_pass_count,rolling_coefficient_ratio,unstable_point_count,worst_active_pole_radius_ratio
+mission,shared,200,147,162,,,
+mission,extended,50,36,41,,,
+linear grid,legacy hinge,270,,,0.02,270,1.007617
+linear grid,wheel-ground,270,,,0.02,0,0.999558

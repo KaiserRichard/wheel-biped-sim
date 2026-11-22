@@ -1,0 +1,3 @@
+cohort,trial_count,s5_pass_count,s7_pass_count,s5_fall_count,s7_fall_count,s5_median_pre_push_abs_error_m_per_s,s7_median_pre_push_abs_error_m_per_s
+shared,200,79,147,25,0,0.145,0.025
+extended matched subset,48,22,35,4,0,0.136,0.018

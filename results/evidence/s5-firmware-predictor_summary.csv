@@ -1,0 +1,5 @@
+test,mass_kg,transport_ms,s4_lower_gain_db,s4_upper_gain_db,s5_lower_gain_db,s5_upper_gain_db,s4_pass_count,s5_pass_count,trial_count
+gain window,3.72,6,-6.27,1.88,-8.51,10.82,,,
+gain window,3.72,9,,,-8.48,8.55,,,
+gain window,5.1,9,-3.34,3.36,-7.41,10.0,,,
+nonlinear battery,,9,,,,,6,9,9

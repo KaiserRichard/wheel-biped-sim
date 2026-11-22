@@ -1,0 +1,4 @@
+cohort,trial_count,s8_pass_count,s9_pass_count,s8_median_brake_peak_m_per_s,s9_median_brake_peak_m_per_s,brake_peak_decreased_count,s8_median_travel_m,s9_median_travel_m
+shared,200,162,200,0.261,0.206,197,0.28,0.272
+extended,50,41,50,0.26,0.206,47,0.281,0.276
+world rolling,10,8,10,0.272,0.198,9,0.301,0.308

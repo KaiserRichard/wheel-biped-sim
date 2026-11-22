@@ -72,6 +72,19 @@ PNG_ALLOWLIST = {
     'media/figures/m14-startup-fix.png': '8feb0eb5d78c8dd7a72ae13f553ddc6976b835242862729aafa09c4dc29e175b',
     'media/hardware/power-board.png': '897a09959997d5b980775a0e2131905ae06afdd97524f9a3161a64ff0f43871d',
     'media/hardware/control-board.png': '0ef5a8d4c2ee4f3b7dc30d8476895a6dc1aca29125494d6c355392a41e56082b',
+    'media/figures/evidence/g2-monte-carlo-input-bins.png': '3076e74629dfb38e0eeeb96892f80458468bbe7dc00536e242425d3fee1d9528',
+    'media/figures/evidence/g2-monte-carlo-pass-rates.png': '80e038d0a878feabb98f3df69b8f078c0a6db5006ddd071bf1546233e035470e',
+    'media/figures/evidence/r5-contact-rerun-contact-correction.png': 'ce304f198cb153d975587297fd8b94c6ed2c645891f5be66b005c97d7d93c1a5',
+    'media/figures/evidence/s10-gyro-bias-accel-bias.png': '42628d4afe16ae29a8a9561b9f1a439c7c7d00a219f3dbf7fc5652ddb930aa90',
+    'media/figures/evidence/s10-gyro-bias-gyro-drift.png': 'ba6964c62ed4a0808c5dc582c57f9b0621c911e0807266b6707154cd70a96cab',
+    'media/figures/evidence/s5-firmware-predictor-gain-window.png': '5962e0a4b55b2a00e66685b6247f54a3244b0d62c9cb288605ceabae2787310b',
+    'media/figures/evidence/s5-firmware-predictor-speed-step.png': 'b9bb9244f02b62b1c1d43f5052481437f47e4762fb42f771c6ae0a4a043faf2a',
+    'media/figures/evidence/s6-estimator-in-loop-bias-and-drift.png': '950dbd11861277470deb85a0f2d1d6ea0870e9fd8f1f817f7c511e85709dd6ef',
+    'media/figures/evidence/s7-wheel-loss-comp-shared-missions.png': '5953fb107a28ba40155ac3953fa529a45839989d1fc500dbabadbb29e3d0b97d',
+    'media/figures/evidence/s8-rest-and-rolling-rolling-model.png': 'cdf7163cf6e41e6397f707926608416ebf698539cd78d54ba708be7a92c8d5e6',
+    'media/figures/evidence/s8-rest-and-rolling-stop-reanchor.png': '3c99ffa7c69ca2ca72012574dced675db47dce84bbccbc073b1b637467953dbf',
+    'media/figures/evidence/s9-balance-point-brake-handoff.png': '02ae9bd8f635174f39819d0fa6b2581a28a1b2fee05e3e0acb451ae72bfa5ac8',
+    'media/figures/evidence/s9-balance-point-paired-braking.png': '1da9a0ad266e1fd4d644463cd75e73c904423ade04dde41f3a3fa7374f949810',
 }
 # No compressed additions are approved in this P3-only batch.
 GZIP_ALLOWLIST = frozenset()

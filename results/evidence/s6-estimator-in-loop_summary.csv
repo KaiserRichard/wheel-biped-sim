@@ -1,0 +1,5 @@
+scenario,gyro_bias_ramp_rad_per_s2,delayed_truth_pass_count,m13_pass_count,complementary_pass_count,trial_count
+nominal,,27,27,27,27
+stress,,81,63,70,81
+isolated gyro bias ramp,0.0036,9,0,0,9
+combined disturbance,,9,0,7,9

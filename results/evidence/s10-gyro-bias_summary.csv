@@ -1,0 +1,6 @@
+scenario,gyro_bias_ramp_rad_per_s2,accel_bias_m_per_s2,s6_complementary_pass_count,s10_pass_count,trial_count,s6_mean_pitch_shift_deg,s10_mean_pitch_shift_deg
+stress,,,71,81,81,,
+gyro ramp,0.0036,,0,9,9,,
+gyro ramp,0.0072,,0,9,9,,
+motor contact encoder,,,24,23,24,,
+forward accelerometer bias,,0.2,,,,1.31,1.47

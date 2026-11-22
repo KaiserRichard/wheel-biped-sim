@@ -1,0 +1,7 @@
+test,trial_count,legacy_pass_count,world_pass_count,legacy_fall_count,world_fall_count,world_earliest_rest_s,world_latest_rest_s
+D1 alternate contact,8,4,8,,,,
+V1 5.193 kg follow-up,2,0,2,,,0.916,1.356
+G1 B05 alternate contact,17,0,0,0,2,,
+G1 V1+B15 alternate contact,17,0,0,0,2,,
+D1 timing grid at Crr 0.005,15,,15,,,,
+D1 timing grid at Crr 0.020,15,,15,,,,
