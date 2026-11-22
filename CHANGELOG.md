@@ -2,6 +2,7 @@
 
 ## 22 November 2026
 
+- README: add the Simscape replay video of the M14 mission (MP4 plus GIF preview), replacing the single replay frame.
 - README: show the MATLAB studio Simscape model (replay frame, model structure, M14 plots) and mark the earlier failed Simscape balance as superseded.
 - Add the MATLAB studio M16 result: two clean runs of the accepted M14 mission in separate MATLAB processes are bit-identical and all 14 first-release gates pass. Adds a summary page and a gate CSV. Simulation only; studio source not yet released.
 

@@ -28,9 +28,9 @@ The CAD model turning on the spot. This is a MuJoCo render of meshes exported fr
 
 The MATLAB studio rebuilds the CAD robot in Simscape Multibody: chassis, five-bar legs and wheels from the CAD (3.62 kg CAD mass estimate), wheel-ground contact with friction, six drives on a battery bus, IMU and encoder models, and a delay-aware LQR balance controller. Its 16 s mission (stand up, drive about 1.5 m, brake, raise and lower the legs, push near 13 s) passes all 777 gates on 11 fixtures of ground friction 0.5-1.0 and added actuator delay 0-5 ms (M14). Two clean runs in separate MATLAB processes reproduce it bit for bit (M16).
 
-<img src="media/figures/m14-simscape-replay.png" width="800" alt="Simscape Multibody replay of the M14 mission at t = 8.5 s, with body pitch, position, bus voltage, pack current and joint torques.">
+[<img src="media/preview/m14-simscape-replay.gif" width="800" alt="Simscape Multibody replay of the full 16 s M14 mission, with body pitch, position, bus voltage, pack current and joint torques.">](media/m14-simscape-replay.mp4)
 
-*Simscape Multibody replay of the M14 mission at t = 8.5 s, while braking, with body pitch, body position, bus voltage, pack current and joint torques. Simulation only; masses are the CAD estimate.*
+*Simscape Multibody replay of the full 16 s M14 mission (stand up, drive, brake, leg height, push), with body pitch, body position, bus voltage, pack current and joint torques; the dashed line marks the current time. Full-resolution video: [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4). Simulation only; masses are the CAD estimate.*
 
 ```mermaid
 flowchart LR
@@ -101,6 +101,12 @@ The exact reference traces are checked against the integration build at seed zer
 ## Videos
 
 Everything below is simulation, played back from saved runs. Nothing here is footage of a real robot.
+
+### MATLAB studio, Simscape Multibody, 3.62 kg CAD mass
+
+| Clip | What it shows |
+| --- | --- |
+| [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4) | M14 mission, 16 s: stand up, drive about 1.5 m, brake, leg height, push |
 
 ### CAD robot, 3.72 kg model
 
