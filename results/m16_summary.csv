@@ -1,0 +1,15 @@
+gate,observed,limit,result
+m16_registry_changed,0,0,PASS
+required_receipts_not_PASS_lineage,0,0,PASS
+run1_mission_receipt_not_PASS,0,0,PASS
+run1_source_protected_differences,0,0,PASS
+run2_mission_receipt_not_PASS,0,0,PASS
+run2_source_protected_differences,0,0,PASS
+distinct_process_ids,0,0,PASS
+reproduction_pitch_rad,0,1e-06,PASS
+reproduction_position_m,0,1e-05,PASS
+reproduction_leg_length_m,0,1e-05,PASS
+reproduction_bus_voltage_V,0,0.0001,PASS
+reproduction_native_event_difference,0,0,PASS
+reproduction_gate_verdict_difference,0,0,PASS
+orchestrator_source_protected_differences,0,0,PASS

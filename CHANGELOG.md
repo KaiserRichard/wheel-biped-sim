@@ -1,5 +1,9 @@
 # Changelog
 
+## 22 November 2026
+
+- Add the MATLAB studio M16 result: two clean runs of the accepted M14 mission in separate MATLAB processes are bit-identical and all 14 first-release gates pass. Adds a summary page and a gate CSV. Simulation only; studio source not yet released.
+
 ## 20 November 2026
 
 - Add the MATLAB studio M14 result: a 16 s mission on 11 friction × actuator-delay fixtures passes all 777 gates with the delay-aware balance controller (R4). Adds a summary page, a per-fixture CSV and four figures with pinned hashes. Simulation only; studio source not yet released.
