@@ -24,9 +24,36 @@ The CAD model turning on the spot. This is a MuJoCo render of meshes exported fr
 | <img src="media/preview/cad-leg-height.gif" width="260" alt="Leg height"><br>Leg height | <img src="media/preview/cad-jump.gif" width="260" alt="Jump"><br>Jump | <img src="media/preview/cad-obstacle.gif" width="260" alt="8 cm obstacle"><br>8 cm obstacle |
 | <img src="media/preview/mass-8.5kg-one-sided-ramp.gif" width="260" alt="8.5 kg, one-sided ramp"><br>8.5 kg, one-sided ramp | <img src="media/preview/mass-8.5kg-drop.gif" width="260" alt="8.5 kg, 0.245 m drop"><br>8.5 kg, 0.245 m drop | <img src="media/preview/cad-obstacle-2ms-falls.gif" width="260" alt="2 ms delay: falls"><br>2 ms delay: falls |
 
-### MATLAB and Simulink
+### MATLAB and Simscape
 
-From saved MATLAB results. Simscape balance of our own CAD robot still fails, so it is not shown as a success here; see Results and limits.
+The MATLAB studio rebuilds the CAD robot in Simscape Multibody: chassis, five-bar legs and wheels from the CAD (3.62 kg CAD mass estimate), wheel-ground contact with friction, six drives on a battery bus, IMU and encoder models, and a delay-aware LQR balance controller. Its 16 s mission (stand up, drive about 1.5 m, brake, raise and lower the legs, push near 13 s) passes all 777 gates on 11 fixtures of ground friction 0.5-1.0 and added actuator delay 0-5 ms (M14). Two clean runs in separate MATLAB processes reproduce it bit for bit (M16).
+
+<img src="media/figures/m14-simscape-replay.png" width="800" alt="Simscape Multibody replay of the M14 mission at t = 8.5 s, with body pitch, position, bus voltage, pack current and joint torques.">
+
+*Simscape Multibody replay of the M14 mission at t = 8.5 s, while braking, with body pitch, body position, bus voltage, pack current and joint torques. Simulation only; masses are the CAD estimate.*
+
+```mermaid
+flowchart LR
+  M[Mission profile] --> C[Delay-aware LQR<br>and leg control]
+  C --> D[Added delay 0/2/5 ms<br>+ 5 ms drive lag]
+  D --> P[Six drives<br>on a battery bus]
+  P --> B[Simscape Multibody:<br>chassis, five-bar legs, wheels]
+  B <--> G[Wheel-ground contact<br>friction 0.5-1.0]
+  B --> S[IMU and encoders<br>with noise]
+  S --> C
+```
+
+<img src="media/figures/m14-pitch-all-fixtures.png" width="640" alt="Body pitch on all 11 M14 fixtures: peak 2.98-3.13 degrees, no fall.">
+
+*Body pitch on all 11 M14 fixtures: peak 2.98-3.13°, no fall. Details in [docs/studio/m14-delay-robustness.md](docs/studio/m14-delay-robustness.md).*
+
+<img src="media/figures/m14-nominal-mission.png" width="640" alt="Nominal M14 mission signals.">
+
+*Nominal M14 mission.*
+
+#### Earlier MATLAB models
+
+These came before the studio. The controller was derived and cross-checked on dmBots' Simscape model. Our first Simscape model of the CAD robot did not balance (peak pitch 89.9°, see Results and limits); the studio model above replaces it.
 
 <img src="media/figures/gains.png" width="640" alt="LQR gains against leg length, from the MATLAB derivation. Design model.">
 
@@ -64,7 +91,7 @@ All results here are simulation results. No motors have been powered. Geometry, 
 | CAD stand comparison | Largest per-column maximum absolute difference `1.785469515` in `Tp` torque (N·m) | MEASURED by `check.py`, saved in `results/parity.json`; the plant properties differ. |
 | CAD obstacle comparison | Largest per-column maximum absolute difference `19.948454409` in rear hip torque `hrR` (N·m) | MEASURED by `check.py`, saved in `results/parity.json`; plant and controller setup differ. Exact cross-model parity is not established. |
 | Obstacle with delay | Five of five trials passed at zero added delay; zero of five passed at assumed 2, 4, 6, and 8 ms delays | MEASURED by `scripts/recount_delay.py`, saved in `docs/delay_summary.csv`. |
-| Simscape balance | Peak pitch `89.8903707414°`; the balance and firmware-equivalence criteria failed | MEASURED by the archived `check.py` output, summarized in `docs/simscape_balance.csv`. The Simscape run is not part of this CPU test suite. |
+| Simscape balance, first CAD model (superseded) | Peak pitch `89.8903707414°`; the balance and firmware-equivalence criteria failed | MEASURED by the archived `check.py` output, summarized in `docs/simscape_balance.csv`. The Simscape run is not part of this CPU test suite. Superseded by the MATLAB studio model, which balances through the whole M14 mission (next row). |
 | MATLAB studio M14: 16 s mission, friction 0.5–1.0 × added delay 0/2/5 ms | 777/777 gates; 11 of 11 fixtures to 16 s, no fall, peak pitch 2.98–3.13°; delay-aware controller, extra-delay margin 12 ms (was 1.4 ms) | MEASURED in MATLAB/Simscape, summarized in [docs/studio/m14-delay-robustness.md](docs/studio/m14-delay-robustness.md) and `results/m14_summary.csv`. Studio source not yet released. |
 | MATLAB studio M16: reproducibility of the first release | 14/14 gates; two clean runs of the M14 mission in separate processes are bit-identical (pitch, CoM, leg lengths, bus voltage, every native sample); all earlier milestone receipts still valid | MEASURED in MATLAB/Simscape, summarized in [docs/studio/m16-reproducibility.md](docs/studio/m16-reproducibility.md) and `results/m16_summary.csv`. Studio source not yet released. |
 | Motors and real robot | No powered-motor or physical robot result | UNKNOWN |
