@@ -91,6 +91,12 @@ The controller grew one real-world problem at a time, each step tested in simula
 
 Steps 1–4 have C or Python code with tests in this repository. Each study has a short evidence page with its figures and raw CSVs ([evidence index](docs/evidence/README.md)). With every layer switched on, the full stack still falls when two encoder packets are lost in a row ([evidence](docs/evidence/g3-full-stack.md)); a graded packet-loss response is the next step. Paired Monte Carlo trials compare each version with the previous one ([paired-trial scorer](wbr/sim/paired_trials.py)).
 
+## Reinforcement learning (optional helper)
+
+<img src="media/preview/ppo-vs-lqr.gif" width="720" alt="MuJoCo: R4, LQR and a PPO policy each recover the CAD robot from a 40 degree tilt">
+
+A PPO policy trained in MATLAB and exported to C recovers the 5.1 kg CAD robot from tilts up to ±40° on every case tested, using 13–33% less motor work than LQR. It drifts 10–37 cm before settling, which LQR avoids, so LQR stays the main controller and PPO is an optional helper ([evidence and log](docs/evidence/k1d-ppo.md), [full video](media/ppo-vs-lqr.mp4)).
+
 ## Electronics (KiCad 9)
 
 Two learning boards for the robot, designed in KiCad 9 for a 6S battery (18.0–25.2 V). Both are clean in KiCad's electrical (ERC) and design-rule (DRC) checks. They are design-only: not fabricated or powered yet. KiCad sources, schematic PDFs and check reports: [hardware/](hardware/README.md).
@@ -126,6 +132,12 @@ Everything below is simulation, played back from saved runs. Nothing here is foo
 | Clip | What it shows |
 | --- | --- |
 | [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4) | 16 s mission: stand up, drive about 1.5 m, brake, leg height, push |
+
+### PPO policy against LQR, 5.1 kg CAD model
+
+| Clip | What it shows |
+| --- | --- |
+| [ppo-vs-lqr.mp4](media/ppo-vs-lqr.mp4) | Recovery from +40°, −40° and +25° tilts by R4, LQR and PPO, with a results card after each |
 
 ### CAD robot, 3.72 kg model
 
