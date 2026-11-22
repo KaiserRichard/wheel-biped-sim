@@ -26,7 +26,7 @@ workspace, services, `~/.bashrc` or network settings.
   USB card reader while our Pi boots from its own card; boot from their card
   only for installing/recording, then put it back in the robot.
 - Login: the owner or team runs `ssh-copy-id <user>@<ip>` and types the
-  password themselves; Claude 2 then uses key login. That adds one line to
+  password themselves. The operator then uses key login, which adds one line to
   their `~/.ssh/authorized_keys`; remove it at cleanup if the team wants.
 
 ## Install (team runs, once; leave installed for later sessions)
@@ -39,7 +39,7 @@ If `rs-enumerate-devices` cannot open the camera, the udev rule is missing;
 the team decides whether to add Intel's `99-realsense-libusb.rules`.
 Never run `realsense-viewer` firmware update prompts; no firmware change.
 
-## What Claude 2 does over SSH
+## Remote setup
 
 1. Read-only checks: OS/ROS versions, disk space, `lsusb -t` (5000M), running
    ROS processes, installed RealSense packages.

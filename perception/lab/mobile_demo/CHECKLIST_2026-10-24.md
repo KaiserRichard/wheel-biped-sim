@@ -49,7 +49,7 @@ chair, slow and steady, ending on the start mark.
 
 | Order | ID | Mode | What | Ground truth |
 |---|---|---|---|---|
-| 0 | P0 | – | Preflight + `dmesg -w` all session; Claude 2 builds `claude2/20261024-demo` on the Pi meanwhile | serial, 5000M, throttle 0x0 |
+| 0 | P0 | – | Run preflight and keep `dmesg -w` open while the operator builds the demo on the Pi | serial, 5000M, throttle 0x0 |
 | 1 | LIVE | RGB-D | Run `wbr_obstacle_node` live, view `/advisory` + markers in Foxglove, put a box in front. Record the run. | – |
 | 2 | S1 | RGB-D | Static 10 s, empty floor | camera height + tilt |
 | 3 | W1 | RGB-D | Static 5 s facing a flat wall at 1.00 m | tape distance |
@@ -108,7 +108,7 @@ FAIL is still evidence: keep every run, never overwrite.
 2. Copy to the Mac with checksums (RUNBOOK §4) into
    `~/wbr-evidence-archive/mobile-demo-20261024-01/`.
 3. On the Mac: `check_capture.py` on each RGB-D bag (RUNBOOK §3).
-4. Tell Claude 2 the archive path; offline evaluation (`tools/obstacle_decision/eval_runs.py`,
+4. Record the archive path for offline evaluation (`tools/obstacle_decision/eval_runs.py`,
    map export, local map) starts from there.
 
 Run sheet: `run_sheet.csv` uses metres and the column names read by

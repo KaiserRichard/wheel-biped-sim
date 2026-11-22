@@ -155,8 +155,8 @@ and full direct-script invocations both exited 0.
 
 ## Real-data first contact (supervisor, 2026-10-23)
 
-Input: 148 offline SGBM depth frames (`tools/stereo_depth`, branch
-`claude2/20261023-stereo-depth`) from the 21 Oct handheld marked-loop IR bag.
+Input: 148 offline SGBM depth frames (`tools/stereo_depth`) from the 21 Oct
+handheld marked-loop IR bag.
 The camera was held low over a glossy tiled floor. Command:
 `python3 tools/ground_plane/real_sgbm_check.py`
 (writes `results/real_sgbm.json`).
