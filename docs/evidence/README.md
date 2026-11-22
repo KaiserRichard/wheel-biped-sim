@@ -12,3 +12,4 @@
 | S9 · Learned balance point and smoother braking | All 260 paired S9 trials met the original rest criteria, and 197 of 200 shared trials reduced peak braking speed. | [Read study](s9-balance-point.md) |
 | S10 · Adaptive gyro-bias estimation | Adaptive pitch gyro-bias correction recovered the injected drift cases, while acceleration bias still shifted pitch. | [Read study](s10-gyro-bias.md) |
 | R5 · Corrected wheel–ground contact reruns | The corrected rolling law recovered eight D1 stops and both V1 stops, while the G1 contact cohort still missed. | [Read study](r5-contact-rerun.md) |
+| G3 · Full-stack Monte Carlo | Combining the revised controller, estimator and rolling model exposed a packet-age failure mode. | [Read study](g3-full-stack.md) |

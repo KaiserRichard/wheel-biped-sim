@@ -74,6 +74,8 @@ PNG_ALLOWLIST = {
     'media/hardware/control-board.png': '0ef5a8d4c2ee4f3b7dc30d8476895a6dc1aca29125494d6c355392a41e56082b',
     'media/figures/evidence/g2-monte-carlo-input-bins.png': '3076e74629dfb38e0eeeb96892f80458468bbe7dc00536e242425d3fee1d9528',
     'media/figures/evidence/g2-monte-carlo-pass-rates.png': '80e038d0a878feabb98f3df69b8f078c0a6db5006ddd071bf1546233e035470e',
+    'media/figures/evidence/g3-full-stack-binned-drivers.png': '88a67165d04b2927d3135f8179dc115ba970f0dc1373111a77d875668131b859',
+    'media/figures/evidence/g3-full-stack-pass-and-brake.png': '2662ae475cb1d2010e0817d6cc4b88c07958389a9ca7e9eb668519eb033051e8',
     'media/figures/evidence/r5-contact-rerun-contact-correction.png': 'ce304f198cb153d975587297fd8b94c6ed2c645891f5be66b005c97d7d93c1a5',
     'media/figures/evidence/s10-gyro-bias-accel-bias.png': '42628d4afe16ae29a8a9561b9f1a439c7c7d00a219f3dbf7fc5652ddb930aa90',
     'media/figures/evidence/s10-gyro-bias-gyro-drift.png': 'ba6964c62ed4a0808c5dc582c57f9b0621c911e0807266b6707154cd70a96cab',

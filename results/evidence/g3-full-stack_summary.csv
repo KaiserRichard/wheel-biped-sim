@@ -1,0 +1,7 @@
+cohort,controller,trial_count,pass_count,fall_count,encoder_timeout_count,completed_without_durable_rest_count,wilson_low_pct,wilson_high_pct
+shared,s8,200,162,0,0,38,75.0,85.8
+shared,s9,200,200,0,0,0,98.1,100.0
+shared,g3,200,104,86,88,7,45.1,58.8
+extended,s8,50,41,0,0,9,69.2,90.2
+extended,s9,50,50,0,0,0,92.9,100.0
+extended,g3,50,23,26,26,1,33.0,59.6
