@@ -1,0 +1,9 @@
+{
+  "tool": "KiCad CLI",
+  "version": "9.0.9",
+  "source": "T11_custom_h723.kicad_sch",
+  "errors": 0,
+  "warnings": 0,
+  "exclusions": 0,
+  "sheets_checked": 7
+}

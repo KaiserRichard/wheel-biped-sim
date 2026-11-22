@@ -85,6 +85,12 @@ PNG_ALLOWLIST = {
     'media/figures/evidence/s8-rest-and-rolling-stop-reanchor.png': '3c99ffa7c69ca2ca72012574dced675db47dce84bbccbc073b1b637467953dbf',
     'media/figures/evidence/s9-balance-point-brake-handoff.png': '02ae9bd8f635174f39819d0fa6b2581a28a1b2fee05e3e0acb451ae72bfa5ac8',
     'media/figures/evidence/s9-balance-point-paired-braking.png': '1da9a0ad266e1fd4d644463cd75e73c904423ade04dde41f3a3fa7374f949810',
+    'media/hardware/control-board-bottom.png': '634a258d824e663bb127b4bad7c66bc1b1e807ee3a25cbe17c9e4d821e6e1709',
+    'media/hardware/control-board-perspective.png': '49c24ecf652261269e3c9561e0c731d37e7947cb720fc26d498af6726d254452',
+    'media/hardware/control-board-top.png': 'e203a9830f0d2134bccbee26ceec9b9b95b7a1667b3aeb8e0567a30bb754166e',
+    'media/hardware/power-board-bottom.png': '615ee0259cbb8695e535508c463dd2b3724121e48e0b6a336b1e5556b3bad7ba',
+    'media/hardware/power-board-perspective.png': '44b8e9cde071194ad4e84abf1ee1ccf3ded6565fe3664729db29661fde4be757',
+    'media/hardware/power-board-top.png': 'b4f74ad1d98e8085cd3b627cd789f7df3aae6801df73b2c6b3c352ac65d6d372',
 }
 # No compressed additions are approved in this P3-only batch.
 GZIP_ALLOWLIST = frozenset()

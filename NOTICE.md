@@ -49,3 +49,9 @@ The log codec/importer, identification formulas, tests and synthetic rehearsal a
 ## Batch 2 simulation methods and C additions
 
 The S5 predictor template, S7 wheel-loss feedforward, S8 stop re-anchor, and S10 estimator are standalone additions from the simulation work. The S5, S7, and S8 methods were exercised around the DM-jump-derived controller in that work. Trần Nguyên Bình and dmBots retain the credit and MIT copyright notices above. This slice uses new files and includes no copies of their chassis tasks, drive code, or hardware headers. The owner review governs the licence for new first-party code and original explanatory text.
+
+## KiCad learning boards
+
+**FROM FILE** · The power board follows the partition and test-point style of the owner's private Edge AI Smart Power Module project. The control board's STM32H723 pin and peripheral map follows Trần Nguyên Bình's CtrlBoard-H7 configuration in MIT-licensed DM-jump. The DM-jump attribution and MIT terms above cover that derivation. [DM-jump](https://github.com/nguyenbinh-shark/DM-jump)
+
+**FROM WEB / FROM FILE** · Official KiCad library material is by the KiCad library contributors and is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) with the KiCad design-use exception. That exception applies to the electronic designs and generated design outputs. The locally bundled KiCad library entries, including modified copies, retain CC BY-SA 4.0. The board copies include project-specific edits to official library material such as the battery connector footprint, MOSFET land pattern, MCU pin metadata and generic IMU sensor footprint. [KiCad library license and exception](https://www.kicad.org/libraries/license/) · [KiCad footprint sources](https://gitlab.com/kicad/libraries/kicad-footprints) · [KiCad symbol sources](https://gitlab.com/kicad/libraries/kicad-symbols)

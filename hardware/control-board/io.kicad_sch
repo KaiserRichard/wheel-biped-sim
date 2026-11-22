@@ -1,0 +1,1887 @@
+(kicad_sch
+  (version 20250114)
+  (generator "eeschema")
+  (uuid "83910dd9-7b31-43d3-a6a5-d0c1184dcb66")
+  (paper "A3")
+  (title_block
+    (title "Sheet 6: Host Interface (Pi 5), Expansion Busses & Mechanical")
+    (date "2026-11-18")
+    (rev "v2.0")
+    (company "Design-only learning exercise")
+    (comment 1 "Raspberry Pi 5 High-Speed UART Communication (USART3 PD8/PD9)")
+    (comment 2 "I2C1 Expansion Header + 2.2k Pull-Ups | SPI3 Expansion Header")
+    (comment 3 "Diagnostic Test Points for All Power Rails & High-Speed Buses")
+    (comment 4 "4x M3 Grounded Mounting Holes")
+  )
+  (lib_symbols
+    (symbol "H723:Conn_Pi_Header"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "J"
+        (at 0 10.16 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "Raspberry Pi 5 Header"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:PinHeader_1x06_P2.54mm_Vertical"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "Conn_Pi_Header_0_1"
+        (rectangle
+          (start -10.16 8.89)
+          (end 10.16 -8.89)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "Conn_Pi_Header_1_1"
+        (pin passive line
+          (at -15.24 6.35 0)
+          (length 5.08)
+          (name "+5V"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 3.81 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "TX_TO_PI"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "RX_FROM_PI"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "4"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -3.81 0)
+          (length 5.08)
+          (name "+3V3"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "5"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -6.35 0)
+          (length 5.08)
+          (name "ESTOP_STATUS"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "6"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:Conn_Expansion_I2C"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "J"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "I2C1 Expansion"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:PinHeader_1x04_P2.54mm_Vertical"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "Conn_Expansion_I2C_0_1"
+        (rectangle
+          (start -10.16 6.35)
+          (end 10.16 -6.35)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "Conn_Expansion_I2C_1_1"
+        (pin passive line
+          (at -15.24 3.81 0)
+          (length 5.08)
+          (name "+3V3"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "SCL"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -3.81 0)
+          (length 5.08)
+          (name "SDA"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "4"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:R_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "R"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "R"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:R_0805_2012Metric"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "R_std_0_1"
+        (rectangle
+          (start -10.16 3.81)
+          (end 10.16 -3.81)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "R_std_1_1"
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "1"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "2"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:Conn_Expansion_SPI"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "J"
+        (at 0 10.16 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "SPI3 Expansion"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:PinHeader_1x06_P2.54mm_Vertical"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "Conn_Expansion_SPI_0_1"
+        (rectangle
+          (start -10.16 8.89)
+          (end 10.16 -8.89)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "Conn_Expansion_SPI_1_1"
+        (pin passive line
+          (at -15.24 6.35 0)
+          (length 5.08)
+          (name "+3V3"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 3.81 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "SCK"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "MOSI"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "4"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -3.81 0)
+          (length 5.08)
+          (name "MISO"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "5"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -6.35 0)
+          (length 5.08)
+          (name "CS"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "6"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:TestPoint"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "TP"
+        (at 0 6.35 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "TP"
+        (at 0 3.81 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:TestPoint_Pad_D1.5mm"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "TestPoint_0_1"
+        (rectangle
+          (start -10.16 2.54)
+          (end 10.16 -2.54)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "TestPoint_1_1"
+        (pin passive line
+          (at -15.24 0 0)
+          (length 5.08)
+          (name "1"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:MountingHole"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "H"
+        (at 0 6.35 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "MountingHole_M3"
+        (at 0 3.81 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:MountingHole_3.2mm_M3"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "MountingHole_0_1"
+        (rectangle
+          (start -10.16 2.54)
+          (end 10.16 -2.54)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "MountingHole_1_1")
+    )
+  )
+  (text "SECTION 1: RASPBERRY PI 5 INTERFACE (USART3 PD8/PD9)"
+    (at 20 20 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-100000000001")
+  )
+  (symbol
+    (lib_id "H723:Conn_Pi_Header")
+    (at 49.53 49.53 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000001")
+    (property "Reference" "J9"
+      (at 49.53 37.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "Pi 5 Header"
+      (at 49.53 40.07 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x06_P2.54mm_Vertical"
+      (at 49.53 49.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (text "SECTION 2: EXPANSION BUSSES (I2C1 & SPI3)"
+    (at 90 20 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-100000000002")
+  )
+  (symbol
+    (lib_id "H723:Conn_Expansion_I2C")
+    (at 119.38 49.53 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000002")
+    (property "Reference" "J10"
+      (at 119.38 39.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "I2C1 Expansion"
+      (at 119.38 42.07 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x04_P2.54mm_Vertical"
+      (at 119.38 49.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 149.86 39.37 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R41"
+      (at 149.86 31.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "2.2k"
+      (at 149.86 33.91 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 149.86 39.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "6172a2ed-533e-417c-b34e-cb21ff7c5dda")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 149.86 59.69 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R42"
+      (at 149.86 51.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "2.2k"
+      (at 149.86 54.23 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 149.86 59.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "715f86b1-9554-4af5-96a7-65e64ce43edb")
+  )
+  (symbol
+    (lib_id "H723:Conn_Expansion_SPI")
+    (at 190.5 49.53 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000003")
+    (property "Reference" "J11"
+      (at 190.5 37.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "SPI3 Expansion"
+      (at 190.5 40.07 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x06_P2.54mm_Vertical"
+      (at 190.5 49.53 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (text "SECTION 3: DIAGNOSTIC TEST POINTS"
+    (at 20 100 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-100000000003")
+  )
+  (symbol
+    (lib_id "H723:TestPoint")
+    (at 160.02 119.38 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000008")
+    (property "Reference" "TP11"
+      (at 160.02 111.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "VREF+"
+      (at 160.02 113.92 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:TestPoint_Pad_D1.5mm"
+      (at 160.02 119.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:TestPoint")
+    (at 190.5 119.38 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000009")
+    (property "Reference" "TP12"
+      (at 190.5 111.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "GND"
+      (at 190.5 113.92 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:TestPoint_Pad_D1.5mm"
+      (at 190.5 119.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (text "Four M3 non-plated mechanical mounting holes."
+    (at 20 150 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-100000000004")
+  )
+  (symbol
+    (lib_id "H723:MountingHole")
+    (at 39.37 170.18 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000012")
+    (property "Reference" "H1"
+      (at 39.37 162.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "MountingHole_M3"
+      (at 39.37 164.72 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:MountingHole_3.2mm_M3"
+      (at 39.37 170.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:MountingHole")
+    (at 69.85 170.18 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000013")
+    (property "Reference" "H2"
+      (at 69.85 162.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "MountingHole_M3"
+      (at 69.85 164.72 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:MountingHole_3.2mm_M3"
+      (at 69.85 170.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:MountingHole")
+    (at 100.33 170.18 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000014")
+    (property "Reference" "H3"
+      (at 100.33 162.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "MountingHole_M3"
+      (at 100.33 164.72 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:MountingHole_3.2mm_M3"
+      (at 100.33 170.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:MountingHole")
+    (at 129.54 170.18 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000015")
+    (property "Reference" "H4"
+      (at 129.54 162.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "MountingHole_M3"
+      (at 129.54 164.72 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:MountingHole_3.2mm_M3"
+      (at 129.54 170.18 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 43.18)
+      (xy 31.75 43.18)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "c448fadb-1648-47df-9fea-291abc03fbe1")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 31.75 43.18 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "7c5834f9-e9d2-481c-957e-81ac88dbbad6")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 43.18 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 45.72)
+      (xy 31.75 45.72)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "9cfedabd-428e-4cba-a1e2-415f76fa3560")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 31.75 45.72 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "4c65edbf-bdad-43dd-912a-315870e3b704")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 45.72 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 48.26)
+      (xy 31.75 48.26)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "e5abda84-a583-4278-ba71-9ae2c024e653")
+  )
+  (global_label "PI_TX"
+    (shape bidirectional)
+    (at 31.75 48.26 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "95fd20c6-9fb6-44cb-a4a6-80af6e37f0bd")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 48.26 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 50.8)
+      (xy 31.75 50.8)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "64376de3-fc0b-4ca4-8309-53b1cc688814")
+  )
+  (global_label "PI_RX"
+    (shape bidirectional)
+    (at 31.75 50.8 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "086bf6c3-883e-4c76-b578-bfe4804e17dc")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 50.8 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 53.34)
+      (xy 31.75 53.34)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "62c0bcb9-b19c-4004-9c1a-014fdb3b1aca")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 31.75 53.34 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "31189e75-a5b0-487a-b1e7-25538b9cc32b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 53.34 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 34.29 55.88)
+      (xy 31.75 55.88)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6e7dfc39-f153-470a-93f9-af2fc91fc74e")
+  )
+  (global_label "ESTOP_STATUS"
+    (shape bidirectional)
+    (at 31.75 55.88 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "9d840403-db29-4252-860c-3845c1c45660")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 31.75 55.88 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 104.14 45.72)
+      (xy 101.6 45.72)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "7507e59c-48bc-457d-8602-ae4c9497ee71")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 101.6 45.72 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "bf192f87-b254-429b-8875-509888c0b62d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 101.6 45.72 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 104.14 48.26)
+      (xy 101.6 48.26)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6001fae7-866e-4a48-8848-f32337b28870")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 101.6 48.26 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "ae176cbd-4457-4b3b-9837-a5bb594dd6be")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 101.6 48.26 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 104.14 50.8)
+      (xy 101.6 50.8)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6a2d6d5c-490c-4ebb-9498-057e328ab396")
+  )
+  (global_label "I2C1_SCL"
+    (shape bidirectional)
+    (at 101.6 50.8 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "91734dd1-e12b-46ce-9740-30bd57e5d758")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 101.6 50.8 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 104.14 53.34)
+      (xy 101.6 53.34)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "e89f91c3-3199-4336-94b7-c2c4dc36a571")
+  )
+  (global_label "I2C1_SDA"
+    (shape bidirectional)
+    (at 101.6 53.34 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "dd0d24ac-e12a-4b3a-85a4-a6d43421749d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 101.6 53.34 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 38.1)
+      (xy 132.08 38.1)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "d834dff3-afd2-4de9-a295-aa21a479a489")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 132.08 38.1 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "aa98a1a3-c333-4e06-b3bd-301edc8cf832")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 38.1 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 40.64)
+      (xy 132.08 40.64)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "ee89786c-231c-4e6f-9b6a-224658198947")
+  )
+  (global_label "I2C1_SCL"
+    (shape bidirectional)
+    (at 132.08 40.64 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "8e561050-52c9-4c4d-b314-67dc8ec6cd47")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 40.64 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 58.42)
+      (xy 132.08 58.42)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "b55a3a56-ba1b-48b8-af39-4464d6e111c0")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 132.08 58.42 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "2026a5b3-0977-4e1c-8cfd-1b47cfe1a555")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 58.42 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 60.96)
+      (xy 132.08 60.96)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "4ac56e5a-f94d-4875-8614-2aefeaede1f3")
+  )
+  (global_label "I2C1_SDA"
+    (shape bidirectional)
+    (at 132.08 60.96 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "4fa4e590-60a8-4ec5-bfbf-0335b135385e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 60.96 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 43.18)
+      (xy 172.72 43.18)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "34cd046c-d7d0-40b6-b656-7a50238be652")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 172.72 43.18 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "d3bd4146-ce97-4ecc-9a1e-cca093a125f0")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 43.18 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 45.72)
+      (xy 172.72 45.72)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "dd81f705-77fc-4a2b-a237-0926398ebbee")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 172.72 45.72 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "8665acf6-f7d0-4977-9fa9-676a1dfdc6d7")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 45.72 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 48.26)
+      (xy 172.72 48.26)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "254f76c9-1a36-45b3-b63a-031f066ae4a7")
+  )
+  (global_label "SPI3_SCK"
+    (shape bidirectional)
+    (at 172.72 48.26 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "87bf59dc-daa7-4811-bb3b-87474cbb1ce7")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 48.26 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 50.8)
+      (xy 172.72 50.8)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "545cd524-bf43-4f2d-93d7-e7d94be2beb9")
+  )
+  (global_label "SPI3_MOSI"
+    (shape bidirectional)
+    (at 172.72 50.8 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "da8e49fb-7614-480c-934c-fd1ddbf9d604")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 50.8 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 53.34)
+      (xy 172.72 53.34)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "3740190b-35a5-4ab0-af7d-ae41899cd141")
+  )
+  (global_label "SPI3_MISO"
+    (shape bidirectional)
+    (at 172.72 53.34 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "67f97d07-944e-453b-8fe4-3186712132ce")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 53.34 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 55.88)
+      (xy 172.72 55.88)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "8e03aa0c-feb5-49b5-8088-ff180fda463b")
+  )
+  (global_label "SPI3_CS"
+    (shape bidirectional)
+    (at 172.72 55.88 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "95058b8d-e19a-4993-b46d-a3769e187c4f")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 55.88 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 144.78 119.38)
+      (xy 142.24 119.38)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "8f60f8f1-92b4-414a-9f6b-052dd1d780e0")
+  )
+  (global_label "VREF+"
+    (shape bidirectional)
+    (at 142.24 119.38 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "5df96e07-5670-44da-b632-f5ace9fab3dd")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 142.24 119.38 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 119.38)
+      (xy 172.72 119.38)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "21477632-35e3-44fb-a59e-a34c23026ba1")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 172.72 119.38 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "671e8dc2-33bf-4ce5-bf95-1a618c4de414")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 119.38 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:TestPoint")
+    (at 39.37 119.38 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000004")
+    (property "Reference" "TP7"
+      (at 39.37 111.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "NRST"
+      (at 39.37 113.92 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:TestPoint_Pad_D1.5mm"
+      (at 39.37 119.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 24.13 119.38)
+      (xy 21.59 119.38)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "1b237e6d-ec8e-4e16-b153-9573741c4847")
+  )
+  (global_label "NRST"
+    (shape bidirectional)
+    (at 21.59 119.38 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "4679f76b-f9c7-4408-815d-056a397a7a3e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 21.59 119.38 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:TestPoint")
+    (at 69.85 119.38 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000005")
+    (property "Reference" "TP8"
+      (at 69.85 111.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "VCAP"
+      (at 69.85 113.92 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:TestPoint_Pad_D1.0mm"
+      (at 69.85 119.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 54.61 119.38)
+      (xy 52.07 119.38)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "95501a7c-527c-4b83-b6f2-716168128486")
+  )
+  (global_label "VCAP"
+    (shape bidirectional)
+    (at 52.07 119.38 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "6d117c6f-1111-47ea-a508-38cd808af677")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 52.07 119.38 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:TestPoint")
+    (at 100.33 119.38 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-110000000006")
+    (property "Reference" "TP9"
+      (at 100.33 111.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "BOOT0"
+      (at 100.33 113.92 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:TestPoint_Pad_D1.5mm"
+      (at 100.33 119.38 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 85.09 119.38)
+      (xy 82.55 119.38)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "79a76cf3-bfd2-42a4-a57a-eff25fca391a")
+  )
+  (global_label "BOOT0"
+    (shape bidirectional)
+    (at 82.55 119.38 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "1818b451-0a68-4041-998b-87033f3ddd6d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 82.55 119.38 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+)

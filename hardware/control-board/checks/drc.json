@@ -1,0 +1,12 @@
+{
+  "tool": "KiCad CLI",
+  "version": "9.0.9",
+  "source": "T11_custom_h723.kicad_pcb",
+  "errors": 0,
+  "warnings": 0,
+  "exclusions": 0,
+  "schematic_parity_enabled": true,
+  "all_track_errors_enabled": true,
+  "unconnected": 0,
+  "parity_findings": 0
+}
