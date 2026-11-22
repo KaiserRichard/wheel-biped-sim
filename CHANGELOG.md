@@ -2,6 +2,7 @@
 
 ## 22 November 2026
 
+- README rewritten as a showcase: MuJoCo, Simscape and KiCad 9 sections with evidence links; the full results table moved to docs/RESULTS.md; renders of the two learning boards added.
 - Add the S5 delay-augmented gain design and C template with caller-supplied tables.
 - Add the S10 adaptive estimator, S7 wheel-loss feedforward, and S8 stop-position re-anchor with host-compiled C checks.
 - Add world-referenced rolling resistance with a primitive coast-down check and a seeded paired-trial scoring rehearsal.

@@ -1,20 +1,23 @@
 # Wheel-biped simulation
 
-A CPU MuJoCo study of a wheel-biped robot: two driven wheels support a body, and symmetric five-bar legs change body height and absorb impacts.
+A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** physics, a **MATLAB Simscape Multibody** model, and the robot's own **KiCad 9 electronics**. Two five-bar legs each end in a driven wheel; the robot balances like an inverted pendulum, drives, turns, changes height and jumps.
 
 ![CAD robot at an assumed 8.5 kg clearing an 8 cm obstacle in MuJoCo](media/preview-obstacle.gif)
 
 *Simulation only: the CAD robot at an assumed 8.5 kg clearing an 8 cm obstacle in MuJoCo.*
 
-This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI tools were used heavily in building and refactoring it. See [NOTICE.md](NOTICE.md).
+This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI tools were used heavily in building it. See [NOTICE.md](NOTICE.md).
 
-## Quick look
+## Highlights
 
-Everything here is simulation. Previews are shortened; full clips are listed under Videos.
+- **Balances, drives, turns, jumps and clears an 8 cm step** in MuJoCo with the CAD robot, at its CAD mass and at a heavier assumed 8.5 kg ([videos](#videos)).
+- **A full Simscape Multibody model** of the robot (legs, wheels, ground contact, six drives on a battery bus, sensors) completes a 16 s mission on every friction and actuator-delay case tested, and reproduces bit for bit in a second clean run ([M14](docs/studio/m14-delay-robustness.md), [M16](docs/studio/m16-reproducibility.md)).
+- **A controller built for real delays and real sensors**: delay-aware LQR, an attitude estimator that learns gyro bias, wheel-loss compensation, a learned balance point and a gentle stop when the host computer disconnects ([methods](docs/methods/batch-2.md)).
+- **Custom electronics in KiCad 9**: a 6S power and monitor board and an STM32H723 control board, both clean in electrical and design-rule checks ([electronics](#electronics-kicad-9)).
 
-### CAD robot in MuJoCo
+## MuJoCo
 
-The CAD model turning on the spot. This is a MuJoCo render of meshes exported from SolidWorks, not a SolidWorks screen recording.
+The CAD model turning on the spot, then the behaviours it runs. These are MuJoCo renders of meshes exported from SolidWorks.
 
 <img src="media/preview/cad-model-turntable.gif" width="480" alt="CAD model turning on the spot">
 
@@ -24,89 +27,105 @@ The CAD model turning on the spot. This is a MuJoCo render of meshes exported fr
 | <img src="media/preview/cad-leg-height.gif" width="260" alt="Leg height"><br>Leg height | <img src="media/preview/cad-jump.gif" width="260" alt="Jump"><br>Jump | <img src="media/preview/cad-obstacle.gif" width="260" alt="8 cm obstacle"><br>8 cm obstacle |
 | <img src="media/preview/mass-8.5kg-one-sided-ramp.gif" width="260" alt="8.5 kg, one-sided ramp"><br>8.5 kg, one-sided ramp | <img src="media/preview/mass-8.5kg-drop.gif" width="260" alt="8.5 kg, 0.245 m drop"><br>8.5 kg, 0.245 m drop | <img src="media/preview/cad-obstacle-2ms-falls.gif" width="260" alt="2 ms delay: falls"><br>2 ms delay: falls |
 
-### MATLAB and Simscape
+The last clip is kept on purpose: the first controller fell with just 2 ms of extra delay. Fixing that drove the delay-aware controller below.
 
-The MATLAB studio rebuilds the CAD robot in Simscape Multibody: chassis, five-bar legs and wheels from the CAD (3.62 kg CAD mass estimate), wheel-ground contact with friction, six drives on a battery bus, IMU and encoder models, and a delay-aware LQR balance controller. Its 16 s mission (stand up, drive about 1.5 m, brake, raise and lower the legs, push near 13 s) passes all 777 gates on 11 fixtures of ground friction 0.5-1.0 and added actuator delay 0-5 ms (M14). Two clean runs in separate MATLAB processes reproduce it bit for bit (M16).
+## MATLAB and Simscape
 
-[<img src="media/preview/m14-simscape-replay.gif" width="800" alt="Simscape Multibody replay of the full 16 s M14 mission, with body pitch, position, bus voltage, pack current and joint torques.">](media/m14-simscape-replay.mp4)
+The robot rebuilt in Simscape Multibody from the CAD: chassis, five-bar legs and wheels, wheel-ground contact with friction, six drives on a battery bus, IMU and encoder models, and a delay-aware LQR balance controller. It runs a 16 s mission (stand up, drive about 1.5 m, brake, raise and lower the legs, take a push) on every friction and added-delay case tested without falling ([evidence](docs/studio/m14-delay-robustness.md)), and a second clean run in a separate MATLAB process reproduces it exactly ([evidence](docs/studio/m16-reproducibility.md)).
 
-*Simscape Multibody replay of the full 16 s M14 mission (stand up, drive, brake, leg height, push), with body pitch, body position, bus voltage, pack current and joint torques; the dashed line marks the current time. Full-resolution video: [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4). Simulation only; masses are the CAD estimate.*
+[<img src="media/preview/m14-simscape-replay.gif" width="800" alt="Simscape Multibody replay of the full 16 s mission, with body pitch, position, bus voltage, pack current and joint torques.">](media/m14-simscape-replay.mp4)
+
+*Simscape Multibody replay of the full mission, with body pitch, position, bus voltage, pack current and joint torques. [Full-resolution video](media/m14-simscape-replay.mp4).*
 
 ```mermaid
 flowchart LR
   M[Mission profile] --> C[Delay-aware LQR<br>and leg control]
-  C --> D[Added delay 0/2/5 ms<br>+ 5 ms drive lag]
+  C --> D[Actuator delay<br>and drive lag]
   D --> P[Six drives<br>on a battery bus]
   P --> B[Simscape Multibody:<br>chassis, five-bar legs, wheels]
-  B <--> G[Wheel-ground contact<br>friction 0.5-1.0]
+  B <--> G[Wheel-ground contact<br>with friction]
   B --> S[IMU and encoders<br>with noise]
   S --> C
 ```
 
-<img src="media/figures/m14-pitch-all-fixtures.png" width="640" alt="Body pitch on all 11 M14 fixtures: peak 2.98-3.13 degrees, no fall.">
+<details>
+<summary>Earlier MATLAB models</summary>
 
-*Body pitch on all 11 M14 fixtures: peak 2.98-3.13°, no fall. Details in [docs/studio/m14-delay-robustness.md](docs/studio/m14-delay-robustness.md).*
-
-<img src="media/figures/m14-nominal-mission.png" width="640" alt="Nominal M14 mission signals.">
-
-*Nominal M14 mission.*
-
-#### Earlier MATLAB models
-
-These came before the studio. The controller was derived and cross-checked on dmBots' Simscape model. Our first Simscape model of the CAD robot did not balance (peak pitch 89.9°, see Results and limits); the studio model above replaces it.
+Before the studio model, the controller was derived and cross-checked on dmBots' Simscape model. Our first Simscape model of the CAD robot did not balance; the studio model above replaces it ([results and limits](docs/RESULTS.md)).
 
 <img src="media/figures/gains.png" width="640" alt="LQR gains against leg length, from the MATLAB derivation. Design model.">
 
-*LQR gains against leg length, from the MATLAB derivation. Design model.*
+*LQR gains against leg length, from the MATLAB derivation.*
 
 <img src="media/figures/poles.png" width="640" alt="Closed-loop poles across the gain schedule. Linear model.">
 
-*Closed-loop poles across the gain schedule. Linear model.*
+*Closed-loop poles across the gain schedule.*
 
 <img src="media/figures/margins.png" width="640" alt="Delay and disk margins against leg length, with frozen contact and no estimator. Linear model.">
 
-*Delay and disk margins against leg length, with frozen contact and no estimator. Linear model.*
+*Delay and disk margins against leg length.*
 
-<img src="media/figures/hip_boundary.png" width="640" alt="MATLAB hip-mode model: first unstable delay against sync damping. Gaps mean no instability found in the range searched.">
+<img src="media/figures/hip_boundary.png" width="640" alt="MATLAB hip-mode model: first unstable delay against sync damping.">
 
-*MATLAB hip-mode model: first unstable delay against sync damping. Gaps mean no instability found in the range searched.*
+*Hip-mode model: first unstable delay against sync damping.*
 
-<img src="media/figures/simscape.png" width="640" alt="dmBots' Simscape model: pitch with their gains, with gains from the rebuilt equations (the curves overlap), and with no control.">
+<img src="media/figures/simscape.png" width="640" alt="dmBots' Simscape model: pitch with their gains, with gains from the rebuilt equations, and with no control.">
 
-*dmBots' Simscape model: pitch with their gains, with gains from the rebuilt equations (the curves overlap), and with no control.*
+*dmBots' Simscape model: their gains and the rebuilt gains give overlapping responses.*
 
 <img src="media/figures/simulink-dmbots-model.png" width="640" alt="Top level of dmBots' Simulink model (MIT), used for the cross-check above.">
 
-*Top level of dmBots' Simulink model (MIT), used for the cross-check above.*
+*Top level of dmBots' Simulink model (MIT), used for the cross-check.*
+
+</details>
+
+## Control and estimation
+
+The controller grew one real-world problem at a time, each step tested in simulation against the one before ([methods and code](docs/methods/batch-2.md)):
+
+1. **Delay**: the gains are designed on a model that includes the actuator delay, and a predictor makes up the missing samples ([C template](wbr/control/predictor/s5_predictor.h)).
+2. **Sensors**: an adaptive complementary filter learns the gyro's pitch bias while the robot stands and while it drives ([C estimator](estimation/s10/s10_estimator.c)).
+3. **Wheels**: feedforward for wheel damping and loss ([header](wbr/control/wheel_loss/s7_wheel_loss.h)), and rolling resistance modelled correctly at the contact patch ([model](wbr/sim/rolling.py)).
+4. **Losing the host**: if the Raspberry Pi disconnects, the robot latches its position and brakes gently to a stop ([header](wbr/control/stop/s8_stop_position.h)).
+5. **Balance point**: a slow trim learns where the centre of mass really is, so the robot settles upright instead of leaning.
+
+Steps 1–4 have C or Python code with tests in this repository; step 5 follows in the next batch. Paired Monte Carlo trials compare each version with the previous one ([paired-trial scorer](wbr/sim/paired_trials.py)).
+
+## Electronics (KiCad 9)
+
+Two learning boards for the robot, designed in KiCad 9 for a 6S battery (18.0–25.2 V). Both are clean in KiCad's electrical (ERC) and design-rule (DRC) checks. They are design-only: not fabricated or powered yet.
+
+| 6S power and monitor board | STM32H723 control board |
+| --- | --- |
+| <img src="media/hardware/power-board.png" width="420" alt="KiCad 3D render of the 6S power and monitor board"> | <img src="media/hardware/control-board.png" width="420" alt="KiCad 3D render of the STM32H723 control board"> |
+| Input protection, two 5 V buck rails (Raspberry Pi and auxiliary), an energy monitor and an isolated e-stop status loop. Builds on my earlier **Edge AI Smart Power Module** project (input protection → buck → power monitor → test points). | STM32H723 with three CAN channels for the DAMIAO joint motors, USB to the Raspberry Pi, an IMU sensor on SPI, pack current sensing and its own protected supply. The pin and peripheral map follows DM-jump's `CtrlBoard-H7`. |
+
+```mermaid
+flowchart LR
+  BAT[6S battery<br>18-25.2 V] --> PWR[Power and monitor board]
+  BAT --> CTRL[STM32H723 control board]
+  PWR -->|5 V| PI[Raspberry Pi 5<br>+ depth camera]
+  PI <-->|USB| CTRL
+  CTRL <-->|CAN x3| MOT[DAMIAO joint<br>and wheel motors]
+  IMU[IMU sensor] -->|SPI| CTRL
+```
 
 ## Results and limits
 
-All results here are simulation results. No motors have been powered. Geometry, inertias, mass distribution, friction, motor limits, sensor noise, and delays are assumptions unless a result says otherwise. The animation above is from a simulation run, not a hardware recording.
-
-| Result | Evidence | Status |
-| --- | --- | --- |
-| Stand behavior | Pitch RMS `0.000034109°`; drift `0.000061911 m`; no fall | MEASURED by `scripts/stand.py`, saved in `results/stand.json` |
-| Stand with a prescribed push | Saved reference trace reproduced with maximum absolute difference `0` across 5,000 samples and 21 columns | MEASURED by `check.py`, saved in `results/parity.json`; reference is `tests/traces/stand_integration.csv` |
-| Obstacle run | Integration reference reproduced with maximum absolute difference `0` across 4,000 samples and 21 columns | MEASURED by `check.py`, saved in `results/parity.json`; reference is `tests/traces/obstacle_integration.csv` |
-| CAD stand comparison | Largest per-column maximum absolute difference `1.785469515` in `Tp` torque (N·m) | MEASURED by `check.py`, saved in `results/parity.json`; the plant properties differ. |
-| CAD obstacle comparison | Largest per-column maximum absolute difference `19.948454409` in rear hip torque `hrR` (N·m) | MEASURED by `check.py`, saved in `results/parity.json`; plant and controller setup differ. Exact cross-model parity is not established. |
-| Obstacle with delay | Five of five trials passed at zero added delay; zero of five passed at assumed 2, 4, 6, and 8 ms delays | MEASURED by `scripts/recount_delay.py`, saved in `docs/delay_summary.csv`. |
-| Simscape balance, first CAD model (superseded) | Peak pitch `89.8903707414°`; the balance and firmware-equivalence criteria failed | MEASURED by the archived `check.py` output, summarized in `docs/simscape_balance.csv`. The Simscape run is not part of this CPU test suite. Superseded by the MATLAB studio model, which balances through the whole M14 mission (next row). |
-| MATLAB studio M14: 16 s mission, friction 0.5–1.0 × added delay 0/2/5 ms | 777/777 gates; 11 of 11 fixtures to 16 s, no fall, peak pitch 2.98–3.13°; delay-aware controller, extra-delay margin 12 ms (was 1.4 ms) | MEASURED in MATLAB/Simscape, summarized in [docs/studio/m14-delay-robustness.md](docs/studio/m14-delay-robustness.md) and `results/m14_summary.csv`. Studio source not yet released. |
-| MATLAB studio M16: reproducibility of the first release | 14/14 gates; two clean runs of the M14 mission in separate processes are bit-identical (pitch, CoM, leg lengths, bus voltage, every native sample); all earlier milestone receipts still valid | MEASURED in MATLAB/Simscape, summarized in [docs/studio/m16-reproducibility.md](docs/studio/m16-reproducibility.md) and `results/m16_summary.csv`. Studio source not yet released. |
-| Motors and real robot | No powered-motor or physical robot result | UNKNOWN |
-
-The exact reference traces are checked against the integration build at seed zero. The CAD stand and obstacle traces are also compared at seed zero; the largest per-column differences are reported by the parity script. These mismatches are not treated as parity. Robot physical masses remain ASSUMED. The simple model generator uses primitive geometry because the source of the CAD mesh export does not establish a redistribution license.
+Everything here is simulation or design. No motors have been powered and no board has been built. Masses, friction, motor limits, sensor noise and delays are assumptions unless a result says otherwise. Each claim links to its evidence; the full table of measured results, including the earlier failures, is in [docs/RESULTS.md](docs/RESULTS.md).
 
 ## Videos
 
 Everything below is simulation, played back from saved runs. Nothing here is footage of a real robot.
 
+<details>
+<summary>All clips</summary>
+
 ### MATLAB studio, Simscape Multibody, 3.62 kg CAD mass
 
 | Clip | What it shows |
 | --- | --- |
-| [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4) | M14 mission, 16 s: stand up, drive about 1.5 m, brake, leg height, push |
+| [m14-simscape-replay.mp4](media/m14-simscape-replay.mp4) | 16 s mission: stand up, drive about 1.5 m, brake, leg height, push |
 
 ### CAD robot, 3.72 kg model
 
@@ -152,6 +171,8 @@ Everything below is simulation, played back from saved runs. Nothing here is foo
 | [design-obstacle-rule-before-after.mp4](media/design-obstacle-rule-before-after.mp4) | Obstacle at 1 m/s. Left: before the distance rule, falls. Right: after it, passes |
 | [design-jump.mp4](media/design-jump.mp4) | Jump |
 
+</details>
+
 ## Quick start
 
 Use Python with NumPy, SciPy, MuJoCo 3.3.7, and pytest. These commands were run on CPU:
@@ -185,12 +206,13 @@ The bundled CSV and all recovery results are synthetic/simulation only. They do 
 - `wbr/sim/`: MuJoCo scenarios and simulation loop.
 - `wbr/analysis/`: saved-trace parity analysis and SVG plotter (`pip install -e '.[plots]'`).
 - `models/`: assumed parameter set and primitive MJCF generator. Meshes are intentionally omitted pending license verification.
+- `estimation/`: the adaptive attitude estimator in C.
 - `matlab/`: derivation, LQR, margins, hip-mode, and Simulink cross-check sources with CSV results. No MATLAB command was run for this refactor. The original Simscape builder depended on the unlicensed CAD mesh set and is not included.
 - `perception/`: dataset-free script entry points and notes. No photographs or datasets are included.
 - `slam/`: live RGB-D SLAM launch kit and setup notes; hardware execution is unverified.
 - `scripts/`: one entry point for each behavior, using a shared result writer.
 - `tests/`: CPU parity test and text CSV reference traces.
-- `media/`: simulation clips, listed under Videos.
+- `media/`: simulation clips (listed under Videos), figures and board renders.
 - `docs/`: design notes and CSV summaries of delay and Simscape failures.
 
 Summary CSVs under `docs/` are labeled MEASURED, ASSUMED, or UNKNOWN. Follow the same convention when adding results.

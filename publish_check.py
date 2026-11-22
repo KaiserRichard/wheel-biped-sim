@@ -56,6 +56,8 @@ PNG_ALLOWLIST = {
     'media/figures/m14-nominal-mission.png': '59c66a64954e926f128d1a1b708dc3e8ad647d98c6fe12ef92a8df32664defac',
     'media/figures/m14-pitch-all-fixtures.png': '7f0613d86da149014150c42880fbbdd4d7171c9ac5f5a583d64c111a6bfa4ba7',
     'media/figures/m14-startup-fix.png': '8feb0eb5d78c8dd7a72ae13f553ddc6976b835242862729aafa09c4dc29e175b',
+    'media/hardware/power-board.png': '897a09959997d5b980775a0e2131905ae06afdd97524f9a3161a64ff0f43871d',
+    'media/hardware/control-board.png': '0ef5a8d4c2ee4f3b7dc30d8476895a6dc1aca29125494d6c355392a41e56082b',
 }
 # No compressed additions are approved in this P3-only batch.
 GZIP_ALLOWLIST = frozenset()
