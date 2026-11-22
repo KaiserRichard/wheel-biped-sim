@@ -16,7 +16,7 @@ These citations describe source contracts, not a Mac/Pi runtime verification.
 First-party interfaces reused without modification:
 
 - [convert_trajectory.py, line 38](../frames/convert_trajectory.py#L38): `read_samples`, exact epoch/stamp agreement, explicit formats. [frames.py, lines 124–162](../frames/frames.py#L124-L162): `convert`, frame composition, clock/domain and epoch boundaries. Transform construction/inversion and SDK mount helpers are in lines 41–123. See [frames README](../frames/README.md) for upstream transform/export citations.
-- [trajectory evaluator CLI, lines 565–590](../../../wbr-perception-phase1-runtime/tools/trajectory_eval/traj_eval.py#L565-L590) and [README](../../../wbr-perception-phase1-runtime/tools/trajectory_eval/README.md): explicit frames/clocks, format/unit flags, SE3/Sim3/none, RPE seconds, no-plots output. This tool is absent from this worktree; a spec provides its existing source path and the receipt hashes it. The source has no claimed public upstream URL; this is first-party reuse.
+- [trajectory evaluator CLI, lines 565–590](../trajectory_eval/traj_eval.py#L565-L590) and [README](../trajectory_eval/README.md): explicit frames/clocks, format/unit flags, SE3/Sim3/none, RPE seconds, no-plots output. This tool is absent from this worktree; a spec provides its existing source path and the receipt hashes it. The source has no claimed public upstream URL; this is first-party reuse.
 
 Third-party API contracts:
 

@@ -12,7 +12,7 @@ micro-ROS and has no `/cmd_vel`** (SOURCE-SUPPORTED by owner sessions).
 `/cmd_vel` and `std_msgs/Empty` on `/twin/jump`. It forwards `linear.x` as
 `v` (m/s), `angular.z` as `yaw_rate` (rad/s), and each `Empty` as a jump edge.
 Other Twist axes are ignored. The planar twin logs yaw but cannot rotate.
-The [protocol and assumptions](../../docs/twin3d_cmd/README.md) are shared with
+The [protocol and assumptions](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/twin3d_cmd/README.md) are shared with
 the Mac sender/listener.
 
 | Parameter / policy | Default | Evidence |

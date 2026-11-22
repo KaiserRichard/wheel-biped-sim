@@ -372,5 +372,5 @@ health for rearm_healthy_ticks, explicit local rearm, then new traffic. Firmware
 currently exposes no rearm command: recovery from its latched FAILSAFE requires
 board reset. No wire message grants rearm.
 
-See [CN integration](../docs/CN_INTEGRATION.md) for the gateway IPC extension,
+See CN integration for the gateway IPC extension,
 startup policy, reproducible host tests and hardware verification limits.

@@ -9,12 +9,12 @@ workflow. All new files and synthetic artifacts belong under this directory.
 
 ## Local sources and provenance
 
-Implementation follows [calibration plan §5](../../docs/D435I_CALIBRATION_PLAN.md),
+Implementation follows [calibration plan §5](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/D435I_CALIBRATION_PLAN.md),
 its local calibration notes and readiness references, and the historical
-[recorder](../../experiments/2026-10-13-n4b-d435i-prep/d435i_record.cpp),
-[SDK helper](../../experiments/2026-10-13-n4b-d435i-prep/d435i_rs.h) and
-[power pattern](../../experiments/2026-10-13-n4b-d435i-prep/smoke_ram.sh).
-The [new-unit enumeration](../../experiments/2026-10-13-pi5-env-snapshot/rs_calibration_new_unit.txt)
+[recorder](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-n4b-d435i-prep/d435i_record.cpp),
+[SDK helper](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-n4b-d435i-prep/d435i_rs.h) and
+[power pattern](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-n4b-d435i-prep/smoke_ram.sh).
+The [new-unit enumeration](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-pi5-env-snapshot/rs_calibration_new_unit.txt)
 lists accel 400/200/100 Hz and gyro 400/200 Hz; this utility requests only
 gyro 200 and accel 100, MOTION_XYZ32F.
 

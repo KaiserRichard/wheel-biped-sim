@@ -144,5 +144,5 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover \
 ```
 
 Exact final commands/output are in `tests/last-run.log`; review findings and
-remaining limits are in [REVIEW.md](REVIEW.md).
+remaining limits are in [REVIEW.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/stamp_drift/REVIEW.md).
 

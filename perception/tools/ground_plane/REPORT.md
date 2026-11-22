@@ -85,10 +85,10 @@ Mac, Python, 80 RANSAC iterations on one benchmark frame):
 
 These are not a Raspberry Pi estimate.
 
-Plots: [normal error](results/normal_error.png),
-[height error](results/height_error.png),
-[recall by range](results/recall_by_range.png),
-[timing](results/timing.png). Raw per-scene records are in
+Plots: [normal error](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/ground_plane/results/normal_error.png),
+[height error](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/ground_plane/results/height_error.png),
+[recall by range](../../media/ground-plane-recall.png),
+[timing](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/ground_plane/results/timing.png). Raw per-scene records are in
 [metrics.json](results/metrics.json).
 
 ## Tests and evaluator runs

@@ -27,7 +27,7 @@ Ran 5 tests in 1.509s
 OK
 ```
 
-The full output is saved in [tests_session/last-run.log](tests_session/last-run.log).
+The full output is saved in [tests_session/last-run.log](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/tests_session/last-run.log).
 Stub check executables cover a PASS chain, early FAIL stop, BLOCKED dependency
 propagation, `--continue-on-fail`, and `--plan`. No Pi, camera, ROS graph, or
 other hardware was accessed.

@@ -50,7 +50,7 @@ Bare-metal C99, register level, no HAL/CMSIS download: needs only
 * `McuStatus.session` is the MCU boot ID (chip UID + boot counter in RTC backup register 0),
   so an MCU reset shows up on the Pi as `mcu_reboots_seen`.
 
-Prebuilt binary: [`firmware/prebuilt/link_bench_f446.bin`](firmware/prebuilt/)
+Prebuilt binary: [`firmware/prebuilt/link_bench_f446.bin`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/tree/fde5721af0627eaf60c78d95296ab26924425e37/tools/link_bench/firmware/prebuilt)
 (SHA-256 in `SHA256SUMS`, built with Arm GNU Toolchain 13.2.rel1 from this tree).
 Rebuild with `make -C tools/link_bench/firmware`.
 

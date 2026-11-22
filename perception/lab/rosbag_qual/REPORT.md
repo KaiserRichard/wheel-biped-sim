@@ -5,7 +5,7 @@
 The original implementation supplies bounded explicit-topic recording,
 offline SQLite/optional rosbag2_py analysis, and isolated rclpy playback
 observation under `lab/rosbag_qual/`. The independent review fixed the issues
-ranked in [REVIEW.md](REVIEW.md): duration versus splitting semantics, replay
+ranked in [REVIEW.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/rosbag_qual/REVIEW.md): duration versus splitting semantics, replay
 saved-data reduction, incomplete evidence acceptance, rate-clock comparison,
 static TF stamp preservation, partial captures, threshold provenance, CDR
 alignment, raw-log preservation and configuration/usage errors.

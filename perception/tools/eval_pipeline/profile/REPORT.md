@@ -76,7 +76,7 @@ config and tests, so production code was not edited. The final suite executes
 14 tests: 13 pass and one expected failure. This is not a clean qualification
 PASS. The 79.9/80.0 °C finite-value boundary itself passes its regressions.
 Exact output is in `tests/last-run.log`; full commands and verdict are in
-[`calibration/allan/REVIEW.md`](../../../calibration/allan/REVIEW.md).
+[`calibration/allan/REVIEW.md`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/calibration/allan/REVIEW.md).
 
 The older shared-decoder bug paragraph above is stale for this checkout:
 `resource_sampler.py` currently uses `FIELDS[14:]`, correctly beginning at

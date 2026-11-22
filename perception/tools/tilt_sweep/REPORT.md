@@ -50,9 +50,9 @@ The fixed-mount method produced only 204 correct advisories because pose error s
 
 Plots:
 
-- [Height error vs pitch](results/height_error_vs_pitch.png)
-- [Advisory correctness heatmap](results/advisory_correctness.png)
-- [Rendered obstacle support](results/obstacle_support.png)
+- [Height error vs pitch](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/tilt_sweep/results/height_error_vs_pitch.png)
+- [Advisory correctness heatmap](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/tilt_sweep/results/advisory_correctness.png)
+- [Rendered obstacle support](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/tilt_sweep/results/obstacle_support.png)
 
 ## Test
 

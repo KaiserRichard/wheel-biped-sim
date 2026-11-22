@@ -23,7 +23,7 @@ The replay uses the exact node depth decoding: row step, endianness, 16UC1 -> fl
 
 **MEASURED:** 110 depth frames per bag; 22 selected per bag; both give **22 BLOCKED / 0 NO_PLANE / 0 NO_POSE**. S1 depth bag receipt span is 7.271789075 s. The reported Pi 17 BLOCKED + 2 NO_POSE in 10 wall-clock seconds is not reproduced count-for-count by this deterministic offline schedule. Identity poses are always available here, so it cannot reproduce transport/startup pose timeouts.
 
-Raw per-frame output, full transforms and first-frame fits: [diag/results.json](diag/results.json). Geometry ablations and recorded LIVE output: [diag/surfaces.json](diag/surfaces.json).
+Raw per-frame output, full transforms and first-frame fits: [diag/results.json](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_planner_node/diag/results.json). Geometry ablations and recorded LIVE output: [diag/surfaces.json](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_planner_node/diag/surfaces.json).
 
 ## Floor fitting succeeds
 
@@ -68,10 +68,10 @@ Across sampled S1 frames the nearest centre has x=0.725 m and y=-0.425..-0.375 m
 
 First-frame sampled points >3 cm: S1 9610 points / 315 occupied cells; B-H13 9752 / 316. The saved depth overlays mark all such points red and nearest-cell contributors cyan; top-down panels show the straight footprint in green:
 
-![S1 measured depth and obstacle samples](diag/S1-empty-obstacles.png)
-![B-H13 measured depth and obstacle samples](diag/B-H13-obstacles.png)
+[S1 measured depth and obstacle samples](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_planner_node/diag/S1-empty-obstacles.png)
+![B-H13 measured depth and obstacle samples](../../media/obstacle-points.png)
 
-The first recorded color frames provide scene context (not asserted to be exactly synchronized to the selected depth): [S1](diag/S1-empty-color.jpg), [B-H13](diag/B-H13-color.jpg). They visibly show the tabletop, lamp, rear wall, right-side monitor/support, and, only in B-H13, the central box stack.
+The first recorded color frames provide scene context (not asserted to be exactly synchronized to the selected depth): [S1](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_planner_node/diag/S1-empty-color.jpg), [B-H13](../../media/obstacle-camera.jpg). They visibly show the tabletop, lamp, rear wall, right-side monitor/support, and, only in B-H13, the central box stack.
 
 ## Why BLOCKED rather than a shift?
 
@@ -108,7 +108,7 @@ S1 has **zero** sampled above-threshold points with |y|<=0.25 and 0<=x<1.3 m. Th
 
 **UNKNOWN:** precise physical identity of each right-edge depth sample, ground-truth depth accuracy, Pi callback ordering behind the two NO_POSE outputs, and actual Pi ORB pose initialization. This analysis does not establish traversability of unseen table edges: unknown cells are only a cost penalty in the present planner, not a hard barrier. The ungated initial plane selector and maximum-height persistence can be limitations in other scenes, but neither is demonstrated as the cause here.
 
-Required command output (also [diag/unittest.txt](diag/unittest.txt)):
+Required command output (also [diag/unittest.txt](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_planner_node/diag/unittest.txt)):
 
 ```text
 ...........

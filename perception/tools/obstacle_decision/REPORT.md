@@ -48,8 +48,8 @@ produce STOP_CANDIDATE.
 Controls: empty floor → NONE, no detection; box outside corridor → NONE, no
 detection.
 
-Plots: [height error](results/height_error.png),
-[advisory confusion](results/confusion.png).
+Plots: [height error](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/obstacle_decision/results/height_error.png),
+[advisory confusion](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/obstacle_decision/results/confusion.png).
 
 ## Supervisor correction (2026-10-23)
 

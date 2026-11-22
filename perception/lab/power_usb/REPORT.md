@@ -115,6 +115,6 @@ partial-evidence BLOCKED replay; exact output is `tests/last-run.log`.
 The earlier statement that all four suites pass needs qualification after
 review: profile now retains an expected-failure regression for an inherited
 non-finite-temperature false PASS. Full findings and exact commands are in
-[`calibration/allan/REVIEW.md`](../../calibration/allan/REVIEW.md). No hardware
+[`calibration/allan/REVIEW.md`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/calibration/allan/REVIEW.md). No hardware
 or network was used, so the external thermal article was not independently
 rechecked.

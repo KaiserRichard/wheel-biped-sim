@@ -9,7 +9,7 @@ It is the "teapot" demo, but with our own complementary filter and the WBR shape
 - Orange ghost (right): gyro integration only.
 - Overlay: pitch/roll of all three, plus a Madgwick filter (numbers only) and the gyro bias.
 
-Theory: [docs/imu_view/LESSON.md](../../docs/imu_view/LESSON.md).
+Theory: [docs/imu_view/LESSON.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/imu_view/LESSON.md).
 
 ## Run without hardware
 

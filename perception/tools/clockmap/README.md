@@ -9,9 +9,9 @@ All files and test-generated fixtures stay under `tools/clockmap/`.
 ## Sources and provenance
 
 **SOURCE-SUPPORTED:** first-party requirements are
-[R1 §3, lines 66–68](../../../wbr-perception-phase1-runtime/slides_roadmap/research/R1_algorithms.md),
-[R2 §1, lines 25–27](../../../wbr-perception-phase1-runtime/slides_roadmap/research/R2_integration.md),
-and [J1 C0/C1/C3](../../research/sw-foundation/J1_components.md).
+R1 §3, lines 66–68,
+R2 §1, lines 25–27,
+and [J1 C0/C1/C3](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/research/sw-foundation/J1_components.md).
 R1 proposes affine bidirectional mapping with delay/residual uncertainty and
 session/wrap checks. R2 defines upper source age as
 `MCU_now - mapped_estimate_epoch + mapping_uncertainty`.
@@ -31,9 +31,9 @@ The line numbers refer to the inspected raw source, not the web page wrapper.
 
 **SOURCE-SUPPORTED:** the mimicked CSV header and stamp placement come from the
 read-only first-party source
-[`d435i_rs.h`, lines 73–92](../../../wbr-perception-phase1-runtime/experiments/2026-10-13-n4b-d435i-prep/d435i_rs.h),
+[`d435i_rs.h`, lines 73–92](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-n4b-d435i-prep/d435i_rs.h),
 called inside the recorder callback and mutex in
-[`d435i_record.cpp`, lines 44–60](../../../wbr-perception-phase1-runtime/experiments/2026-10-13-n4b-d435i-prep/d435i_record.cpp).
+[`d435i_record.cpp`, lines 44–60](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/experiments/2026-10-13-n4b-d435i-prep/d435i_record.cpp).
 Those reference files are untracked in the inspected reference checkout, so no
 upstream commit URL is asserted for their first-party CSV format. SDK timestamp
 units/domains are supported by upstream

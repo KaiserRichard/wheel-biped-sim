@@ -2,7 +2,7 @@
 
 Goal: one well-measured dataset that serves all offline work for the Oct 31
 demo: ORB-SLAM3 lab map, depth accuracy, box measurement, local map. Commands
-and stop rules are in [RUNBOOK.md](RUNBOOK.md); use run root
+and stop rules are in [RUNBOOK.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/mobile_demo/RUNBOOK.md); use run root
 `~/wbr-evidence/mobile-demo-20261024-01`. No motor commands from the Pi.
 
 ## 1. Bring / prepare

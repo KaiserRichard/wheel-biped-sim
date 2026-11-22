@@ -4,7 +4,7 @@
 is additive; no default config or gate state changes. Do not execute these
 ROS scripts until the owner authorizes CAMERA AVAILABLE,
 and power/USB and destination storage qualification prerequisites are satisfied.
-See [storage draft](../../docs/STORAGE_QUALIFICATION_DRAFT.md), which itself needs review.
+See [storage draft](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/STORAGE_QUALIFICATION_DRAFT.md), which itself needs review.
 
 The intended target is realsense2_camera **4.58.4**, as pinned in
 [manifest.yaml](../platform_env/manifest.yaml). From a sourced Jazzy Pi terminal,

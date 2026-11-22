@@ -25,5 +25,5 @@ and the JSON method label from both CLI invocation forms. Final suite:
 runtime-observer make suite also passed (C++ probe plus 20 Python tests), with
 output in `tests/runtime-observer-review.log`.
 
-See [`calibration/allan/REVIEW.md`](../../calibration/allan/REVIEW.md) for the
+See [`calibration/allan/REVIEW.md`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/calibration/allan/REVIEW.md) for the
 full phase-21 review, inherited profile defect and source-verification limits.

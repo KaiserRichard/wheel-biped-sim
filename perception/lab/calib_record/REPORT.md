@@ -49,7 +49,7 @@ invented receipts. SHA-256 proves byte identity, not authenticity or original
 capture-time integrity when a manifest was made later.
 
 Validation: **26 unittest tests PASS**, output saved in
-[`tests/last-run.log`](tests/last-run.log). Coverage includes full Allan PASS,
+[`tests/last-run.log`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/calib_record/tests/last-run.log). Coverage includes full Allan PASS,
 camera checks PASS with mandatory target BLOCKED, FAIL and BLOCKED precedence,
 reanalysis consistency, all result-artifact hashes, checksum tampering/traversal,
 original wrapper layout, unsupported/corrupt bag formats, missing dependencies,

@@ -41,7 +41,7 @@ All numeric limits and evaluation deltas reside in [thresholds.json](thresholds.
 
 ## Validation and limits
 
-The saved [validation report](validation/report.md) and [summary](validation/summary.json) reproduce the read-only N4A evidence (0.041461, 0.036844, 0.041604 m, rounding to 0.0415, 0.0368, 0.0416 m). It used three historical trajectories, the saved EuRoC ground truth CSV, and the evidence report's 3,682 camera-frame count because the timestamp file was not part of that saved evidence bundle. This is offline tool validation only.
+The saved [validation report](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/eval_pipeline/accuracy/validation/report.md) and [summary](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/eval_pipeline/accuracy/validation/summary.json) reproduce the read-only N4A evidence (0.041461, 0.036844, 0.041604 m, rounding to 0.0415, 0.0368, 0.0416 m). It used three historical trajectories, the saved EuRoC ground truth CSV, and the evidence report's 3,682 camera-frame count because the timestamp file was not part of that saved evidence bundle. This is offline tool validation only.
 
 Run tests and preserve their output:
 

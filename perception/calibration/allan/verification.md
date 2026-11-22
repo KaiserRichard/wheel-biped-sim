@@ -17,7 +17,7 @@ All physical calibration and gate conclusions remain OPEN.
 | Missing matplotlib | Fits/YAML/summary produced; warning and plots skipped | Injected unavailable-module fixture |
 | Wrapper | Empty directory handoff, no overwrite, free-space refusal, under-voltage label, SIGTERM drain/final power sample | Fake recorder, vcgencmd and df; no Pi hardware |
 
-Full final Python receipt: [tests/last-run.log](tests/last-run.log).
+Full final Python receipt: [tests/last-run.log](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/calibration/allan/tests/last-run.log).
 Python was 3.11.0rc2, numpy 1.26.4. Standard /usr/local and /opt/homebrew
 librealsense include paths and Homebrew Cellar location were absent.
 No SDK install or brew command was needed.

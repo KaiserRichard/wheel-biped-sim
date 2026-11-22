@@ -20,7 +20,7 @@ This path has no IMU dependency or fake engine. Native Pi build/install and
 camera-free `d435_node` startup now pass; startup intentionally stops at the
 missing-vocabulary/settings error, before ORB construction. No live camera
 execution or tracked pose is claimed. See the
-[build session](../../ops/worklog/sessions/2026-10-21-camera-ros-build.md).
+[build session](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ops/worklog/sessions/2026-10-21-camera-ros-build.md).
 **Sparse active-map output:** `d435_node` now also exposes bounded, source-stamped
 `PointCloud2` snapshots at at most 1 Hz, with companion map metadata. See
 [map frames, Foxglove, separate MCAP persistence, build and bounded replay](MAP_POINTS.md).

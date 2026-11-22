@@ -140,5 +140,5 @@ It omits payloads and is parser evidence only. Tests mock all recording/replay
 commands and cover PASS, FAIL and BLOCKED for each CLI, round trips through
 saved evidence, static TF, partial streams, absent ROS and error exits.
 Test commands and complete output are recorded in `tests/last-run.log`.
-See [REVIEW.md](REVIEW.md) for the independent review and fixes.
+See [REVIEW.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/rosbag_qual/REVIEW.md) for the independent review and fixes.
 

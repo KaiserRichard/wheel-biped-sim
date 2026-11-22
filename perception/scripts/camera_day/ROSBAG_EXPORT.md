@@ -82,5 +82,5 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
 
 The pure tests run without ROS on Mac. Actual Pi serialization/read/export smoke
 uses explicitly synthetic bags outside Git; commands/results and preserved
-paths are in [the runner session](../../ops/worklog/sessions/2026-10-21-camera-replay-export.md).
+paths are in [the runner session](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ops/worklog/sessions/2026-10-21-camera-replay-export.md).
 No real camera, estimator, replay or final atlas export is validated by that smoke.

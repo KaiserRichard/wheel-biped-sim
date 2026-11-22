@@ -40,7 +40,7 @@ No existing-tool bug was established during this task.
 ## Verification
 
 **MEASURED software-only:** 28 unittest tests passed in 14.293 s on the available
-Mac Python **3.11.0rc2**. Full output: [tests/last-run.log](tests/last-run.log).
+Mac Python **3.11.0rc2**. Full output: [tests/last-run.log](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/lab/d435i_raw/tests/last-run.log).
 
 ```bash
 python3 -m unittest discover -s lab/d435i_raw/tests -v \

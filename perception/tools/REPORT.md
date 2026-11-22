@@ -4,7 +4,7 @@ MEASURED: reviewed all nine tools directories present, excluding trajectory_eval
 and fixed three confirmed numeric correctness bugs within Q4's permitted edit
 scope. Added one failing-then-passing regression for each. No style refactoring.
 
-[REVIEW_Q4.md](REVIEW_Q4.md) contains the ranked FIXED / OPEN / NOT-A-BUG findings,
+[REVIEW_Q4.md](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/REVIEW_Q4.md) contains the ranked FIXED / OPEN / NOT-A-BUG findings,
 primary-source conventions, reproduction evidence, exact commands and results.
 Five findings in the additional read-only tools remain OPEN.
 

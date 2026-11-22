@@ -191,7 +191,7 @@ target visible, and avoiding blur. The [Kalibr IMU Noise Model wiki](https://git
 recommends approximately **15–24 h** for stationary Allan data. These are
 **SOURCE-SUPPORTED through the existing calibration plan's reviewer-verified
 citations**, not freshly fetched for this network-free task. Local policies and
-their provenance are in [the plan](../../docs/D435I_CALIBRATION_PLAN.md),
+their provenance are in [the plan](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/D435I_CALIBRATION_PLAN.md),
 [lab instructions](../../calibration/lab/README.md), and
 [Allan instructions](../../calibration/allan/README.md).
 

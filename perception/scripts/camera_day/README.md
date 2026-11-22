@@ -4,7 +4,7 @@
 Serial `WITH_ORB_SLAM3=ON` colcon build exited 0; installed `d435_node` reached
 its expected missing-settings error with immediate symbol binding enabled.
 Camera absent: no live launch, tracking, pose or throughput claim.
-See the [build session and preserved failures](../../ops/worklog/sessions/2026-10-21-camera-ros-build.md).
+See the [build session and preserved failures](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ops/worklog/sessions/2026-10-21-camera-ros-build.md).
 The initial 2026-10-20 preparation was offline because SSH timed out.
 
 `d435_node` is a visual-only executable in the existing `ros2/wbr_orb_node`

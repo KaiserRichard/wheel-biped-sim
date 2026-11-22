@@ -105,7 +105,7 @@ packs code/distance/height/width/confidence/plane-valid/sequence/age.
 
 **SOURCE-SUPPORTED:** [`filter.py:55–70`](../../tools/imu_view/filter.py) blends
 gyro prediction with accelerometer tilt on every update; it has no dynamic
-acceleration rejection. [`LESSON.md:33–49`](../imu_view/LESSON.md) records measured
+acceleration rejection. [`LESSON.md:33–49`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/imu_view/LESSON.md) records measured
 bench x-axis gyro bias −3.25°/s (roll), and $\tau=0.5$ s at 100 Hz.
 **INFERRED:** unremoved bias produces 1.625° roll error in 0.5 s gyro-only flight;
 this is not a measured pitch bias. Acceleration of 1 m/s² can imitate 5.8° tilt.
@@ -124,7 +124,7 @@ mark geometry unavailable and gate UNCERTAIN rather than invent a floor.
 ## 3. Jump gating mapped to actual firmware
 
 **SOURCE-SUPPORTED source baseline:** local unmodified DM-jump snapshot
-[`PROVENANCE.json`](../../sim/parity/vendor/dm_jump/PROVENANCE.json), upstream commit
+[`PROVENANCE.json`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/sim/parity/vendor/dm_jump/PROVENANCE.json), upstream commit
 `6855ef8c6da20246251cfd473467c04112bf800f`.
 [`jump_loop_r`, User/APP/chassisR_task.c:272–342](https://github.com/nguyenbinh-shark/DM-jump/blob/6855ef8c6da20246251cfd473467c04112bf800f/User/APP/chassisR_task.c#L272)
 exposes internal `jump_flag`, `jump_status_l/r`, counters and leg lengths:
@@ -136,7 +136,7 @@ statuses, not contact; the comment "landed" is not evidence of impact detection.
 [`ground_detectionR/L`, User/Algorithm/VMC/VMC_calc.c:184–215](https://github.com/nguyenbinh-shark/DM-jump/blob/6855ef8c6da20246251cfd473467c04112bf800f/User/Algorithm/VMC/VMC_calc.c#L184)
 computes estimated force $F_N=F_0\cos\theta+T_p\sin\theta/L_0+6$;
 returns **1 airborne** if $F_N<5$ N, otherwise 0. Its `ins` argument is unused.
-[`chassisR_task.c:218–224`](../../sim/parity/vendor/dm_jump/User/APP/chassisR_task.c)
+[`chassisR_task.c:218–224`](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/sim/parity/vendor/dm_jump/User/APP/chassisR_task.c)
 calls the jump loop before this contact estimate; both airborne flags affect
 balance logic separately. These are internal estimates, not verified Pi telemetry
 or direct contact sensors. Current upstream freshness was not verified: shell

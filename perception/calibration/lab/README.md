@@ -6,7 +6,7 @@ accuracy. No camera, Pi, SSH, network, install, Git or Docker command was execut
 during preparation. Existing evidence and external source trees were read only.
 No build is required for these scripts; the reviewer supplies the Docker image.
 
-Follow [the calibration plan](../../docs/D435I_CALIBRATION_PLAN.md), including
+Follow [the calibration plan](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/D435I_CALIBRATION_PLAN.md), including
 N1 → N2 → N3 and independent attestation of the 30 Hz recording profile. N2's
 15 Hz profile and mandatory 300-second soak are unchanged. USB must be ≥5000M.
 All physical capture remains OPEN until the owner explicitly says

@@ -50,7 +50,7 @@ The available host interpreter ran the tests; Python 3.12 on the Pi was not run.
 
 `make -B -C ros2/wbr_orb_node test` rebuilt the C++17 fake-engine probe with
 `-Wall -Wextra -Wpedantic` and passed **19 unittest tests**, no skips, in the
-final saved run. Output: [tests/last-run.log](tests/last-run.log).
+final saved run. Output: [tests/last-run.log](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_orb_node/tests/last-run.log).
 
 Coverage includes exact stereo equality/unmatched drops; no processing before
 IMU endpoint coverage; source ns precision at real epoch magnitude; a rotated
@@ -76,11 +76,11 @@ Additional verification:
 
 - `check_core.py --outdir ros2/wbr_orb_node/tests/evidence`, followed by
   `--analyze-only` on that directory: three software criteria PASS, exit 0.
-  [tests/evidence/result.json](tests/evidence/result.json) contains raw hashes,
+  [tests/evidence/result.json](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_orb_node/tests/evidence/result.json) contains raw hashes,
   timestamps and host metadata. This is not a Pi gate result.
 - C++ core compiled separately with `-g -O1 -fsanitize=address,undefined`; its
   `all` scenario passed without sanitizer diagnostics. Output:
-  [tests/sanitizer.log](tests/sanitizer.log).
+  [tests/sanitizer.log](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/ros2/wbr_orb_node/tests/sanitizer.log).
 - Python sources compile; existing test runner passes `bash -n`; no shell script
   was added. Whitespace review found no trailing whitespace.
 

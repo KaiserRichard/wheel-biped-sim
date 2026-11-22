@@ -6,8 +6,8 @@ fixtures. **Every numeric layout value, identifier, rate, limit and arithmetic
 result below is PROPOSED**, except explicitly attributed source facts and synthetic
 test observations. This designation also applies to code constants and fixtures.
 
-SOURCE-SUPPORTED inputs: [R2 integration §§1–2, lines 15–39](../../../wbr-perception-phase1-runtime/slides_roadmap/research/R2_integration.md)
-and [J2 architecture §4, lines 44–57](../../research/sw-foundation/J2_architecture.md).
+SOURCE-SUPPORTED inputs: R2 integration §§1–2, lines 15–39
+and [J2 architecture §4, lines 44–57](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/research/sw-foundation/J2_architecture.md).
 Exact widths and policy choices here are INFERRED. This is original framing/code,
 not MAVLink wire compatibility. Borrowed reset/quality semantics are
 SOURCE-SUPPORTED by [MAVLink common ODOMETRY](https://mavlink.io/en/messages/common.html#ODOMETRY)

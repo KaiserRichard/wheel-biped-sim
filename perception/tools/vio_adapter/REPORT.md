@@ -67,7 +67,7 @@ MEASURED: input export was read only at
 `<local workspace>/Desktop/Research/wbr-data/2026-10-14-d435i-ramtest15s/euroc`.
 The manifest and all camera metadata declare `global_time`; no clock conversion
 or camera–IMU timeshift was applied. Input hashes are retained in
-[summary.json](real_replay/summary.json) and were rechecked after replay.
+[summary.json](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/vio_adapter/real_replay/summary.json) and were rechecked after replay.
 Selected images were decoded as grayscale Y8 and sent to C++; raw camera/IMU
 files were not copied into the repository.
 
@@ -93,7 +93,7 @@ by the supplied times file; they are selections excluded before adapter ingestio
 not unreported adapter rejects. Four trailing gyro samples remain explicit EOF
 tail exclusions. No sample was counted as a pose merely to conceal missing coverage.
 
-MEASURED: [snapshots.jsonl](real_replay/snapshots.jsonl) contains 445 adapter
+MEASURED: [snapshots.jsonl](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/tools/vio_adapter/real_replay/snapshots.jsonl) contains 445 adapter
 snapshots. **SYNTHETIC**: 442 contain fake valid poses; the initial, lost and
 reset/map-boundary snapshots are invalid. The script changes map 1→2 once,
 increments reset/epoch counters once, and never supplies covariance. Those
