@@ -13,4 +13,4 @@
 | S10 · Adaptive gyro-bias estimation | Adaptive pitch gyro-bias correction recovered the injected drift cases, while acceleration bias still shifted pitch. | [Read study](s10-gyro-bias.md) |
 | R5 · Corrected wheel–ground contact reruns | D1 passes rose from four to eight, both V1 trials passed, and both G1 arms still missed. | [Read study](r5-contact-rerun.md) |
 | G3 · Full-stack Monte Carlo | Combining the revised controller, estimator and rolling model exposed a packet-age failure mode. | [Read study](g3-full-stack.md) |
-- [K1d: PPO policy against LQR](k1d-ppo.md): recovery from ±40° tilts, motor work and drift.
+| K1d · PPO policy against LQR | A PPO policy recovers from ±40° tilts with 13–33% less motor work than LQR, but drifts 10–37 cm. | [Read study](k1d-ppo.md) |
