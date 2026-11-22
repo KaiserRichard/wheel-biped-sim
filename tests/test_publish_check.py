@@ -101,7 +101,7 @@ def test_private_contexts(tmp_path, value):
     check_case(tmp_path, 'doc.md', value, 'MIT motor frames; MIT software license; upstream author seek.')
 
 
-@pytest.mark.parametrize('value', ['BMI' + '-088', 'MPU' + '6050', 'ICM' + '-42688-P', 'BNO' + '085', 'LSM6' + 'DSOX', 'ADIS' + '16470'])
+@pytest.mark.parametrize('value', ['BMI' + '-088', 'MPU' + '6050', 'ICM' + '-42688-P', 'BNO' + '085', 'LSM' + '6DSOX', 'ADIS' + '16470'])
 def test_sensor_spelling_variants(tmp_path, value):
     check_case(tmp_path, 'doc.md', value, 'IMU sensor')
 

@@ -47,7 +47,7 @@ IMU_MODEL_PATTERNS = (
     r"(?<![A-Za-z0-9])MPU[ _-]?(?:6000|6050|6500|9250)(?![A-Za-z0-9])",
     r"(?<![A-Za-z0-9])ICM[ _-]?(?:20602|20608|20948|42605|42688)(?:[ _-]?P)?(?![A-Za-z0-9])",
     r"(?<![A-Za-z0-9])BNO[ _-]?(?:055|080|085|086)(?![A-Za-z0-9])",
-    r"(?<![A-Za-z0-9])LSM6(?:DS3|DSL|DSO|DSOX|DSV)(?![A-Za-z0-9])",
+    r"(?<![A-Za-z0-9])LSM" r"6(?:DS3|DSL|DSO|DSOX|DSV)(?![A-Za-z0-9])",
     r"(?<![A-Za-z0-9])ADIS[ _-]?16\d{3}(?![A-Za-z0-9])",
 )
 IMU_MODELS = re.compile("|".join(IMU_MODEL_PATTERNS), re.I)
