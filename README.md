@@ -89,16 +89,16 @@ The controller grew one real-world problem at a time, each step tested in simula
 4. **Losing the host**: if the Raspberry Pi disconnects, the robot latches its position and brakes gently to a stop ([header](wbr/control/stop/s8_stop_position.h)).
 5. **Balance point**: a slow trim learns where the centre of mass really is, so the robot settles upright instead of leaning.
 
-Steps 1–4 have C or Python code with tests in this repository; step 5 follows in the next batch. Paired Monte Carlo trials compare each version with the previous one ([paired-trial scorer](wbr/sim/paired_trials.py)).
+Steps 1–4 have C or Python code with tests in this repository. Each study has a short evidence page with its figures and raw CSVs ([evidence index](docs/evidence/README.md)). With every layer switched on, the full stack still falls when two encoder packets are lost in a row ([evidence](docs/evidence/g3-full-stack.md)); a graded packet-loss response is the next step. Paired Monte Carlo trials compare each version with the previous one ([paired-trial scorer](wbr/sim/paired_trials.py)).
 
 ## Electronics (KiCad 9)
 
-Two learning boards for the robot, designed in KiCad 9 for a 6S battery (18.0–25.2 V). Both are clean in KiCad's electrical (ERC) and design-rule (DRC) checks. They are design-only: not fabricated or powered yet.
+Two learning boards for the robot, designed in KiCad 9 for a 6S battery (18.0–25.2 V). Both are clean in KiCad's electrical (ERC) and design-rule (DRC) checks. They are design-only: not fabricated or powered yet. KiCad sources, schematic PDFs and check reports: [hardware/](hardware/README.md).
 
 | 6S power and monitor board | STM32H723 control board |
 | --- | --- |
 | <img src="media/hardware/power-board.png" width="420" alt="KiCad 3D render of the 6S power and monitor board"> | <img src="media/hardware/control-board.png" width="420" alt="KiCad 3D render of the STM32H723 control board"> |
-| Input protection, two 5 V buck rails (Raspberry Pi and auxiliary), an energy monitor and an isolated e-stop status loop. Builds on my earlier **Edge AI Smart Power Module** project (input protection → buck → power monitor → test points). | STM32H723 with three CAN channels for the DAMIAO joint motors, USB to the Raspberry Pi, an IMU sensor on SPI, pack current sensing and its own protected supply. The pin and peripheral map follows DM-jump's `CtrlBoard-H7`. |
+| Input protection, two 5 V buck rails (Raspberry Pi and auxiliary), an energy monitor and an isolated e-stop status loop. Builds on my earlier **Edge AI Smart Power Module** project (input protection → buck → power monitor → test points). | STM32H723 with three CAN channels for the DAMIAO joint motors, USB to the Raspberry Pi, an IMU sensor on SPI, current sensing for its own supply branch, and its own protected supply. The pin and peripheral map follows DM-jump's `CtrlBoard-H7`. |
 
 ```mermaid
 flowchart LR
@@ -212,6 +212,8 @@ The bundled CSV and all recovery results are synthetic/simulation only. They do 
 - `slam/`: live RGB-D SLAM launch kit and setup notes; hardware execution is unverified.
 - `scripts/`: one entry point for each behavior, using a shared result writer.
 - `tests/`: CPU parity test and text CSV reference traces.
+- `docs/evidence/`: one page per simulation study, with figures and CSVs.
+- `hardware/`: KiCad 9 sources, schematic PDFs and ERC/DRC reports for both boards.
 - `media/`: simulation clips (listed under Videos), figures and board renders.
 - `docs/`: design notes and CSV summaries of delay and Simscape failures.
 
