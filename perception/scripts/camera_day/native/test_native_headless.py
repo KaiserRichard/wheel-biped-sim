@@ -51,8 +51,9 @@ class NativeTests(unittest.TestCase):
             evidence.mkdir(); output.mkdir()
             (upstream / "Examples/Stereo-Inertial").mkdir(parents=True)
             text = sdk_fixture()
-            (evidence / "rs-enumerate.txt").write_text(text)
-            base = (f"# SDK serial: {native.SERIAL}; input SHA256: {hashlib.sha256(text.encode()).hexdigest()}\n"
+            readback = evidence / "rs-enumerate.txt"
+            readback.write_text(text)
+            base = (f"# SDK serial: {native.SERIAL}; input SHA256: {hashlib.sha256(readback.read_bytes()).hexdigest()}\n"
                     "Camera.fps: 30\nORBextractor.nFeatures: 1250\nRGBD.DepthMapFactor: 1.0\n")
             for name in ("stereo.yaml", "rgbd-ros.yaml"):
                 (evidence / name).write_text(base)

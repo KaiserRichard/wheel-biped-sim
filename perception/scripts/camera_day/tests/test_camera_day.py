@@ -1,5 +1,6 @@
 """Small offline fixtures; no ROS, camera, network, training or dependency builds."""
 import ast
+import hashlib
 import importlib.util
 import json
 import os
@@ -101,12 +102,16 @@ class CalibrationTests(unittest.TestCase):
 
     def test_cli_never_overwrites_calibration(self):
         with tempfile.TemporaryDirectory(dir=HERE) as tmp:
+            saved_readback = Path(tmp) / "rs-enumerate.txt"
+            saved_readback.write_bytes(self.text.replace("\n", "\r\n").encode("utf-8"))
             output = Path(tmp) / "camera.yaml"
             command = [sys.executable, str(CAMERA_DAY / "sdk_to_yaml.py"),
-                       str(FIXTURE), str(output), "--serial", SERIAL, "--mode", "rgbd"]
+                       str(saved_readback), str(output), "--serial", SERIAL, "--mode", "rgbd"]
             first = subprocess.run(command, capture_output=True, text=True, timeout=3)
             self.assertEqual(first.returncode, 0, first.stderr)
             original = output.read_bytes()
+            digest = hashlib.sha256(saved_readback.read_bytes()).hexdigest()
+            self.assertIn(f"input SHA256: {digest}".encode(), original)
             second = subprocess.run(command, capture_output=True, text=True, timeout=3)
             self.assertEqual(second.returncode, 2)
             self.assertEqual(output.read_bytes(), original)

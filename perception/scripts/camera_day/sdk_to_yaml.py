@@ -148,8 +148,10 @@ def main() -> int:
     parser.add_argument("--fps", type=int, default=30)
     args = parser.parse_args()
     try:
-        output = convert(args.input.read_text(), serial=args.serial, mode=args.mode,
-                         width=args.width, height=args.height, fps=args.fps)
+        # Keep line endings so the SHA-256 matches the saved SDK readback bytes.
+        with args.input.open(encoding="utf-8", newline="") as stream:
+            output = convert(stream.read(), serial=args.serial, mode=args.mode,
+                             width=args.width, height=args.height, fps=args.fps)
         with args.output.open("x") as stream:
             stream.write(output)
     except (ValueError, OSError) as error:
