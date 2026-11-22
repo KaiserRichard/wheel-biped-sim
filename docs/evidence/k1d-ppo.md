@@ -2,7 +2,7 @@
 
 Simulation only. MuJoCo, 5.1 kg CAD model, wheel–floor friction 0.7, 3 s per run. The PPO policy was trained in MATLAB (Reinforcement Learning Toolbox) on a two-angle model of the robot (chassis pitch and virtual-leg tilt), started from imitation of an LQR, and exported to C. The C actor matches MATLAB on 10,000 inputs (largest normalised action error about 2×10⁻⁶).
 
-Video: [ppo-vs-lqr.mp4](../../media/ppo-vs-lqr.mp4) (32 s, slowed down 2×, results card after each scenario).
+Video: [ppo-vs-lqr.mp4](../../media/ppo-vs-lqr.mp4) (51 s, slowed down 2×: the three robots on top, live pitch, wheel-axle position and wheel-speed plots below, and a results card after each scenario).
 
 ## Results
 
