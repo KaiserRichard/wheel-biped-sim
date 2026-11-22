@@ -19,7 +19,9 @@ def main():
  # Kalibr wants T_cam_imu (IMU -> camera), inverse of the known camera->IMU transform.
  Tci=[[Tbc[j][i] for j in range(3)]+[0] for i in range(3)]+[[0,0,0,1]]
  for i in range(3):Tci[i][3]=-sum(Tci[i][j]*Tbc[j][3] for j in range(3))
- phase-10=factory['cam1']['T_cn_cnm1']; T1i=[[sum(phase-10[i][k]*Tci[k][j] for k in range(4)) for j in range(4)] for i in range(4)]
+ T_right_left = factory['cam1']['T_cn_cnm1']
+ T1i = [[sum(T_right_left[i][k] * Tci[k][j] for k in range(4))
+        for j in range(4)] for i in range(4)]
  doc={'cam0':dict(factory['cam0']), 'cam1':dict(factory['cam1'])}
  for name,T in [('cam0',Tci),('cam1',T1i)]:doc[name]['T_cam_imu']=T; doc[name]['timeshift_cam_imu']=0.0
  a.output_dir.mkdir(parents=True,exist_ok=True)

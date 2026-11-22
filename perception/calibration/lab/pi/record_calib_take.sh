@@ -30,7 +30,7 @@ DISK_FREE=$(df -B1 --output=avail "$(dirname "$R")" | tail -n 1 | tr -d ' ')
 [[ "$DISK_FREE" =~ ^[0-9]+$ && "$DISK_FREE" -ge "$DISK_REQUIRED" ]] || fail "Evidence storage free=$DISK_FREE bytes < required=$DISK_REQUIRED"
 mkdir "$R"
 printf 'OPEN: name=%s seconds=%s RAM_free=%s RAM_required=%s\n' "$1" "$2" "$FREE" "$REQUIRED" > "$R/record.log"
-printf 'Profile: IR1+IR2 Y8 640x480@30; gyro 200; accel 100; emitter OFF; recorder enforces SDK 99005.\n' >> "$R/record.log"
+printf 'Profile: IR1+IR2 Y8 640x480@30; gyro 200; accel 100; emitter OFF.\n' >> "$R/record.log"
 printf 'storage_free=%s storage_required=%s (ASSUMED OS reserve 2 GiB)\n' "$DISK_FREE" "$DISK_REQUIRED" >> "$R/record.log"
 sha256sum "$RECORDER" "$ANALYZER" "$0" "$HERE/take_diagnostics.py" > "$R/tools-sha256.txt"
 P='' K='' C='' INTERRUPTED=0
@@ -86,10 +86,10 @@ if [[ -d "$S" ]]; then
     # Hash all recorder files before copying; no glob omission of hidden files.
     (cd "$S" && find . -type f -print0 | sort -z | xargs -0 -r sha256sum) > "$R/ram-sha256.txt"
     [[ -s "$R/ram-sha256.txt" ]] || fail 'RAM take has no files; retained for inspection'
-    phase-0=$(date +%s)
+    copy_started_s=$(date +%s)
     cp -a "$S" "$R/take"
     sync
-    printf 'copy_to_card_s=%s\n' "$(( $(date +%s) - phase-0 ))" >> "$R/record.log"
+    printf 'copy_to_card_s=%s\n' "$(( $(date +%s) - copy_started_s ))" >> "$R/record.log"
     if (cd "$R/take" && sha256sum -c ../ram-sha256.txt) > "$R/copy-verify.log" 2>&1; then
         VERIFIED=yes
         # S is constructed from a validated NAME, never caller-supplied as a path.
