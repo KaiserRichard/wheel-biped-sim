@@ -1,0 +1,13 @@
+{
+  "python_minimum": {"major": 3, "minor": 12, "source": "phase-16 requirement: Python 3.12 on Pi"},
+  "launcher_usage_exit_code": {"value": 2, "source": "tools/eval_pipeline/accuracy/run_euroc.sh usage()"},
+  "optional_modules": {"numpy": "tools/eval_pipeline and calibration workflows", "yaml": "optional calibration workflows", "rclpy": "optional ROS 2 workflows"},
+  "bundle_roots": ["lab", "tools", "calibration/lab/pi", "scripts", "ros2", "licenses"],
+  "exclude_paths": ["tools/link_bench/host", "tools/link_bench/firmware"],
+  "support_files": [
+    "lab/sensor_validation/sdk_analysis.py",
+    "lab/sensor_validation/kernel_analysis.py",
+    "lab/sensor_validation/n3_metrics.py"
+  ],
+  "source": "phase-16 deployment scope; host simulator/firmware artifacts excluded from Pi bundle"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "window_s": {"value": 60, "rationale": "PROPOSED default observation window; an idle or short run cannot qualify streaming."},
+  "sample_interval_s": {"value": 1, "rationale": "PROPOSED 1 Hz default requested by phase-1; missed slots are skipped."},
+  "max_sample_gap_s": {"value": 2.5, "rationale": "PROPOSED maximum gap between sample starts; larger gaps leave transient faults unobserved (BLOCKED)."},
+  "command_timeout_s": {"value": 2, "rationale": "PROPOSED bound per diagnostic command, not a hardware acceptance limit."},
+  "load_stop_grace_s": {"value": 3, "rationale": "PROPOSED grace after SIGTERM before SIGKILL of the load process group."},
+  "min_load_coverage_fraction": {"value": 0.95, "rationale": "PROPOSED minimum command lifetime/window ratio; lifetime does not prove useful workload."},
+  "allowed_fault_count": {"value": 0, "rationale": "PROPOSED no observed under-voltage, selected kernel faults, or temperature/voltage violations."},
+  "require_5a": {"value": true, "rationale": "PROPOSED bench policy; a configured USB-current override alone is not PSU negotiation evidence."},
+  "min_psu_current_ma": {"value": 5000, "source": "SOURCE-SUPPORTED Pi 5 recommended 5 V/5 A supply: https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#power-supply ; max_current is a big-endian device-tree u32 in mA. Software declaration is not an electrical measurement."},
+  "min_ext5v_v": {"value": 4.75, "rationale": "PROPOSED conservative bench guard for sampled EXT5V_V; not the firmware under-voltage detector threshold. ADC accuracy/calibration UNKNOWN. API: https://www.raspberrypi.com/documentation/computers/os.html#pmic_read_adc"},
+  "max_temperature_c": {"value": 80, "source": "SOURCE-SUPPORTED thermal boundary: Raspberry Pi says Pi 5 begins throttling when temperature reaches 80°C (https://www.raspberrypi.com/news/heating-and-cooling-raspberry-pi-5/); this check fails inclusively at >= 80°C."},
+  "usb_min_speed_mbps": {"value": 5000, "rationale": "SOURCE-SUPPORTED native baseline N1 requires SuperSpeed >=5000 Mbit/s: docs/NATIVE_PI5_BASELINE_ARCHITECTURE.md section 4."},
+  "usb_identity": {"vid": "8086", "pid": "0b3a", "source": "SOURCE-SUPPORTED saved lsusb and sysfs observations in experiments/2026-10-13-pi5-env-snapshot/camera_plug_check.txt; no serial identity is assumed."},
+  "throttle_bits": {"source": "SOURCE-SUPPORTED https://www.raspberrypi.com/documentation/computers/os.html#get_throttled ; existing decoder tools/runtime_observer/resource_sampler.py", "meanings": {"0": "under-voltage now", "1": "ARM frequency capped now", "2": "throttled now", "3": "soft temperature limit now", "16": "under-voltage occurred since boot", "17": "ARM frequency capped occurred", "18": "throttling occurred", "19": "soft temperature limit occurred"}},
+  "kernel_patterns": {
+    "source": "PROPOSED fault selection using lab/sensor_validation/kernel_analysis.py classifier. Conservative board-wide attribution; inspect matches manually.",
+    "patterns": {
+      "usb_disconnect": "USB disconnect",
+      "usb_reset": "reset .*USB device",
+      "uvc_error": "(?:uvcvideo|\\bUVC\\b).*(?:fail|error|timed?\\s*out|timeout|unknown.*format)",
+      "xhci_error": "xhci.*(?:error|fail|dead|timed?\\s*out|timeout|not responding|WARN|HC died)",
+      "under_voltage": "under[ -]?voltage|undervoltage",
+      "capture_loss": "messages (?:lost|suppressed)|callbacks suppressed|missed .*kernel messages"
+    }
+  }
+}

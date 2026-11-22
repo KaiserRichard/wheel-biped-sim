@@ -1,0 +1,28 @@
+# OPEN: MEASURED factory SDK readback, not an independent calibration.
+# Provenance: experiments/2026-10-13-pi5-env-snapshot/rs_calibration_new_unit.txt
+# IR1/IR2 640x480 Y8 blocks, and SDK IR1 -> IR2 extrinsic; see
+# docs/D435I_CALIBRATION_PLAN.md sections 1-3 and calibration_notes.md.
+# SDK serial 99005 is separate from ASIC/update-ID/USB serial.
+# cam0 = IR1, cam1 = IR2. Metres; p_cam1 = T_cn_cnm1 * p_cam0.
+# Four radtan zeros represent the factory rectified stream projection.
+cam0:
+  camera_model: pinhole
+  intrinsics: [386.953308105469, 386.953308105469, 321.034301757812, 241.040130615234]
+  distortion_model: radtan
+  distortion_coeffs: [0.0, 0.0, 0.0, 0.0]
+  resolution: [640, 480]
+  rostopic: /cam0/image_raw
+  cam_overlaps: [1]
+cam1:
+  camera_model: pinhole
+  intrinsics: [386.953308105469, 386.953308105469, 321.034301757812, 241.040130615234]
+  distortion_model: radtan
+  distortion_coeffs: [0.0, 0.0, 0.0, 0.0]
+  resolution: [640, 480]
+  rostopic: /cam1/image_raw
+  cam_overlaps: [0]
+  T_cn_cnm1:
+    - [1.0, 0.0, 0.0, -0.049912553280592]
+    - [0.0, 1.0, 0.0, 0.0]
+    - [0.0, 0.0, 1.0, 0.0]
+    - [0.0, 0.0, 0.0, 1.0]

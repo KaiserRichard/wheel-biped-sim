@@ -1,0 +1,32 @@
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw): make -C tools/bench_twin_fw
+make: Nothing to be done for `all'.
+EXIT: 0
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw): python3 -m unittest discover -s tools/bench_twin_fw/tests -v
+test_advisory_echo_leds_stale_rejections_and_sequence_wrap (test_bench_twin.TwinTests.test_advisory_echo_leds_stale_rejections_and_sequence_wrap) ... ok
+test_bandwidth_bound_uses_actual_formats (test_bench_twin.TwinTests.test_bandwidth_bound_uses_actual_formats) ... ok
+test_corrupt_and_nonfinite_advisory_echo (test_bench_twin.TwinTests.test_corrupt_and_nonfinite_advisory_echo) ... ok
+test_fake_motor_enable_step_disable_and_saturation (test_bench_twin.TwinTests.test_fake_motor_enable_step_disable_and_saturation) ... ok
+test_feedback_against_reference (test_bench_twin.TwinTests.test_feedback_against_reference) ... ok
+test_line_parser_formatter_actual_c (test_bench_twin.TwinTests.test_line_parser_formatter_actual_c) ... ok
+test_mit_bytes_against_reference_and_roundtrip (test_bench_twin.TwinTests.test_mit_bytes_against_reference_and_roundtrip) ... ok
+test_optional_agv_codec_compiles_only_when_explicitly_selected (test_bench_twin.TwinTests.test_optional_agv_codec_compiles_only_when_explicitly_selected) ... ok
+test_reference_conversions_and_clipping (test_bench_twin.TwinTests.test_reference_conversions_and_clipping) ... ok
+test_uart_mux_chunking_overflow_and_viewer_compatibility (test_bench_twin.TwinTests.test_uart_mux_chunking_overflow_and_viewer_compatibility) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.145s
+
+OK
+EXIT: 0
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw): python3 tools/lint_markdown.py tools/bench_twin_fw/README.md tools/bench_twin_fw/WORKLOG.md tools/bench_twin_fw/REVIEW.md
+0 issues across 3 file(s)
+EXIT: 0
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw): /usr/local/bin/arm-none-eabi-size tools/bench_twin_fw/build/bench_twin.elf
+   text	   data	    bss	    dec	    hex	filename
+  17020	      0	   5920	  22940	   599c	tools/bench_twin_fw/build/bench_twin.elf
+EXIT: 0
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw): /usr/local/bin/arm-none-eabi-nm -u tools/bench_twin_fw/build/bench_twin.elf
+EXIT: 0
+COMMAND (<local workspace>/Desktop/Research/wbr-wt-t3-fw/tools/bench_twin_fw/firmware): shasum -a 256 -c SHA256SUMS
+bench_twin.bin: OK
+EXIT: 0

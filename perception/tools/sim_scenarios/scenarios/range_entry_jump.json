@@ -1,0 +1,49 @@
+{
+  "name": "range_entry_jump",
+  "description": "Box begins beyond the default detector range, enters at 1.4 s, then robot performs an assumed jump cycle.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.25,
+    "duration_s": 9.0,
+    "l0": 0.12,
+    "jump_at_s": 3.0
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 3.5,
+      "y": 0.0,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.08,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0,
+      "t_to": 1.4,
+      "advisory": "NONE",
+      "note": "detect.Params.max_forward=3.0 m is measured from the camera, which simcam mounts 0.15 m ahead of the axle (simcam CAMERA_POS, ASSUMED): face distance = 3.5 - 0.15 - 0.25*t reaches 3.0 at t = 1.4. No live 1.3 m range override assumed."
+    },
+    {
+      "t_from": 1.4,
+      "t_to": 3.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "DecisionParams.jump_min_h=.03 <= .08 <= jump_max_h=.12; confirm_n=3; CROUCH starts at jump_at_s = 3 s."
+    },
+    {
+      "t_from": 3.0,
+      "t_to": 4.4,
+      "advisory": "UNCERTAIN",
+      "note": "Jump gate spec (#169 table, tools/jump_gate): UNCERTAIN from CROUCH start until SETTLE dwell is met = LAND tick (CROUCH+1.07 s rounded to the 10 Hz tick) + 0.3 s dwell. The scripted SETTLE lasts 0.40 s but the gate may return to STAND earlier by design."
+    },
+    {
+      "t_from": 4.4,
+      "t_to": 9.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "Fresh confirmation after SETTLE; DecisionParams.confirm_n=3 and jump_max_h=.12; geometry remains in default range."
+    }
+  ]
+}

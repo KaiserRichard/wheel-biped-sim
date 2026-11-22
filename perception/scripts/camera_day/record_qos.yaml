@@ -1,0 +1,27 @@
+# Best-effort subscriptions match either reliable or best-effort camera publishers.
+# /tf_static needs transient-local durability to retain the camera geometry.
+/camera/camera/infra1/image_rect_raw:
+  reliability: best_effort
+  history: keep_last
+  depth: 10
+/camera/camera/infra2/image_rect_raw:
+  reliability: best_effort
+  history: keep_last
+  depth: 10
+/camera/camera/depth/image_rect_raw:
+  reliability: best_effort
+  history: keep_last
+  depth: 10
+/camera/camera/color/image_raw:
+  reliability: best_effort
+  history: keep_last
+  depth: 10
+/camera/camera/aligned_depth_to_color/image_raw:
+  reliability: best_effort
+  history: keep_last
+  depth: 10
+/tf_static:
+  reliability: reliable
+  durability: transient_local
+  history: keep_last
+  depth: 1

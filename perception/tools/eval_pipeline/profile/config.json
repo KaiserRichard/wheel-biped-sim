@@ -1,0 +1,9 @@
+{
+  "sample_period_s": {"value": 0.1, "source": "PROPOSED: default 10 Hz profiling cadence requested by phase-6; override with --period-s"},
+  "throttle_period_s": {"value": 1.0, "source": "PROPOSED: lower-rate 1 Hz VideoCore polling requested by phase-6; override with --throttle-period-s"},
+  "camera_period_ms": {"value": 33.3, "source": "PROPOSED: phase-6's stated 30 Hz frame budget"},
+  "soft_temperature_limit_c": {"value": 80.0, "source": "SOURCE-SUPPORTED thermal boundary: Raspberry Pi says Pi 5 begins throttling when temperature reaches 80°C (https://www.raspberrypi.com/news/heating-and-cooling-raspberry-pi-5/); this check fails inclusively at >= 80°C."},
+  "throttle_bits_invalid": {"value": [0, 1, 2, 3, 16, 17, 18, 19], "source": "SOURCE-SUPPORTED: vcgencmd get_throttled current and historical under-voltage/frequency-capped/throttled/soft-temperature bits documented in Raspberry Pi vcgencmd behavior and mirrored by tools/runtime_observer/resource_sampler.py"},
+  "max_invalid_throttle_occurrences": {"value": 0, "source": "PROPOSED: phase-6 requires that no under-voltage or throttling bit occur during a profiling window"},
+  "percentile_method": {"value": "nearest-rank", "source": "SOURCE-SUPPORTED: reused from tools/runtime_observer/stats.py; rank = ceil(q*n), one-indexed"}
+}

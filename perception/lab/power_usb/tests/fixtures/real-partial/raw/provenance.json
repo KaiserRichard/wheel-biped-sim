@@ -1,0 +1,53 @@
+[
+  {
+    "source_path": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt",
+    "source_sha256": "0558d8cef14d165de84a2043e24faf0e2e40a2e28303937fc15de8aab64385eb",
+    "saved_as": "raw/snapshot-throttled.stdout",
+    "line_range_inclusive": [
+      37,
+      37
+    ],
+    "evidence_label": "MEASURED saved evidence"
+  },
+  {
+    "source_path": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt",
+    "source_sha256": "0558d8cef14d165de84a2043e24faf0e2e40a2e28303937fc15de8aab64385eb",
+    "saved_as": "raw/snapshot-temperature.stdout",
+    "line_range_inclusive": [
+      38,
+      38
+    ],
+    "evidence_label": "MEASURED saved evidence"
+  },
+  {
+    "source_path": "experiments/2026-10-13-pi5-env-snapshot/camera_plug_check.txt",
+    "source_sha256": "962e7ff0f51c442d0d39465b4f0dcdb98cd35a521bbf6de66230e6731156364d",
+    "saved_as": "raw/camera-plug-check.txt",
+    "line_range_inclusive": "whole file",
+    "evidence_label": "MEASURED saved evidence"
+  },
+  {
+    "source_path": "experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md",
+    "source_sha256": "9dae15c3001c6a39366414054f850f41b6c94b9a6d5a3e9b93385607ecd1c36d",
+    "saved_as": "raw/session-addendum-excerpt.md",
+    "line_range_inclusive": [
+      1,
+      7
+    ],
+    "evidence_label": "MEASURED saved evidence"
+  },
+  {
+    "source_path": "experiments/2026-09-13-d435i-post-reboot-20260913T023833Z/resume-20260913T055451Z/n2-complete/n1/usb-tree-before.txt",
+    "source_sha256": "9164dc6af194921338a916de407f96bcb0ca7f72d758bd878e54e2810200078f",
+    "saved_as": "raw/september-lsusb-tree.txt",
+    "line_range_inclusive": "whole file",
+    "evidence_label": "MEASURED saved evidence"
+  },
+  {
+    "source_path": "experiments/2026-09-12-pi5-native-sensor-validation/smoke-01-kernel.log",
+    "source_sha256": "f0061718083382a19b9bc71da9e18e140d3681dfaf8bea60a4afca3b53a8088c",
+    "saved_as": "raw/september-kernel.log",
+    "line_range_inclusive": "whole file",
+    "evidence_label": "MEASURED saved evidence"
+  }
+]

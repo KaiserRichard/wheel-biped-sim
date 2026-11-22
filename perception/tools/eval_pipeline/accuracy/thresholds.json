@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "acceptance": {
+    "ate_rmse_se3_max_m": {
+      "value": 0.046,
+      "evidence_label": "PROPOSED",
+      "source": "PROPOSED: ORB-SLAM3 Campos et al. IEEE T-RO 2021 Table II reports 0.036 m for stereo-inertial MH01; proposed 0.010 m margin. https://arxiv.org/abs/2007.11898"
+    },
+    "min_pose_fraction": {
+      "value": 0.95,
+      "evidence_label": "PROPOSED",
+      "source": "PROPOSED: project-selected minimum pose output coverage; not a published ORB-SLAM3 criterion"
+    },
+    "max_pose_fraction": {
+      "value": 1.0,
+      "evidence_label": "CALCULATED",
+      "source": "CALCULATED: a pose-row count divided by the expected frame-row count cannot exceed 1 for a valid coverage fraction"
+    }
+  },
+  "evaluation": {
+    "timestamp_unit_detection": {
+      "ns_magnitude_cutoff": {
+        "value": "1000000000000",
+        "source": "INFERRED format rule: EuRoC absolute epoch seconds are about 1e9 and nanoseconds about 1e18; inspect the first emitted timestamp and record the selected unit. Verify against the run's dataset time domain."
+      }
+    },
+    "tolerance_s": {"value": 0.02, "source": "N4A historical evo evaluation used --t_max_diff 0.02 s"},
+    "estimate_offset_s": {"value": 0.0, "source": "N4A historical evaluation declared zero offset on the EuRoC dataset time base"},
+    "rpe_delta_m": {"value": 1.0, "source": "PROPOSED: task-required RPE at 1 m"},
+    "rpe_delta_frames": {"value": 10, "source": "PROPOSED: task-required RPE at 10 frames"}
+  }
+}

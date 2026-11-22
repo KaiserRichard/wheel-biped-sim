@@ -1,0 +1,1 @@
+Copied from KaiserRichard/heterogeneous-edge-ai-os branch feat/cn-integration commit 5e5be3843717bd08ce9abeab41ef62a4202569dd on 2026-10-18 (read-only reference; upstream owns these files).

@@ -1,0 +1,8 @@
+# Kalibr target for aprilgrid_6x4_45mm_A3.pdf (A3 landscape). NOMINAL values: replace tagSize with the
+# measured value after printing (see README.md). tagSpacing is a ratio and does not change
+# under uniform print scaling.
+target_type: 'aprilgrid'
+tagCols: 6
+tagRows: 4
+tagSize: 0.0450  # [m] NOMINAL
+tagSpacing: 0.30  # [-] gap / tagSize

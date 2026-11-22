@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "thresholds": {
+    "minimum_fit_samples": {
+      "value": 3,
+      "source": "PROPOSED",
+      "rationale": "An affine fit needs at least three ordered observations so a residual check is meaningful."
+    },
+    "outlier_mad_scale": {
+      "value": 4.0,
+      "source": "PROPOSED",
+      "rationale": "Iterative least-squares rejection keeps samples within four MADs of the current residual centre."
+    },
+    "minimum_mad_ns": {
+      "value": 1000,
+      "source": "PROPOSED",
+      "rationale": "Do not treat sub-microsecond numerical/serialization variation as a resolvable outlier scale."
+    },
+    "fit_max_iterations": {
+      "value": 8,
+      "source": "PROPOSED",
+      "rationale": "Bound robust-fit work while allowing the inlier mask to settle."
+    },
+    "step_window_samples": {
+      "value": 5,
+      "source": "PROPOSED",
+      "rationale": "Compare five observations on each side of a candidate residual discontinuity."
+    },
+    "step_threshold_ns": {
+      "value": 5000000,
+      "source": "PROPOSED",
+      "rationale": "A five-millisecond residual jump is reported as a possible transport/clock step; it is not a robot acceptance limit."
+    },
+    "maximum_step_segments": {
+      "value": 16,
+      "source": "PROPOSED",
+      "rationale": "Bound recursive discontinuity splitting on malformed or highly discontinuous input."
+    },
+    "max_discontinuities": {
+      "value": 0,
+      "source": "PROPOSED",
+      "rationale": "Any detected reversal or residual step makes continuity diagnostics FAIL; this is not a hardware acceptance budget."
+    }
+  },
+  "percentiles": [
+    0,
+    50,
+    95,
+    99,
+    100
+  ]
+}

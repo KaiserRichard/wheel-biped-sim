@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>wbr_orb_node</name>
+  <version>0.1.0</version>
+  <description>Diagnostic ORB-SLAM3 stereo-inertial and D435 visual camera nodes.</description>
+  <maintainer email="">WBR maintainers</maintainer>
+  <license>GPL-3.0-or-later</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>yaml_cpp_vendor</depend>
+  <depend>cv_bridge</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>realsense2_camera</exec_depend>
+  <build_depend>python3</build_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

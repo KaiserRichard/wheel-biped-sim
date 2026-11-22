@@ -1,0 +1,67 @@
+{
+  "sequence": {
+    "frames": 16,
+    "travel_m": 1.5,
+    "height_m": 0.3,
+    "pitch_peak_deg": 3.0,
+    "stride": 4,
+    "points_per_frame_mean": 2170.3125
+  },
+  "floor_plane": {
+    "valid": true,
+    "inliers": 2299,
+    "camera_height_m": 0.30004451074730965,
+    "pitch_deg": 3.0032854412495653
+  },
+  "timing": {
+    "total_ms": 297.2864689072594,
+    "ms_per_frame": 18.580404306703713
+  },
+  "cases": {
+    "gravity_aligned": {
+      "height_rmse_m": 0.0042513449707027315,
+      "observed_cells": 2619,
+      "obstacle_precision": 1.0,
+      "obstacle_recall": 0.9642857142857143,
+      "tp": 27,
+      "fp": 0,
+      "fn": 1
+    },
+    "pose_bias_1cm": {
+      "height_rmse_m": 0.003911018573647231,
+      "observed_cells": 2628,
+      "obstacle_precision": 1.0,
+      "obstacle_recall": 1.0,
+      "tp": 27,
+      "fp": 0,
+      "fn": 0
+    },
+    "pose_bias_3cm": {
+      "height_rmse_m": 0.004683018728255276,
+      "observed_cells": 2505,
+      "obstacle_precision": 0.5142857142857142,
+      "obstacle_recall": 0.9,
+      "tp": 18,
+      "fp": 17,
+      "fn": 2
+    },
+    "pose_bias_1deg": {
+      "height_rmse_m": 0.0052950536713539526,
+      "observed_cells": 2617,
+      "obstacle_precision": 0.7352941176470589,
+      "obstacle_recall": 0.8928571428571429,
+      "tp": 25,
+      "fp": 9,
+      "fn": 3
+    },
+    "raw_pose_no_gravity_alignment": {
+      "height_rmse_m": 0.11559074004330243,
+      "observed_cells": 2576,
+      "obstacle_precision": 0.011194029850746268,
+      "obstacle_recall": 1.0,
+      "tp": 27,
+      "fp": 2385,
+      "fn": 0
+    }
+  }
+}

@@ -12,6 +12,18 @@ import zlib
 ROOT = Path(__file__).resolve().parent
 MAX_TEXT_BYTES = 10 * 1024 * 1024
 MAX_HARDWARE_KICAD_BYTES = 24 * 1024 * 1024
+PERCEPTION_IMAGE_LIMITS = {".png": 1024**2, ".jpg": 1024**2, ".jpeg": 1024**2, ".gif": 4 * 1024**2}
+# Exact bytes of the reviewed perception visuals. See perception/README.md.
+PERCEPTION_IMAGE_ALLOWLIST = {
+    "perception/media/euroc-mh01.png": "21459bbb440e8e05f57492eae3cbb53c5ecdec6247a872c5d5b36f1eadff6b22",
+    "perception/media/ground-plane-recall.png": "49250b7a65554e56506aeddf31d4ef8e21b08adc4117d853223f78321db72424",
+    "perception/media/lab-obstacle-height.png": "9f6aeafec6776255fe1f977cc682e426d70130774ac78703dc0438087bbffafa",
+    "perception/media/local-height-map.png": "ed56098a7dc9dd9519eb6775a3e88ca2765b28ff81d37aea8d4ce2af9723f30e",
+    "perception/media/obstacle-camera.jpg": "78a22a9d833811a3deb21648111a37610167159b661e4712542a6468e4f661f5",
+    "perception/media/obstacle-points.png": "e00cf8205a72d80ea1d5c37c5f71349a1ec2c58cf089953f78954c055e1a31de",
+    "perception/media/scene-twin-approach.gif": "40c559407049fa905408c9ed681e85a16f13d846d6b24a5b0ea4dcba4d86eec9",
+    "perception/media/yolo-depth-overlay.png": "93c47bafcba85aca20d660e4e7fb653849f3ad6eea58de40e59d5d4605234c0e",
+}
 HARDWARE_KICAD_HEADERS = {
     ".kicad_pcb": "(kicad_pcb",
     ".kicad_sch": "(kicad_sch",
@@ -192,6 +204,28 @@ def mp4_metadata(raw):
     return b"".join(chunks) + raw[offset:]
 
 
+def jpeg_metadata(raw):
+    """Return JPEG application and comment segments before the first scan."""
+    if not raw.startswith(b"\xff\xd8") or not raw.endswith(b"\xff\xd9"):
+        raise ValueError("invalid JPEG")
+    offset = 2
+    segments = []
+    while offset + 4 <= len(raw) and raw[offset] == 0xff:
+        marker = raw[offset + 1]
+        if marker == 0xff:
+            offset += 1
+            continue
+        size = int.from_bytes(raw[offset + 2:offset + 4], "big")
+        if size < 2 or offset + 2 + size > len(raw):
+            break
+        if marker == 0xda:
+            return b"\n".join(segments)
+        if 0xe0 <= marker <= 0xef or marker == 0xfe:
+            segments.append(raw[offset + 4:offset + 2 + size])
+        offset += 2 + size
+    raise ValueError("unreadable JPEG segments")
+
+
 def hardware_pdf_text(raw):
     """Inspect PDF metadata and visible text with a PDF parser."""
     import pymupdf
@@ -233,14 +267,22 @@ def scan(root=None):
             under_hardware = len(path.relative_to(root).parts) > 1 and rel.startswith("hardware/")
             is_hardware_pdf = under_hardware and suffix == ".pdf"
             kicad_header = HARDWARE_KICAD_HEADERS.get(suffix) if under_hardware else None
-            if ((suffix in FORBIDDEN_SUFFIXES and not is_hardware_pdf)
+            perception_limit = PERCEPTION_IMAGE_LIMITS.get(suffix) if rel.startswith("perception/") else None
+            perception_digest = PERCEPTION_IMAGE_ALLOWLIST.get(rel) if perception_limit else None
+            if perception_limit and perception_digest is None:
+                problems.append(f"unreviewed perception image: {rel}")
+                continue
+            if perception_limit and path.stat().st_size > perception_limit:
+                problems.append(f"oversize perception image: {rel}")
+                continue
+            if ((suffix in FORBIDDEN_SUFFIXES and not is_hardware_pdf and not perception_digest)
                     or name.lower().startswith(("trial_", ".env", "id_"))
                     or name.lower() == ".git" or blocked_path.lower() in rel.lower()):
                 problems.append(f"prohibited file: {rel}")
             if any(n.lower() in rel.lower() for n in blocked_names) or IMU_MODELS.search(rel):
                 problems.append(f"prohibited source or sensor filename: {rel}")
-            is_figure = suffix == ".png" and rel in PNG_ALLOWLIST
-            is_video = suffix in {".mp4", ".gif"} or is_figure
+            is_figure = suffix == ".png" and (rel in PNG_ALLOWLIST or perception_digest is not None)
+            is_video = suffix in {".mp4", ".gif"} or is_figure or perception_digest is not None
             if suffix == ".png" and not is_figure:
                 problems.append(f"unreviewed PNG: {rel}")
                 continue
@@ -252,7 +294,10 @@ def scan(root=None):
                 problems.append(f"oversize text or opaque data: {rel}")
                 continue
             raw = path.read_bytes()
-            if is_figure and hashlib.sha256(raw).hexdigest() != PNG_ALLOWLIST[rel]:
+            if perception_digest and hashlib.sha256(raw).hexdigest() != perception_digest:
+                problems.append(f"changed allow-listed perception image: {rel}")
+                continue
+            if is_figure and not perception_digest and hashlib.sha256(raw).hexdigest() != PNG_ALLOWLIST[rel]:
                 problems.append(f"changed allow-listed PNG: {rel}")
             if suffix == ".gz":
                 try:
@@ -269,6 +314,12 @@ def scan(root=None):
                     raw = png_metadata(raw)
                 except (ValueError, IndexError, zlib.error):
                     problems.append(f"unreadable PNG metadata: {rel}")
+                    continue
+            if perception_digest and suffix in {".jpg", ".jpeg"}:
+                try:
+                    raw = jpeg_metadata(raw)
+                except ValueError:
+                    problems.append(f"unreadable JPEG metadata: {rel}")
                     continue
             if is_hardware_pdf:
                 try:

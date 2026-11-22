@@ -1,0 +1,14 @@
+{
+  "evidence": "SOURCE-SUPPORTED read-only inspection of existing sender branch; schema fixture, no UART access",
+  "commit": "7028a55de2fff6f349f3e7f56df6680074f7280b",
+  "path": "tools/perception_health/py/perception_health.py",
+  "tracking_states": {
+    "SYSTEM_NOT_READY": 0,
+    "NO_IMAGES_YET": 1,
+    "NOT_INITIALIZED": 2,
+    "OK": 3,
+    "RECENTLY_LOST": 4,
+    "LOST": 5,
+    "OK_KLT": 6
+  }
+}

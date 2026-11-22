@@ -1,0 +1,143 @@
+--- stereo_inertial_realsense_D435i.cc
++++ stereo_inertial_realsense_D435i.cc
+@@ -26,0 +27,2 @@
++#include <deque>
++#include <atomic>
+@@ -145,4 +146,0 @@
+-    double prev_accel_timestamp = 0;
+-    rs2_vector prev_accel_data{};
+-    double current_accel_timestamp = 0;
+-    rs2_vector current_accel_data{};
+@@ -151,0 +150,4 @@
++    std::atomic<bool> imu_callback_error{false};
++    std::deque<std::pair<double, rs2_vector>> accel_samples, pending_gyro;
++    std::ofstream imu_raw(runtime.output + "/imu_raw.csv");
++    imu_raw << std::setprecision(17) << "stream,source_s,x,y,z\n";
+@@ -163,0 +166 @@
++        if (imu_callback_error.load()) return;
+@@ -188,10 +190,0 @@
+-            while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
+-            {
+-
+-                int index = v_accel_timestamp_sync.size();
+-                double target_time = v_gyro_timestamp[index];
+-
+-                v_accel_data_sync.push_back(current_accel_data);
+-                v_accel_timestamp_sync.push_back(target_time);
+-            }
+-
+@@ -203,8 +196,34 @@
+-            if (m_frame.get_profile().stream_name() == "Gyro")
+-            {
+-                if (!have_accel) return;
+-                // Explicitly requested at 200 Hz
+-                v_gyro_data.push_back(m_frame.get_motion_data());
+-                v_gyro_timestamp.push_back((m_frame.get_timestamp()+offset)*1e-3);
+-                //rs2_vector gyro_sample = m_frame.get_motion_data();
+-                //std::cout << "Gyro:" << gyro_sample.x << ", " << gyro_sample.y << ", " << gyro_sample.z << std::endl;
++            const auto data = m_frame.get_motion_data();
++            const double stamp = (m_frame.get_timestamp() + offset) * 1e-3;
++            const bool gyro = m_frame.get_profile().stream_type() == RS2_STREAM_GYRO;
++            imu_raw << (gyro ? "gyro" : "accel") << ',' << stamp << ','
++                    << data.x << ',' << data.y << ',' << data.z << '\n';
++            if (gyro) pending_gyro.emplace_back(stamp, data);
++            else { have_accel = true; accel_samples.emplace_back(stamp, data); }
++            // Unified IMU on gyro timestamps. Wait for two bracketing accel
++            // samples; never substitute a future/latest sample or extrapolate.
++            while (!pending_gyro.empty() && accel_samples.size() >= 2) {
++                const auto g = pending_gyro.front();
++                if (g.first < accel_samples.front().first) {
++                    pending_gyro.pop_front(); // startup has no accel bracket
++                    continue;
++                }
++                while (accel_samples.size() > 2 && accel_samples[1].first < g.first)
++                    accel_samples.pop_front();
++                const auto a = accel_samples[0], b = accel_samples[1];
++                if (g.first > b.first) break;
++                if (b.first <= a.first) {
++                    imu_callback_error.store(true);
++                    cond_image_rec.notify_all();
++                    return; // Report this fault from the main thread.
++                }
++                const double alpha = (g.first - a.first) / (b.first - a.first);
++                rs2_vector value;
++                value.x = a.second.x + alpha * (b.second.x - a.second.x);
++                value.y = a.second.y + alpha * (b.second.y - a.second.y);
++                value.z = a.second.z + alpha * (b.second.z - a.second.z);
++                v_gyro_timestamp.push_back(g.first);
++                v_gyro_data.push_back(g.second);
++                v_accel_timestamp_sync.push_back(g.first);
++                v_accel_data_sync.push_back(value);
++                pending_gyro.pop_front();
+@@ -212,24 +231 @@
+-            else if (m_frame.get_profile().stream_name() == "Accel")
+-            {
+-                have_accel = true;
+-                // Explicitly requested at 200 Hz
+-                prev_accel_timestamp = current_accel_timestamp;
+-                prev_accel_data = current_accel_data;
+-
+-                current_accel_data = m_frame.get_motion_data();
+-                current_accel_timestamp = (m_frame.get_timestamp()+offset)*1e-3;
+-
+-                while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
+-                {
+-                    int index = v_accel_timestamp_sync.size();
+-                    double target_time = v_gyro_timestamp[index];
+-
+-                    rs2_vector interp_data = interpolateMeasure(target_time, current_accel_data, current_accel_timestamp,
+-                                                                prev_accel_data, prev_accel_timestamp);
+-
+-                    v_accel_data_sync.push_back(interp_data);
+-                    v_accel_timestamp_sync.push_back(target_time);
+-
+-                }
+-                // std::cout << "Accel:" << current_accel_data.x << ", " << current_accel_data.y << ", " << current_accel_data.z << std::endl;
+-            }
++            cond_image_rec.notify_all();
+@@ -265,0 +262,16 @@
++    cv::FileStorage imu_settings(argv[2], cv::FileStorage::READ);
++    cv::Mat configured_tbc;
++    imu_settings["IMU.T_b_c1"] >> configured_tbc;
++    if (configured_tbc.rows != 4 || configured_tbc.cols != 4 ||
++        std::abs(static_cast<double>(imu_settings["IMU.Frequency"]) - 200.0) > 1e-6)
++        throw std::runtime_error("require body-from-camera Tbc and 200 Hz IMU settings");
++    configured_tbc.convertTo(configured_tbc, CV_64F);
++    for (int i = 0; i < 3; ++i) {
++        for (int j = 0; j < 3; ++j)
++            if (std::abs(configured_tbc.at<double>(i,j) - Rbc[j*3+i]) > 1e-6)
++                throw std::runtime_error("Tbc rotation differs from SDK camera-to-gyro");
++        if (std::abs(configured_tbc.at<double>(i,3) - tbc[i]) > 1e-6)
++            throw std::runtime_error("Tbc translation differs from SDK camera-to-gyro");
++    }
++    std::cout << "IMU_CHECK Tbc=body_from_camera interpolation=bracketed_linear gyro_hz=200 accel_hz=200 units=m/s2,rad/s" << std::endl;
++
+@@ -337 +349 @@
+-            while (!image_ready && b_continue_session && runtime.within_duration())
++            while (!(image_ready && !v_gyro_timestamp.empty() && v_gyro_timestamp.back() >= timestamp_image) && !imu_callback_error.load() && b_continue_session && runtime.within_duration())
+@@ -338,0 +351,2 @@
++            if (imu_callback_error.load())
++                throw std::runtime_error("SDK callback reported non-increasing accel timestamp");
+@@ -351,12 +364,0 @@
+-
+-            while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
+-            {
+-                int index = v_accel_timestamp_sync.size();
+-                double target_time = v_gyro_timestamp[index];
+-
+-                rs2_vector interp_data = interpolateMeasure(target_time, current_accel_data, current_accel_timestamp, prev_accel_data, prev_accel_timestamp);
+-
+-                v_accel_data_sync.push_back(interp_data);
+-                // v_accel_data_sync.push_back(current_accel_data); // 0 interpolation
+-                v_accel_timestamp_sync.push_back(target_time);
+-            }
+@@ -460,0 +463,5 @@
++    if (imu_callback_error.load()) {
++        processing_error = true;
++        std::cerr << "SDK callback IMU timestamp fault; run incomplete" << std::endl;
++    }
++    imu_raw.close();
+@@ -498,2 +505 @@
+-        // zero interpolation
+-        value_interp = current_data;
++        // Keep the linear interpolation result.

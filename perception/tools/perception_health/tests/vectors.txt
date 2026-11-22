@@ -1,0 +1,6 @@
+# source=upstream_snapshot/PROTOCOL.md captured parser regression frames (real saved evidence)
+UPSTREAM_13355 a55a01022b3416887766554433221100ffeeddccbbaa99efbeadde075d70a8
+UPSTREAM_13356 a55a01022c3416887766554433221100ffeeddccbbaa99efbeadde075d5d60
+# Proposed PERCEPTION_HEALTH frozen vector: seq=0x1234, send=0x0102030405060708,
+# age=0x11223344, tracking=OK(2), imu=1, reset=0x5566, features=0x7788, flags=3.
+PH_HEALTH_1234 a55a0305341213080706050403020144332211020166558877035e8b

@@ -1,0 +1,21 @@
+{
+  "name": "lab_empty",
+  "description": "Lab-day 1-empty mirror: stationary robot, unobstructed floor.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "NONE",
+      "note": "decide.update: nearest=None and plane_valid => NONE; hysteresis_frames=2 clears history."
+    }
+  ]
+}

@@ -1,0 +1,5102 @@
+{
+  "metadata": {
+    "claim_labels": {
+      "intrinsics": "MEASURED factory values supplied by task",
+      "stereo_baseline_m": "SOURCE-SUPPORTED datasheet parameter supplied by task",
+      "nominal_camera_height_m": "ASSUMED 0.40 m",
+      "scenes": "SYNTHETIC / CALCULATED ray casting",
+      "noise_model": "CALCULATED from supplied stereo disparity equation"
+    },
+    "quick": false,
+    "pitches_deg": [
+      0,
+      1.5,
+      3,
+      4.5,
+      6
+    ],
+    "sigma_d_px": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "seeds": [
+      7,
+      19,
+      41
+    ],
+    "intrinsics": {
+      "width": 640,
+      "height": 480,
+      "fx": 386.953,
+      "fy": 386.953,
+      "cx": 321.034,
+      "cy": 241.04
+    },
+    "baseline_m": 0.05,
+    "max_range_m": 6,
+    "obstacle_threshold_m": 0.05
+  },
+  "timing": {
+    "1": {
+      "mean_ms_per_frame": 96.93722803300868,
+      "samples_ms": [
+        118.70835104491562,
+        70.60190197080374,
+        101.50143108330667
+      ],
+      "repetitions": 3
+    },
+    "4": {
+      "mean_ms_per_frame": 12.963893978546063,
+      "samples_ms": [
+        15.175838954746723,
+        11.875319993123412,
+        11.840522987768054
+      ],
+      "repetitions": 3
+    }
+  },
+  "runs": [
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.006187454067932531,
+      "height_error_m": 7.138147655011418e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9900117508813161,
+        "tp": 3370,
+        "fp": 0,
+        "fn": 34,
+        "recall_any_box_pixel": 0.5938925938925939,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.991430454845089,
+            "tp": 1504,
+            "fp": 0,
+            "fn": 13,
+            "gt_obstacle_pixels": 1517
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 991,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 991
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9759450171821306,
+            "tp": 852,
+            "fp": 0,
+            "fn": 21,
+            "gt_obstacle_pixels": 873
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9908930669800236,
+        "tp": 3373,
+        "fp": 0,
+        "fn": 31,
+        "recall_any_box_pixel": 0.5944190944190945,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.99340804218853,
+            "tp": 1507,
+            "fp": 0,
+            "fn": 10,
+            "gt_obstacle_pixels": 1517
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 991,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 991
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9759450171821306,
+            "tp": 852,
+            "fp": 0,
+            "fn": 21,
+            "gt_obstacle_pixels": 873
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.004790634093587964,
+      "height_error_m": 0.00010382372363387793,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.997790277219767,
+        "tp": 4967,
+        "fp": 0,
+        "fn": 11,
+        "recall_any_box_pixel": 0.652464604090194,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9947793070716658,
+            "tp": 2096,
+            "fp": 0,
+            "fn": 11,
+            "gt_obstacle_pixels": 2107
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2485,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 2485
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 386,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 386
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9979911611088791,
+        "tp": 4968,
+        "fp": 0,
+        "fn": 10,
+        "recall_any_box_pixel": 0.6527267960146828,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9952539155196962,
+            "tp": 2097,
+            "fp": 0,
+            "fn": 10,
+            "gt_obstacle_pixels": 2107
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2485,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 2485
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 386,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 386
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0008848090092866906,
+      "height_error_m": 6.0662592855864617e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9972375690607734,
+        "tp": 1444,
+        "fp": 0,
+        "fn": 4,
+        "recall_any_box_pixel": 0.5513350883790898,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9988558352402745,
+            "tp": 873,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 874
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9947735191637631,
+            "tp": 571,
+            "fp": 0,
+            "fn": 3,
+            "gt_obstacle_pixels": 574
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9972375690607734,
+        "tp": 1444,
+        "fp": 0,
+        "fn": 4,
+        "recall_any_box_pixel": 0.5513350883790898,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9988558352402745,
+            "tp": 873,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 874
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9947735191637631,
+            "tp": 571,
+            "fp": 0,
+            "fn": 3,
+            "gt_obstacle_pixels": 574
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.021703458089769485,
+      "height_error_m": 0.00023930487701284697,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9865996649916248,
+        "tp": 1178,
+        "fp": 0,
+        "fn": 16,
+        "recall_any_box_pixel": 0.5176470588235295,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9842436974789915,
+            "tp": 937,
+            "fp": 0,
+            "fn": 15,
+            "gt_obstacle_pixels": 952
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9956331877729258,
+            "tp": 228,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 229
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9865996649916248,
+        "tp": 1178,
+        "fp": 0,
+        "fn": 16,
+        "recall_any_box_pixel": 0.5185185185185185,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9842436974789915,
+            "tp": 937,
+            "fp": 0,
+            "fn": 15,
+            "gt_obstacle_pixels": 952
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9956331877729258,
+            "tp": 228,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 229
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.007602340461943888,
+      "height_error_m": 8.143758609319152e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9737302977232924,
+        "tp": 1112,
+        "fp": 0,
+        "fn": 30,
+        "recall_any_box_pixel": 0.27229601518026564,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9594272076372315,
+            "tp": 402,
+            "fp": 0,
+            "fn": 17,
+            "gt_obstacle_pixels": 419
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9820193637621023,
+            "tp": 710,
+            "fp": 0,
+            "fn": 13,
+            "gt_obstacle_pixels": 723
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9737302977232924,
+        "tp": 1112,
+        "fp": 0,
+        "fn": 30,
+        "recall_any_box_pixel": 0.27277039848197343,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9594272076372315,
+            "tp": 402,
+            "fp": 0,
+            "fn": 17,
+            "gt_obstacle_pixels": 419
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9820193637621023,
+            "tp": 710,
+            "fp": 0,
+            "fn": 13,
+            "gt_obstacle_pixels": 723
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.01714721477995739,
+      "height_error_m": 0.0004347562524205095,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9966139954853274,
+        "tp": 13245,
+        "fp": 0,
+        "fn": 45,
+        "recall_any_box_pixel": 0.7242744778953079,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9971815965874467,
+            "tp": 13091,
+            "fp": 0,
+            "fn": 37,
+            "gt_obstacle_pixels": 13128
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9506172839506173,
+            "tp": 154,
+            "fp": 0,
+            "fn": 8,
+            "gt_obstacle_pixels": 162
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9973664409330324,
+        "tp": 13255,
+        "fp": 0,
+        "fn": 35,
+        "recall_any_box_pixel": 0.7261187957689178,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9980956733698964,
+            "tp": 13103,
+            "fp": 0,
+            "fn": 25,
+            "gt_obstacle_pixels": 13128
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9382716049382716,
+            "tp": 152,
+            "fp": 0,
+            "fn": 10,
+            "gt_obstacle_pixels": 162
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.034700781187936874,
+      "height_error_m": 0.0006556405162136958,
+      "obstacles": {
+        "precision": 0.99118218502466,
+        "recall": 0.9794712745532418,
+        "tp": 6632,
+        "fp": 59,
+        "fn": 139,
+        "recall_any_box_pixel": 0.6421052631578947,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9911537043862882,
+            "tp": 5378,
+            "fp": 0,
+            "fn": 48,
+            "gt_obstacle_pixels": 5426
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 65,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 65
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9274900398406375,
+            "tp": 1164,
+            "fp": 0,
+            "fn": 91,
+            "gt_obstacle_pixels": 1255
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 0.9889634601043997,
+        "recall": 0.9793235858809629,
+        "tp": 6631,
+        "fp": 74,
+        "fn": 140,
+        "recall_any_box_pixel": 0.6417259364627785,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9902322152598599,
+            "tp": 5373,
+            "fp": 0,
+            "fn": 53,
+            "gt_obstacle_pixels": 5426
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 65,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 65
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9306772908366534,
+            "tp": 1168,
+            "fp": 0,
+            "fn": 87,
+            "gt_obstacle_pixels": 1255
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.06283337770085584,
+      "height_error_m": 0.0010920765969819057,
+      "obstacles": {
+        "precision": 0.9517184942716858,
+        "recall": 0.7150322778973256,
+        "tp": 2326,
+        "fp": 118,
+        "fn": 927,
+        "recall_any_box_pixel": 0.30403476101800125,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.6912474155754652,
+            "tp": 2006,
+            "fp": 0,
+            "fn": 896,
+            "gt_obstacle_pixels": 2902
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9902912621359223,
+            "tp": 102,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 103
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.8861788617886179,
+            "tp": 218,
+            "fp": 0,
+            "fn": 28,
+            "gt_obstacle_pixels": 246
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 0.9671026555687673,
+        "recall": 0.7500768521364894,
+        "tp": 2440,
+        "fp": 83,
+        "fn": 813,
+        "recall_any_box_pixel": 0.31880819366852886,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.7319090282563749,
+            "tp": 2124,
+            "fp": 0,
+            "fn": 778,
+            "gt_obstacle_pixels": 2902
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9902912621359223,
+            "tp": 102,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 103
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.8699186991869918,
+            "tp": 214,
+            "fp": 0,
+            "fn": 32,
+            "gt_obstacle_pixels": 246
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.06818267488180095,
+      "height_error_m": 0.0012175773015515867,
+      "obstacles": {
+        "precision": 0.9929306900261257,
+        "recall": 0.9883738718066392,
+        "tp": 12922,
+        "fp": 92,
+        "fn": 152,
+        "recall_any_box_pixel": 0.5214875703283987,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9881682263095622,
+            "tp": 9187,
+            "fp": 0,
+            "fn": 110,
+            "gt_obstacle_pixels": 9297
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9888416578108395,
+            "tp": 3722,
+            "fp": 0,
+            "fn": 42,
+            "gt_obstacle_pixels": 3764
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.8666666666666667,
+            "recall": 1.0,
+            "tp": 13,
+            "fp": 2,
+            "fn": 0,
+            "gt_obstacle_pixels": 13
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 0,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0,
+      "height_error_m": 0.0,
+      "obstacles": {
+        "precision": 0.9943242828654701,
+        "recall": 0.9915863545969099,
+        "tp": 12964,
+        "fp": 74,
+        "fn": 110,
+        "recall_any_box_pixel": 0.5257571525477834,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9924706894697214,
+            "tp": 9227,
+            "fp": 0,
+            "fn": 70,
+            "gt_obstacle_pixels": 9297
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9893730074388948,
+            "tp": 3724,
+            "fp": 0,
+            "fn": 40,
+            "gt_obstacle_pixels": 3764
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.9285714285714286,
+            "recall": 1.0,
+            "tp": 13,
+            "fp": 1,
+            "fn": 0,
+            "gt_obstacle_pixels": 13
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.00743103350377021,
+      "height_error_m": 0.000124564219552592,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9983749746089783,
+        "tp": 4915,
+        "fp": 0,
+        "fn": 8,
+        "recall_any_box_pixel": 0.6531071949118855,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9973870847331093,
+            "tp": 2672,
+            "fp": 0,
+            "fn": 7,
+            "gt_obstacle_pixels": 2679
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 1105,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 1105
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9991220368744512,
+            "tp": 1138,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 1139
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.04723333868880474,
+      "obstacles": {
+        "precision": 0.1301141769743102,
+        "recall": 1.0,
+        "tp": 4923,
+        "fp": 32913,
+        "fn": 0,
+        "recall_any_box_pixel": 0.8694845634026765,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2679,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 2679
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.3435945273631841,
+            "recall": 1.0,
+            "tp": 1105,
+            "fp": 2111,
+            "fn": 0,
+            "gt_obstacle_pixels": 1105
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.07075413094794385,
+            "recall": 1.0,
+            "tp": 1139,
+            "fp": 14959,
+            "fn": 0,
+            "gt_obstacle_pixels": 1139
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0015172052557876038,
+      "height_error_m": 5.01725553948007e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9886389983769998,
+        "tp": 4264,
+        "fp": 0,
+        "fn": 49,
+        "recall_any_box_pixel": 0.6081196581196581,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9877216916780355,
+            "tp": 3620,
+            "fp": 0,
+            "fn": 45,
+            "gt_obstacle_pixels": 3665
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9938271604938271,
+            "tp": 644,
+            "fp": 0,
+            "fn": 4,
+            "gt_obstacle_pixels": 648
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.04763674318048261,
+      "obstacles": {
+        "precision": 0.11292349583704246,
+        "recall": 1.0,
+        "tp": 4313,
+        "fp": 33881,
+        "fn": 0,
+        "recall_any_box_pixel": 0.8548433048433048,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.6160699277189443,
+            "recall": 1.0,
+            "tp": 3665,
+            "fp": 2284,
+            "fn": 0,
+            "gt_obstacle_pixels": 3665
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.03974484789008832,
+            "recall": 1.0,
+            "tp": 648,
+            "fp": 15656,
+            "fn": 0,
+            "gt_obstacle_pixels": 648
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.00043737716460975196,
+      "height_error_m": 5.092916996785046e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9984567901234568,
+        "tp": 11646,
+        "fp": 0,
+        "fn": 18,
+        "recall_any_box_pixel": 0.8675235901627164,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 8370,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 8370
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.994535519125683,
+            "tp": 3276,
+            "fp": 0,
+            "fn": 18,
+            "gt_obstacle_pixels": 3294
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.033346738526530695,
+      "obstacles": {
+        "precision": 0.2540899684130269,
+        "recall": 1.0,
+        "tp": 11664,
+        "fp": 34241,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9588379522995765,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 8370,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 8370
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.613865076407007,
+            "recall": 1.0,
+            "tp": 3294,
+            "fp": 2072,
+            "fn": 0,
+            "gt_obstacle_pixels": 3294
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 15827,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.02431986512922331,
+      "height_error_m": 0.00041059171075374934,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9897348160821214,
+        "tp": 1157,
+        "fp": 0,
+        "fn": 12,
+        "recall_any_box_pixel": 0.13529073114565343,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9895742832319722,
+            "tp": 1139,
+            "fp": 0,
+            "fn": 12,
+            "gt_obstacle_pixels": 1151
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.055519375576331596,
+      "obstacles": {
+        "precision": 0.03421730476524997,
+        "recall": 1.0,
+        "tp": 1169,
+        "fp": 32995,
+        "fn": 0,
+        "recall_any_box_pixel": 0.7276914219919401,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 2955,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0736357238820293,
+            "recall": 1.0,
+            "tp": 1151,
+            "fp": 14480,
+            "fn": 0,
+            "gt_obstacle_pixels": 1151
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.030369065155683352,
+      "height_error_m": 0.00044857890447447257,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9980407731003442,
+        "tp": 18848,
+        "fp": 0,
+        "fn": 37,
+        "recall_any_box_pixel": 0.8173184839851506,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9986547946960477,
+            "tp": 15590,
+            "fp": 0,
+            "fn": 21,
+            "gt_obstacle_pixels": 15611
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9969135802469136,
+            "tp": 2907,
+            "fp": 0,
+            "fn": 9,
+            "gt_obstacle_pixels": 2916
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.981651376146789,
+            "tp": 321,
+            "fp": 0,
+            "fn": 6,
+            "gt_obstacle_pixels": 327
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.04438477481089765,
+      "obstacles": {
+        "precision": 0.3568526671831598,
+        "recall": 1.0,
+        "tp": 18885,
+        "fp": 34036,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9131917465250798,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 15611,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 15611
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.5012893243940175,
+            "recall": 1.0,
+            "tp": 2916,
+            "fp": 2901,
+            "fn": 0,
+            "gt_obstacle_pixels": 2916
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.02090525508247027,
+            "recall": 1.0,
+            "tp": 327,
+            "fp": 15315,
+            "fn": 0,
+            "gt_obstacle_pixels": 327
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.005766576884415091,
+      "height_error_m": 0.000167880414922994,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9826194909993793,
+        "tp": 1583,
+        "fp": 0,
+        "fn": 28,
+        "recall_any_box_pixel": 0.6127562642369021,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9940652818991098,
+            "tp": 1005,
+            "fp": 0,
+            "fn": 6,
+            "gt_obstacle_pixels": 1011
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9633333333333334,
+            "tp": 578,
+            "fp": 0,
+            "fn": 22,
+            "gt_obstacle_pixels": 600
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.05577312413364965,
+      "obstacles": {
+        "precision": 0.04625854246827083,
+        "recall": 1.0,
+        "tp": 1611,
+        "fp": 33215,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9491268033409264,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.27039315324953195,
+            "recall": 1.0,
+            "tp": 1011,
+            "fp": 2728,
+            "fn": 0,
+            "gt_obstacle_pixels": 1011
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.03924646781789639,
+            "recall": 1.0,
+            "tp": 600,
+            "fp": 14688,
+            "fn": 0,
+            "gt_obstacle_pixels": 600
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.03333581247429333,
+      "height_error_m": 0.0007123275586247146,
+      "obstacles": {
+        "precision": 0.9876984694607353,
+        "recall": 0.9785997732426304,
+        "tp": 6905,
+        "fp": 86,
+        "fn": 151,
+        "recall_any_box_pixel": 0.529296580810363,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9770710059171598,
+            "tp": 3963,
+            "fp": 0,
+            "fn": 93,
+            "gt_obstacle_pixels": 4056
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9818379949146385,
+            "tp": 2703,
+            "fp": 0,
+            "fn": 50,
+            "gt_obstacle_pixels": 2753
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9676113360323887,
+            "tp": 239,
+            "fp": 0,
+            "fn": 8,
+            "gt_obstacle_pixels": 247
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.038317171437887515,
+      "obstacles": {
+        "precision": 0.1724003127443315,
+        "recall": 1.0,
+        "tp": 7056,
+        "fp": 33872,
+        "fn": 0,
+        "recall_any_box_pixel": 0.8245217653261033,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 4056,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 4056
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.40031990693616404,
+            "recall": 1.0,
+            "tp": 2753,
+            "fp": 4124,
+            "fn": 0,
+            "gt_obstacle_pixels": 2753
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.01757131678167461,
+            "recall": 1.0,
+            "tp": 247,
+            "fp": 13810,
+            "fn": 0,
+            "gt_obstacle_pixels": 247
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.03868769523743604,
+      "height_error_m": 0.0003083696740828201,
+      "obstacles": {
+        "precision": 0.9884592022676655,
+        "recall": 0.9734795613160518,
+        "tp": 4882,
+        "fp": 57,
+        "fn": 133,
+        "recall_any_box_pixel": 0.6921254355400697,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9821561338289962,
+            "tp": 3963,
+            "fp": 0,
+            "fn": 72,
+            "gt_obstacle_pixels": 4035
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9377551020408164,
+            "tp": 919,
+            "fp": 0,
+            "fn": 61,
+            "gt_obstacle_pixels": 980
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.05186051801544801,
+      "obstacles": {
+        "precision": 0.1374650512581547,
+        "recall": 1.0,
+        "tp": 5015,
+        "fp": 31467,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9285017421602787,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.5224653632008287,
+            "recall": 1.0,
+            "tp": 4035,
+            "fp": 3688,
+            "fn": 0,
+            "gt_obstacle_pixels": 4035
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.07293294634218948,
+            "recall": 1.0,
+            "tp": 980,
+            "fp": 12457,
+            "fn": 0,
+            "gt_obstacle_pixels": 980
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.07889977917874762,
+      "height_error_m": 0.0013977020311316535,
+      "obstacles": {
+        "precision": 0.9625860520802155,
+        "recall": 0.9730711043872919,
+        "tp": 3216,
+        "fp": 125,
+        "fn": 89,
+        "recall_any_box_pixel": 0.5062865497076023,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9776513612352702,
+            "tp": 2406,
+            "fp": 0,
+            "fn": 55,
+            "gt_obstacle_pixels": 2461
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9960629921259843,
+            "tp": 253,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 254
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.9982078853046595,
+            "recall": 0.9440677966101695,
+            "tp": 557,
+            "fp": 1,
+            "fn": 33,
+            "gt_obstacle_pixels": 590
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 1.5,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 1.5,
+      "height_error_m": 0.05088976448031024,
+      "obstacles": {
+        "precision": 0.09055786935554581,
+        "recall": 1.0,
+        "tp": 3305,
+        "fp": 33191,
+        "fn": 0,
+        "recall_any_box_pixel": 0.8173976608187135,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 2461,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 2461
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.05595946243666006,
+            "recall": 1.0,
+            "tp": 254,
+            "fp": 4285,
+            "fn": 0,
+            "gt_obstacle_pixels": 254
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.042312105565117615,
+            "recall": 1.0,
+            "tp": 590,
+            "fp": 13354,
+            "fn": 0,
+            "gt_obstacle_pixels": 590
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.003963483395296121,
+      "height_error_m": 0.00014209944776183425,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9988550866862937,
+        "tp": 6107,
+        "fp": 0,
+        "fn": 7,
+        "recall_any_box_pixel": 0.5993970044738378,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9981701738334858,
+            "tp": 2182,
+            "fp": 0,
+            "fn": 4,
+            "gt_obstacle_pixels": 2186
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9991266375545852,
+            "tp": 3432,
+            "fp": 0,
+            "fn": 3,
+            "gt_obstacle_pixels": 3435
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 493,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 493
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.08039794141644385,
+      "obstacles": {
+        "precision": 0.07384949873173088,
+        "recall": 1.0,
+        "tp": 6114,
+        "fp": 76676,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9867730013616028,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.4190950920245399,
+            "recall": 1.0,
+            "tp": 2186,
+            "fp": 3030,
+            "fn": 0,
+            "gt_obstacle_pixels": 2186
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.07422052246062098,
+            "recall": 1.0,
+            "tp": 3435,
+            "fp": 42846,
+            "fn": 0,
+            "gt_obstacle_pixels": 3435
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.03264684457982915,
+            "recall": 1.0,
+            "tp": 493,
+            "fp": 14608,
+            "fn": 0,
+            "gt_obstacle_pixels": 493
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.00772693282008623,
+      "height_error_m": 9.412431322902703e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9879518072289156,
+        "tp": 1968,
+        "fp": 0,
+        "fn": 24,
+        "recall_any_box_pixel": 0.1709179246920007,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9923322683706071,
+            "tp": 1553,
+            "fp": 0,
+            "fn": 12,
+            "gt_obstacle_pixels": 1565
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9718969555035128,
+            "tp": 415,
+            "fp": 0,
+            "fn": 12,
+            "gt_obstacle_pixels": 427
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.08723305199981446,
+      "obstacles": {
+        "precision": 0.02365093499554764,
+        "recall": 1.0,
+        "tp": 1992,
+        "fp": 82233,
+        "fn": 0,
+        "recall_any_box_pixel": 0.8724622592399792,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 3586,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.03247763919729388,
+            "recall": 1.0,
+            "tp": 1565,
+            "fp": 46622,
+            "fn": 0,
+            "gt_obstacle_pixels": 1565
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.026379193179712115,
+            "recall": 1.0,
+            "tp": 427,
+            "fp": 15760,
+            "fn": 0,
+            "gt_obstacle_pixels": 427
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.004878441548191623,
+      "height_error_m": 0.00023508229824736881,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9990212870075851,
+        "tp": 4083,
+        "fp": 0,
+        "fn": 4,
+        "recall_any_box_pixel": 0.21542833087770996,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9990212870075851,
+            "tp": 4083,
+            "fp": 0,
+            "fn": 4,
+            "gt_obstacle_pixels": 4087
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.06667888063327851,
+      "obstacles": {
+        "precision": 0.05016262657256827,
+        "recall": 1.0,
+        "tp": 4087,
+        "fp": 77388,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9325931382866764,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 3625,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.08979260040425345,
+            "recall": 1.0,
+            "tp": 4087,
+            "fp": 41429,
+            "fn": 0,
+            "gt_obstacle_pixels": 4087
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 15984,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.005086438955954362,
+      "height_error_m": 3.971931845458965e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9964847929084518,
+        "tp": 19560,
+        "fp": 0,
+        "fn": 69,
+        "recall_any_box_pixel": 0.8324580721666949,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.996760391198044,
+            "tp": 16307,
+            "fp": 0,
+            "fn": 53,
+            "gt_obstacle_pixels": 16360
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9962887989203779,
+            "tp": 2953,
+            "fp": 0,
+            "fn": 11,
+            "gt_obstacle_pixels": 2964
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9836065573770492,
+            "tp": 300,
+            "fp": 0,
+            "fn": 5,
+            "gt_obstacle_pixels": 305
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.06244930152726047,
+      "obstacles": {
+        "precision": 0.2049812030075188,
+        "recall": 1.0,
+        "tp": 19629,
+        "fp": 76131,
+        "fn": 0,
+        "recall_any_box_pixel": 0.990682703709978,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.8514181628935727,
+            "recall": 1.0,
+            "tp": 16360,
+            "fp": 2855,
+            "fn": 0,
+            "gt_obstacle_pixels": 16360
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.06685312161674485,
+            "recall": 1.0,
+            "tp": 2964,
+            "fp": 41372,
+            "fn": 0,
+            "gt_obstacle_pixels": 2964
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.01893939393939394,
+            "recall": 1.0,
+            "tp": 305,
+            "fp": 15799,
+            "fn": 0,
+            "gt_obstacle_pixels": 305
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.002363842063059093,
+      "height_error_m": 0.00015662059797183492,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9887429643527205,
+        "tp": 7378,
+        "fp": 0,
+        "fn": 84,
+        "recall_any_box_pixel": 0.5887503944461976,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9939142461964039,
+            "tp": 3593,
+            "fp": 0,
+            "fn": 22,
+            "gt_obstacle_pixels": 3615
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9839101396478446,
+            "tp": 3241,
+            "fp": 0,
+            "fn": 53,
+            "gt_obstacle_pixels": 3294
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9836956521739131,
+            "tp": 543,
+            "fp": 0,
+            "fn": 9,
+            "gt_obstacle_pixels": 552
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.09390866343578554,
+      "obstacles": {
+        "precision": 0.08929682638456751,
+        "recall": 1.0,
+        "tp": 7462,
+        "fp": 76102,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9695487535500158,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.5342101374316536,
+            "recall": 1.0,
+            "tp": 3615,
+            "fp": 3152,
+            "fn": 0,
+            "gt_obstacle_pixels": 3615
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.07396429774334792,
+            "recall": 1.0,
+            "tp": 3294,
+            "fp": 41241,
+            "fn": 0,
+            "gt_obstacle_pixels": 3294
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0338525696062799,
+            "recall": 1.0,
+            "tp": 552,
+            "fp": 15754,
+            "fn": 0,
+            "gt_obstacle_pixels": 552
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.00899207460533625,
+      "height_error_m": 0.000268974382084175,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.98903836571998,
+        "tp": 1985,
+        "fp": 0,
+        "fn": 22,
+        "recall_any_box_pixel": 0.2958916083916084,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.997943797121316,
+            "tp": 1456,
+            "fp": 0,
+            "fn": 3,
+            "gt_obstacle_pixels": 1459
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9653284671532847,
+            "tp": 529,
+            "fp": 0,
+            "fn": 19,
+            "gt_obstacle_pixels": 548
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.10083081140950331,
+      "obstacles": {
+        "precision": 0.024371880654288455,
+        "recall": 1.0,
+        "tp": 2007,
+        "fp": 80342,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9643065268065268,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 3512,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.030610104061765692,
+            "recall": 1.0,
+            "tp": 1459,
+            "fp": 46205,
+            "fn": 0,
+            "gt_obstacle_pixels": 1459
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.03577490534012273,
+            "recall": 1.0,
+            "tp": 548,
+            "fp": 14770,
+            "fn": 0,
+            "gt_obstacle_pixels": 548
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.03815481796443833,
+      "height_error_m": 0.000432028126027606,
+      "obstacles": {
+        "precision": 0.9692982456140351,
+        "recall": 0.9692982456140351,
+        "tp": 2431,
+        "fp": 77,
+        "fn": 77,
+        "recall_any_box_pixel": 0.557628979143798,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9697970740915526,
+            "tp": 2055,
+            "fp": 0,
+            "fn": 64,
+            "gt_obstacle_pixels": 2119
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9731903485254692,
+            "tp": 363,
+            "fp": 0,
+            "fn": 10,
+            "gt_obstacle_pixels": 373
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.11250068859542793,
+      "obstacles": {
+        "precision": 0.030148579121988747,
+        "recall": 1.0,
+        "tp": 2508,
+        "fp": 80680,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9995609220636663,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 5362,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.04530004061825256,
+            "recall": 1.0,
+            "tp": 2119,
+            "fp": 44658,
+            "fn": 0,
+            "gt_obstacle_pixels": 2119
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.024301257410906246,
+            "recall": 1.0,
+            "tp": 373,
+            "fp": 14976,
+            "fn": 0,
+            "gt_obstacle_pixels": 373
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0328328000138219,
+      "height_error_m": 0.00024881722294439745,
+      "obstacles": {
+        "precision": 0.9698572184029614,
+        "recall": 0.9165417291354323,
+        "tp": 1834,
+        "fp": 57,
+        "fn": 167,
+        "recall_any_box_pixel": 0.5086689783942384,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9178332318928789,
+            "tp": 1508,
+            "fp": 0,
+            "fn": 135,
+            "gt_obstacle_pixels": 1643
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.9965753424657534,
+            "recall": 0.917981072555205,
+            "tp": 291,
+            "fp": 1,
+            "fn": 26,
+            "gt_obstacle_pixels": 317
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.11203047139059677,
+      "obstacles": {
+        "precision": 0.024009503011686785,
+        "recall": 1.0,
+        "tp": 2001,
+        "fp": 81341,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 5307,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.03576637568844287,
+            "recall": 1.0,
+            "tp": 1643,
+            "fp": 44294,
+            "fn": 0,
+            "gt_obstacle_pixels": 1643
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.019230769230769232,
+            "recall": 1.0,
+            "tp": 317,
+            "fp": 16167,
+            "fn": 0,
+            "gt_obstacle_pixels": 317
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.04102834006454986,
+      "height_error_m": 0.0007300195564716172,
+      "obstacles": {
+        "precision": 0.9784833925214121,
+        "recall": 0.9725913621262459,
+        "tp": 4684,
+        "fp": 103,
+        "fn": 132,
+        "recall_any_box_pixel": 0.6387852956846031,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.975049504950495,
+            "tp": 2462,
+            "fp": 0,
+            "fn": 63,
+            "gt_obstacle_pixels": 2525
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 510,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 510
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.961257720381808,
+            "tp": 1712,
+            "fp": 0,
+            "fn": 69,
+            "gt_obstacle_pixels": 1781
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 3,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 3.0,
+      "height_error_m": 0.10340428930938465,
+      "obstacles": {
+        "precision": 0.05810109784051152,
+        "recall": 1.0,
+        "tp": 4816,
+        "fp": 78074,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9916089504528502,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.3368013872215553,
+            "recall": 1.0,
+            "tp": 2525,
+            "fp": 4972,
+            "fn": 0,
+            "gt_obstacle_pixels": 2525
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.01157381141495518,
+            "recall": 1.0,
+            "tp": 510,
+            "fp": 43555,
+            "fn": 0,
+            "gt_obstacle_pixels": 510
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.11152160300563557,
+            "recall": 1.0,
+            "tp": 1781,
+            "fp": 14189,
+            "fn": 0,
+            "gt_obstacle_pixels": 1781
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0031481246266181827,
+      "height_error_m": 5.642074895528815e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.99265605875153,
+        "tp": 811,
+        "fp": 0,
+        "fn": 6,
+        "recall_any_box_pixel": 0.43617021276595747,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9878934624697336,
+            "tp": 408,
+            "fp": 0,
+            "fn": 5,
+            "gt_obstacle_pixels": 413
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9975247524752475,
+            "tp": 403,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 404
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.18212287448698417,
+      "obstacles": {
+        "precision": 0.006110604179443838,
+        "recall": 1.0,
+        "tp": 817,
+        "fp": 132885,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 52807,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.008366420873511062,
+            "recall": 1.0,
+            "tp": 413,
+            "fp": 48951,
+            "fn": 0,
+            "gt_obstacle_pixels": 413
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.02591903509334702,
+            "recall": 1.0,
+            "tp": 404,
+            "fp": 15183,
+            "fn": 0,
+            "gt_obstacle_pixels": 404
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.008656503129424396,
+      "height_error_m": 0.00010779908715197184,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.8839041095890411,
+        "tp": 2581,
+        "fp": 0,
+        "fn": 339,
+        "recall_any_box_pixel": 0.48823640127987955,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.8432692307692308,
+            "tp": 1754,
+            "fp": 0,
+            "fn": 326,
+            "gt_obstacle_pixels": 2080
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9845238095238096,
+            "tp": 827,
+            "fp": 0,
+            "fn": 13,
+            "gt_obstacle_pixels": 840
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.1570344351380421,
+      "obstacles": {
+        "precision": 0.022088748354690834,
+        "recall": 1.0,
+        "tp": 2920,
+        "fp": 129274,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 52677,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.04296544173844787,
+            "recall": 1.0,
+            "tp": 2080,
+            "fp": 46331,
+            "fn": 0,
+            "gt_obstacle_pixels": 2080
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.05531774777741192,
+            "recall": 1.0,
+            "tp": 840,
+            "fp": 14345,
+            "fn": 0,
+            "gt_obstacle_pixels": 840
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.003611247056025342,
+      "height_error_m": 7.513033001682601e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9965888934370309,
+        "tp": 7304,
+        "fp": 0,
+        "fn": 25,
+        "recall_any_box_pixel": 0.6790982465905928,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9964887640449438,
+            "tp": 5676,
+            "fp": 0,
+            "fn": 20,
+            "gt_obstacle_pixels": 5696
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9962149886449659,
+            "tp": 1316,
+            "fp": 0,
+            "fn": 5,
+            "gt_obstacle_pixels": 1321
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 312,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 312
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.13517885974353297,
+      "obstacles": {
+        "precision": 0.055883855520904024,
+        "recall": 1.0,
+        "tp": 7329,
+        "fp": 123818,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.1007606580576685,
+            "recall": 1.0,
+            "tp": 5696,
+            "fp": 50834,
+            "fn": 0,
+            "gt_obstacle_pixels": 5696
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.031090399868201182,
+            "recall": 1.0,
+            "tp": 1321,
+            "fp": 41168,
+            "fn": 0,
+            "gt_obstacle_pixels": 1321
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.01966593129530413,
+            "recall": 1.0,
+            "tp": 312,
+            "fp": 15553,
+            "fn": 0,
+            "gt_obstacle_pixels": 312
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.009672739453167049,
+      "height_error_m": 0.0001419613894911298,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9704570791527313,
+        "tp": 1741,
+        "fp": 0,
+        "fn": 53,
+        "recall_any_box_pixel": 0.5455665024630542,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9708029197080292,
+            "tp": 1330,
+            "fp": 0,
+            "fn": 40,
+            "gt_obstacle_pixels": 1370
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9693396226415094,
+            "tp": 411,
+            "fp": 0,
+            "fn": 13,
+            "gt_obstacle_pixels": 424
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.1679486449066888,
+      "obstacles": {
+        "precision": 0.013464930386159793,
+        "recall": 1.0,
+        "tp": 1794,
+        "fp": 131441,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 52816,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.027492374377909776,
+            "recall": 1.0,
+            "tp": 1370,
+            "fp": 48462,
+            "fn": 0,
+            "gt_obstacle_pixels": 1370
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.029015260384589063,
+            "recall": 1.0,
+            "tp": 424,
+            "fp": 14189,
+            "fn": 0,
+            "gt_obstacle_pixels": 424
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.022232435904240684,
+      "height_error_m": 0.00019584808342659743,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9825986078886311,
+        "tp": 3388,
+        "fp": 0,
+        "fn": 60,
+        "recall_any_box_pixel": 0.6304428044280442,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9875502008032129,
+            "tp": 2459,
+            "fp": 0,
+            "fn": 31,
+            "gt_obstacle_pixels": 2490
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9697286012526096,
+            "tp": 929,
+            "fp": 0,
+            "fn": 29,
+            "gt_obstacle_pixels": 958
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.172813229087529,
+      "obstacles": {
+        "precision": 0.026012629101251593,
+        "recall": 1.0,
+        "tp": 3448,
+        "fp": 129103,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 52742,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.0520626424404625,
+            "recall": 1.0,
+            "tp": 2490,
+            "fp": 45337,
+            "fn": 0,
+            "gt_obstacle_pixels": 2490
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.05914310408692431,
+            "recall": 1.0,
+            "tp": 958,
+            "fp": 15240,
+            "fn": 0,
+            "gt_obstacle_pixels": 958
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.008190805133514743,
+      "height_error_m": 0.00013052528163531862,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9914693337255479,
+        "tp": 6741,
+        "fp": 0,
+        "fn": 58,
+        "recall_any_box_pixel": 0.6969106024838345,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9919227114349065,
+            "tp": 6263,
+            "fp": 0,
+            "fn": 51,
+            "gt_obstacle_pixels": 6314
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9855670103092784,
+            "tp": 478,
+            "fp": 0,
+            "fn": 7,
+            "gt_obstacle_pixels": 485
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.16233711412776447,
+      "obstacles": {
+        "precision": 0.05169909741390454,
+        "recall": 1.0,
+        "tp": 6799,
+        "fp": 124712,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 52722,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.1312900274473925,
+            "recall": 1.0,
+            "tp": 6314,
+            "fp": 41778,
+            "fn": 0,
+            "gt_obstacle_pixels": 6314
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.032668732318469625,
+            "recall": 1.0,
+            "tp": 485,
+            "fp": 14361,
+            "fn": 0,
+            "gt_obstacle_pixels": 485
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.05262818720054078,
+      "height_error_m": 0.0009034955913085341,
+      "obstacles": {
+        "precision": 0.993583222474372,
+        "recall": 0.9901739062621852,
+        "tp": 12697,
+        "fp": 82,
+        "fn": 126,
+        "recall_any_box_pixel": 0.519233890602175,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9929454726533322,
+            "tp": 11964,
+            "fp": 0,
+            "fn": 85,
+            "gt_obstacle_pixels": 12049
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9394572025052192,
+            "tp": 450,
+            "fp": 0,
+            "fn": 29,
+            "gt_obstacle_pixels": 479
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.995575221238938,
+            "recall": 0.9656652360515021,
+            "tp": 225,
+            "fp": 1,
+            "fn": 8,
+            "gt_obstacle_pixels": 233
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.12087306798275592,
+      "obstacles": {
+        "precision": 0.09910501746684391,
+        "recall": 1.0,
+        "tp": 12823,
+        "fp": 116565,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9840529134880701,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.23588026859301894,
+            "recall": 1.0,
+            "tp": 12049,
+            "fp": 39032,
+            "fn": 0,
+            "gt_obstacle_pixels": 12049
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.010253446356708622,
+            "recall": 1.0,
+            "tp": 479,
+            "fp": 46237,
+            "fn": 0,
+            "gt_obstacle_pixels": 479
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.014605403372406444,
+            "recall": 1.0,
+            "tp": 233,
+            "fp": 15720,
+            "fn": 0,
+            "gt_obstacle_pixels": 233
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.025966805239707073,
+      "height_error_m": 0.0007720588786070959,
+      "obstacles": {
+        "precision": 0.9912290440768291,
+        "recall": 0.9826106097292538,
+        "tp": 8928,
+        "fp": 79,
+        "fn": 158,
+        "recall_any_box_pixel": 0.6478631254921612,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9852870622101392,
+            "tp": 6161,
+            "fp": 0,
+            "fn": 92,
+            "gt_obstacle_pixels": 6253
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9841269841269841,
+            "tp": 1922,
+            "fp": 0,
+            "fn": 31,
+            "gt_obstacle_pixels": 1953
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9602272727272727,
+            "tp": 845,
+            "fp": 0,
+            "fn": 35,
+            "gt_obstacle_pixels": 880
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.1407098221250037,
+      "obstacles": {
+        "precision": 0.07015295289421467,
+        "recall": 1.0,
+        "tp": 9086,
+        "fp": 120431,
+        "fn": 0,
+        "recall_any_box_pixel": 0.9998568258286206,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.12120331065495919,
+            "recall": 1.0,
+            "tp": 6253,
+            "fp": 45338,
+            "fn": 0,
+            "gt_obstacle_pixels": 6253
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.04240397767983151,
+            "recall": 1.0,
+            "tp": 1953,
+            "fp": 44104,
+            "fn": 0,
+            "gt_obstacle_pixels": 1953
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.05302163041513527,
+            "recall": 1.0,
+            "tp": 880,
+            "fp": 15717,
+            "fn": 0,
+            "gt_obstacle_pixels": 880
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.011783699294269315,
+      "height_error_m": 0.0004630532255258668,
+      "obstacles": {
+        "precision": 0.9925937852197714,
+        "recall": 0.9859267551575244,
+        "tp": 12330,
+        "fp": 92,
+        "fn": 176,
+        "recall_any_box_pixel": 0.7017721518987342,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9863507316007862,
+            "tp": 9033,
+            "fp": 0,
+            "fn": 125,
+            "gt_obstacle_pixels": 9158
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9847670250896058,
+            "tp": 3297,
+            "fp": 0,
+            "fn": 51,
+            "gt_obstacle_pixels": 3348
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 1,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 4.5,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 4.5,
+      "height_error_m": 0.10469345135028005,
+      "obstacles": {
+        "precision": 0.09693822184326796,
+        "recall": 1.0,
+        "tp": 12506,
+        "fp": 116504,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.16761535223383422,
+            "recall": 1.0,
+            "tp": 9158,
+            "fp": 45479,
+            "fn": 0,
+            "gt_obstacle_pixels": 9158
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.07731923050275975,
+            "recall": 1.0,
+            "tp": 3348,
+            "fp": 39953,
+            "fn": 0,
+            "gt_obstacle_pixels": 3348
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 15143,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0049366468751005175,
+      "height_error_m": 9.546796149595416e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9952380952380953,
+        "tp": 2299,
+        "fp": 0,
+        "fn": 11,
+        "recall_any_box_pixel": 0.6539110861001688,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9953596287703016,
+            "tp": 1287,
+            "fp": 0,
+            "fn": 6,
+            "gt_obstacle_pixels": 1293
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9950835791543756,
+            "tp": 1012,
+            "fp": 0,
+            "fn": 5,
+            "gt_obstacle_pixels": 1017
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.22758013028206037,
+      "obstacles": {
+        "precision": 0.014521726010863005,
+        "recall": 1.0,
+        "tp": 2310,
+        "fp": 156762,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 78237,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.026116463673271525,
+            "recall": 1.0,
+            "tp": 1293,
+            "fp": 48216,
+            "fn": 0,
+            "gt_obstacle_pixels": 1293
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.06409529211571185,
+            "recall": 1.0,
+            "tp": 1017,
+            "fp": 14850,
+            "fn": 0,
+            "gt_obstacle_pixels": 1017
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.006765828207261995,
+      "height_error_m": 0.00016351091352095892,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9977379659790083,
+        "tp": 11027,
+        "fp": 0,
+        "fn": 25,
+        "recall_any_box_pixel": 0.7072421079592751,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9990182603573532,
+            "tp": 10176,
+            "fp": 0,
+            "fn": 10,
+            "gt_obstacle_pixels": 10186
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9801980198019802,
+            "tp": 693,
+            "fp": 0,
+            "fn": 14,
+            "gt_obstacle_pixels": 707
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9937106918238994,
+            "tp": 158,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 159
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.19618126645199893,
+      "obstacles": {
+        "precision": 0.0710091106513666,
+        "recall": 1.0,
+        "tp": 11052,
+        "fp": 144590,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.12639755791877103,
+            "recall": 1.0,
+            "tp": 10186,
+            "fp": 70401,
+            "fn": 0,
+            "gt_obstacle_pixels": 10186
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.01618071131047741,
+            "recall": 1.0,
+            "tp": 707,
+            "fp": 42987,
+            "fn": 0,
+            "gt_obstacle_pixels": 707
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.010532591414944356,
+            "recall": 1.0,
+            "tp": 159,
+            "fp": 14937,
+            "fn": 0,
+            "gt_obstacle_pixels": 159
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.0010747487682564634,
+      "height_error_m": 2.5558867846275923e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9953434225844005,
+        "tp": 1710,
+        "fp": 0,
+        "fn": 8,
+        "recall_any_box_pixel": 0.5406338249137119,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9989023051591658,
+            "tp": 910,
+            "fp": 0,
+            "fn": 1,
+            "gt_obstacle_pixels": 911
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9913258983890955,
+            "tp": 800,
+            "fp": 0,
+            "fn": 7,
+            "gt_obstacle_pixels": 807
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.05,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.2460081459414285,
+      "obstacles": {
+        "precision": 0.010821501908565238,
+        "recall": 1.0,
+        "tp": 1718,
+        "fp": 157040,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 78214,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.0183480695252865,
+            "recall": 1.0,
+            "tp": 911,
+            "fp": 48740,
+            "fn": 0,
+            "gt_obstacle_pixels": 911
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.05221949009965057,
+            "recall": 1.0,
+            "tp": 807,
+            "fp": 14647,
+            "fn": 0,
+            "gt_obstacle_pixels": 807
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.015246632185851889,
+      "height_error_m": 0.00032551160415006386,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9919844020797227,
+        "tp": 4579,
+        "fp": 0,
+        "fn": 37,
+        "recall_any_box_pixel": 0.511923161845882,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9920477137176938,
+            "tp": 3992,
+            "fp": 0,
+            "fn": 32,
+            "gt_obstacle_pixels": 4024
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 1.0,
+            "tp": 8,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 8
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9914383561643836,
+            "tp": 579,
+            "fp": 0,
+            "fn": 5,
+            "gt_obstacle_pixels": 584
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.204132711849041,
+      "obstacles": {
+        "precision": 0.029633814390632222,
+        "recall": 1.0,
+        "tp": 4616,
+        "fp": 151152,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.053931620495087984,
+            "recall": 1.0,
+            "tp": 4024,
+            "fp": 70589,
+            "fn": 0,
+            "gt_obstacle_pixels": 4024
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.00016225864027259452,
+            "recall": 1.0,
+            "tp": 8,
+            "fp": 49296,
+            "fn": 0,
+            "gt_obstacle_pixels": 8
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.037304375598850206,
+            "recall": 1.0,
+            "tp": 584,
+            "fp": 15071,
+            "fn": 0,
+            "gt_obstacle_pixels": 584
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.017759264930871398,
+      "height_error_m": 0.00016812758884632295,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9845034361945829,
+        "tp": 7306,
+        "fp": 0,
+        "fn": 115,
+        "recall_any_box_pixel": 0.5847860538827259,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9706744868035191,
+            "tp": 2648,
+            "fp": 0,
+            "fn": 80,
+            "gt_obstacle_pixels": 2728
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9928980526918672,
+            "tp": 4334,
+            "fp": 0,
+            "fn": 31,
+            "gt_obstacle_pixels": 4365
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9878048780487805,
+            "tp": 324,
+            "fp": 0,
+            "fn": 4,
+            "gt_obstacle_pixels": 328
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.16816450477666084,
+      "obstacles": {
+        "precision": 0.04790430757909278,
+        "recall": 1.0,
+        "tp": 7421,
+        "fp": 147492,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.03486039230720082,
+            "recall": 1.0,
+            "tp": 2728,
+            "fp": 75527,
+            "fn": 0,
+            "gt_obstacle_pixels": 2728
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.09564188522973772,
+            "recall": 1.0,
+            "tp": 4365,
+            "fp": 41274,
+            "fn": 0,
+            "gt_obstacle_pixels": 4365
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.021876875875408524,
+            "recall": 1.0,
+            "tp": 328,
+            "fp": 14665,
+            "fn": 0,
+            "gt_obstacle_pixels": 328
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.008418321331484574,
+      "height_error_m": 5.631994454902145e-05,
+      "obstacles": {
+        "precision": 1.0,
+        "recall": 0.9898284802552852,
+        "tp": 9926,
+        "fp": 0,
+        "fn": 102,
+        "recall_any_box_pixel": 0.6559090311555147,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 1.0,
+            "recall": 0.9927854454203262,
+            "tp": 6330,
+            "fp": 0,
+            "fn": 46,
+            "gt_obstacle_pixels": 6376
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9904761904761905,
+            "tp": 3432,
+            "fp": 0,
+            "fn": 33,
+            "gt_obstacle_pixels": 3465
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.8961748633879781,
+            "tp": 164,
+            "fp": 0,
+            "fn": 19,
+            "gt_obstacle_pixels": 183
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.1,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.17902087733141192,
+      "obstacles": {
+        "precision": 0.06471932157009538,
+        "recall": 1.0,
+        "tp": 10028,
+        "fp": 144918,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.08269994033567667,
+            "recall": 1.0,
+            "tp": 6376,
+            "fp": 70722,
+            "fn": 0,
+            "gt_obstacle_pixels": 6376
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.07487844408427877,
+            "recall": 1.0,
+            "tp": 3465,
+            "fp": 42810,
+            "fn": 0,
+            "gt_obstacle_pixels": 3465
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.011663479923518164,
+            "recall": 1.0,
+            "tp": 183,
+            "fp": 15507,
+            "fn": 0,
+            "gt_obstacle_pixels": 183
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.030267810083575458,
+      "height_error_m": 0.000496243919841044,
+      "obstacles": {
+        "precision": 0.9372852233676976,
+        "recall": 0.9046434494195689,
+        "tp": 1091,
+        "fp": 73,
+        "fn": 115,
+        "recall_any_box_pixel": 0.4982471516213848,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9111570247933884,
+            "tp": 441,
+            "fp": 0,
+            "fn": 43,
+            "gt_obstacle_pixels": 484
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.9984639016897081,
+            "recall": 0.9002770083102493,
+            "tp": 650,
+            "fp": 1,
+            "fn": 72,
+            "gt_obstacle_pixels": 722
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 7,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.23026487344581442,
+      "obstacles": {
+        "precision": 0.007586957479066666,
+        "recall": 1.0,
+        "tp": 1206,
+        "fp": 157751,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 78238,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.009761410160740577,
+            "recall": 1.0,
+            "tp": 484,
+            "fp": 49099,
+            "fn": 0,
+            "gt_obstacle_pixels": 484
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0463384891855465,
+            "recall": 1.0,
+            "tp": 722,
+            "fp": 14859,
+            "fn": 0,
+            "gt_obstacle_pixels": 722
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.025396893682990442,
+      "height_error_m": 0.00032140330254698535,
+      "obstacles": {
+        "precision": 0.924357034795764,
+        "recall": 0.9160419790104948,
+        "tp": 611,
+        "fp": 50,
+        "fn": 56,
+        "recall_any_box_pixel": 0.1307277628032345,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.8357487922705314,
+            "tp": 173,
+            "fp": 0,
+            "fn": 34,
+            "gt_obstacle_pixels": 207
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 1.0,
+            "recall": 0.9521739130434783,
+            "tp": 438,
+            "fp": 0,
+            "fn": 22,
+            "gt_obstacle_pixels": 460
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 19,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.19285193953019872,
+      "obstacles": {
+        "precision": 0.004292674136477433,
+        "recall": 1.0,
+        "tp": 667,
+        "fp": 154714,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 76071,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.004337712956560005,
+            "recall": 1.0,
+            "tp": 207,
+            "fp": 47514,
+            "fn": 0,
+            "gt_obstacle_pixels": 207
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.0293161685042381,
+            "recall": 1.0,
+            "tp": 460,
+            "fp": 15231,
+            "fn": 0,
+            "gt_obstacle_pixels": 460
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "per_frame",
+      "plane_valid": true,
+      "normal_angle_error_deg": 0.01169170211554102,
+      "height_error_m": 0.0002074523561651498,
+      "obstacles": {
+        "precision": 0.9863398203592815,
+        "recall": 0.9841299477221808,
+        "tp": 5271,
+        "fp": 73,
+        "fn": 85,
+        "recall_any_box_pixel": 0.6996516578505999,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": null,
+            "recall": null,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 1.0,
+            "recall": 0.9878559463986599,
+            "tp": 4718,
+            "fp": 0,
+            "fn": 58,
+            "gt_obstacle_pixels": 4776
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.9963963963963964,
+            "recall": 0.9534482758620689,
+            "tp": 553,
+            "fp": 2,
+            "fn": 27,
+            "gt_obstacle_pixels": 580
+          }
+        ]
+      }
+    },
+    {
+      "pitch_deg": 6,
+      "sigma_d_px": 0.2,
+      "seed": 41,
+      "method": "fixed_mount",
+      "plane_valid": true,
+      "normal_angle_error_deg": 6.0,
+      "height_error_m": 0.18491300133410782,
+      "obstacles": {
+        "precision": 0.033997067467294646,
+        "recall": 1.0,
+        "tp": 5356,
+        "fp": 152187,
+        "fn": 0,
+        "recall_any_box_pixel": 1.0,
+        "positive_definition": "box pixel with true height >= 0.05 m",
+        "distance_bins": [
+          {
+            "range_m": [
+              0,
+              1
+            ],
+            "precision": 0.0,
+            "recall": null,
+            "tp": 0,
+            "fp": 78244,
+            "fn": 0,
+            "gt_obstacle_pixels": 0
+          },
+          {
+            "range_m": [
+              1,
+              2
+            ],
+            "precision": 0.09724512858102742,
+            "recall": 1.0,
+            "tp": 4776,
+            "fp": 44337,
+            "fn": 0,
+            "gt_obstacle_pixels": 4776
+          },
+          {
+            "range_m": [
+              2,
+              3
+            ],
+            "precision": 0.039622899303183495,
+            "recall": 1.0,
+            "tp": 580,
+            "fp": 14058,
+            "fn": 0,
+            "gt_obstacle_pixels": 580
+          }
+        ]
+      }
+    }
+  ]
+}

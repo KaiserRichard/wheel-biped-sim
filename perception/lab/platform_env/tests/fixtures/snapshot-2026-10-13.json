@@ -1,0 +1,32 @@
+{
+  "collected_utc": "2026-10-13T04:19:52+00:00",
+  "host": {"hostname": "pi-host", "platform": "Linux-6.8.0-1064-raspi-aarch64", "python": "3.12.3", "architecture": "aarch64", "uid": 1000},
+  "clock_note": "UTC came from Pi CLOCK_REALTIME; monotonic durations are separate.",
+  "commands": {},
+  "facts": {
+    "pi_model": "Raspberry Pi 5 Model B Rev 1.0",
+    "board_ram_bytes": 4294967296,
+    "kernel_release": "6.8.0-1064-raspi",
+    "ubuntu_version": "24.04",
+    "ros_distro": "jazzy",
+    "ros_jazzy_realsense2_camera_package": "4.58.4-1noble.20260902.181721",
+    "ros_jazzy_librealsense2_package": "2.58.4-1noble.20260831.020056",
+    "librealsense_sdk_version": "2.58.4",
+    "d435i_firmware_expected": "not_probed_camera_access_prohibited",
+    "orbslam3_source_commit": "4452a3c",
+    "orbslam3_applied_patches": ["C++11/C++14 to C++17; remove -march=native", "disable Sophus tests/examples", "mnFullBAIdx++ changed to mnFullBAIdx = true"],
+    "liborbslam3_sha256": "2aa97a5a8b04107b5c4ccf95eb724c9cc7d1e2874a1f9463315ef5520d95f048",
+    "stereo_inertial_euroc_sha256": "2c518765b04bfeb6450995b0a1d4b48d1d47315f362c8eb1713ecdc76519efe2",
+    "pangolin_version": "0.9.1",
+    "opencv_version": null,
+    "eigen_version": null,
+    "python_version": "3.12.3",
+    "clocksource": null,
+    "cpu_governor": "ondemand",
+    "swap_bytes": 0,
+    "ntp_synchronized": true,
+    "recording_mount": {"mountpoint": "/", "source": "/dev/mmcblk0p2", "fstype": "ext4"},
+    "recording_free_bytes": null,
+    "d435i_udev_rule_present": "99006"
+  }
+}

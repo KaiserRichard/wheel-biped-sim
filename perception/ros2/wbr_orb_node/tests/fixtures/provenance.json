@@ -1,0 +1,7 @@
+{
+  "evidence": "MEASURED source epochs from saved real-input association; all generated pixels, IMU values and estimates are ASSUMED synthetic",
+  "source": "tools/vio_adapter/real_replay/snapshots.jsonl",
+  "source_sha256": "14c6a1caf12bb2b458e96b09f7cef14620ae4bc883bc6f6c3efcc80b4062c7ce",
+  "selection": "first 8 source_ns values, verbatim integers",
+  "original_input": "2026-10-14-d435i-ramtest15s/euroc, global_time; see tools/vio_adapter/real_replay/summary.json"
+}

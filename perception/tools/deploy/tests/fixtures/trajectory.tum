@@ -1,0 +1,4 @@
+# Synthetic monotone camera-to-world TUM poses; fixture only, not captured data.
+0.0 0 0 0 0 0 0 1
+1.0 1 0 0 0 0 0 1
+2.0 1 1 0 0 0 0 1

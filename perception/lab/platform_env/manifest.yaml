@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "description": "JSON-compatible YAML: measured October 2026 Pi 5 4 GB stand-in environment. Refresh from a current Pi snapshot before treating it as the deployment target.",
+  "fields": {
+    "pi_model": {"policy": "info", "severity": "INFO", "expected": "Raspberry Pi 5 Model B Rev 1.0", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: hardware (MEASURED 4 GB stand-in; re-pin after review on 8 GB target)"},
+    "board_ram_bytes": {"policy": "info", "severity": "INFO", "expected": 4294967296, "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: free -h and nproc (MEASURED 4 GB stand-in); re-pin after review on 8 GB target"},
+    "kernel_release": {"policy": "exact", "severity": "REQUIRED", "expected": "6.8.0-1064-raspi", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: os/kernel (MEASURED)"},
+    "ubuntu_version": {"policy": "exact", "severity": "REQUIRED", "expected": "24.04", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: os/kernel VERSION_ID (MEASURED)"},
+    "ros_distro": {"policy": "exact", "severity": "REQUIRED", "expected": "jazzy", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: ros env ROS_DISTRO (MEASURED)"},
+    "ros_jazzy_realsense2_camera_package": {"policy": "exact", "severity": "REQUIRED", "expected": "4.58.4-1noble.20260902.181721", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: dpkg-query (MEASURED)"},
+    "ros_jazzy_librealsense2_package": {"policy": "exact", "severity": "REQUIRED", "expected": "2.58.4-1noble.20260831.020056", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: dpkg-query (MEASURED)"},
+    "librealsense_sdk_version": {"policy": "exact", "severity": "REQUIRED", "expected": "2.58.4", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: package version; bundles/wbr-runtime-20261013T044130Z/sdk-enumeration-full.txt identifies SDK 2.58.4 (MEASURED)"},
+    "d435i_firmware_expected": {"policy": "info", "severity": "INFO", "expected": "LOCAL_FIRMWARE_VERSION", "source": "experiments/2026-10-13-pi5-env-snapshot/ADDENDUM_CAMERA_SWAP.md and rs_enumerate_new_unit.txt (MEASURED by enumeration; checker intentionally does not open camera)"},
+    "orbslam3_source_commit": {"policy": "exact", "severity": "REQUIRED", "expected": "4452a3c", "source": "experiments/2026-10-13-n4a-euroc-mh01/REPORT.md (SOURCE-SUPPORTED); upstream source commit stated in build provenance"},
+    "orbslam3_applied_patches": {"policy": "exact", "severity": "REQUIRED", "expected": ["C++11/C++14 to C++17; remove -march=native", "disable Sophus tests/examples", "mnFullBAIdx++ changed to mnFullBAIdx = true"], "source": "experiments/2026-10-13-n4a-euroc-mh01/REPORT.md (SOURCE-SUPPORTED); build patch source is in saved Pi evidence, not this checkout"},
+    "liborbslam3_sha256": {"policy": "exact", "severity": "REQUIRED", "expected": "2aa97a5a8b04107b5c4ccf95eb724c9cc7d1e2874a1f9463315ef5520d95f048", "source": "experiments/2026-10-13-n4a-euroc-mh01/provenance.txt (MEASURED)"},
+    "stereo_inertial_euroc_sha256": {"policy": "exact", "severity": "REQUIRED", "expected": "2c518765b04bfeb6450995b0a1d4b48d1d47315f362c8eb1713ecdc76519efe2", "source": "experiments/2026-10-13-n4a-euroc-mh01/provenance.txt (MEASURED)"},
+    "pangolin_version": {"policy": "exact", "severity": "REQUIRED", "expected": "0.9.1", "source": "experiments/2026-10-13-n4a-euroc-mh01/REPORT.md and build_orbslam3.sh (MEASURED tag)"},
+    "opencv_version": {"policy": "info", "severity": "INFO", "expected": null, "source": "UNKNOWN in retained Pi snapshot/build report; recorded at runtime when available"},
+    "eigen_version": {"policy": "info", "severity": "INFO", "expected": null, "source": "UNKNOWN in retained Pi snapshot/build report; recorded at runtime when available"},
+    "python_version": {"policy": "min-version", "severity": "REQUIRED", "expected": "3.12.3", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt (MEASURED Python 3.12.3); rationale: match captured Pi interpreter baseline"},
+    "clocksource": {"policy": "info", "severity": "INFO", "expected": null, "source": "UNKNOWN in retained snapshot; record Linux clocksource without assuming a pin"},
+    "cpu_governor": {"policy": "exact", "severity": "REQUIRED", "expected": "ondemand", "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: CPU0 scaling governor (MEASURED); per-CPU differences remain possible"},
+    "swap_bytes": {"policy": "exact", "severity": "REQUIRED", "expected": 0, "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: free -h (MEASURED at snapshot time; temporary ORB build swap is not part of pinned idle state)"},
+    "ntp_synchronized": {"policy": "exact", "severity": "REQUIRED", "expected": true, "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: timedatectl System clock synchronized=yes (MEASURED)"},
+    "recording_mount": {"policy": "exact", "severity": "REQUIRED", "expected": {"mountpoint": "/", "source": "/dev/mmcblk0p2", "fstype": "ext4"}, "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: findmnt and df (MEASURED; this is the snapshot's root recording volume)"},
+    "recording_free_bytes": {"policy": "info", "severity": "INFO", "expected": null, "source": "experiments/2026-10-13-pi5-env-snapshot/snapshot.txt: df reports about 17 GB available (MEASURED at capture; dynamic value, not a threshold)"},
+    "d435i_udev_rule_present": {"policy": "present", "severity": "REQUIRED", "expected": "99006", "source": "experiments/2026-10-13-pi5-env-snapshot/udev_change_2026-10-13.txt: active camera USB serial rule (MEASURED); candidate checks the active serial rule text"}
+  }
+}

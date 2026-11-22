@@ -1,0 +1,19 @@
+SYNTHETIC fixture written for tooling tests; no sensor/calibration evidence.
+Calibration results
+====================
+Camera-system parameters:
+cam0 (/cam0/image_raw):
+    type: <class 'aslam_cv.PinholeRadtanCameraGeometry'>
+    distortion: [0.01 0.02 -0.001 0.002] +- [0.001 0.001 0.001 0.001]
+    projection: [387.95330811 385.95330811 321.03430176 241.04013062] +- [0.1 0.1 0.1 0.1]
+    reprojection error: [0.300000, -0.400000] +- [0.000000, 0.000000]
+
+cam1 (/cam1/image_raw):
+    type: <class 'aslam_cv.PinholeRadtanCameraGeometry'>
+    distortion: [0. 0. 0. 0.] +- [0.001 0.001 0.001 0.001]
+    projection: [386.95330811 386.95330811 321.03430176 241.04013062] +- [0.1 0.1 0.1 0.1]
+    reprojection error: [0.000000, 0.000000] +- [0.300000, 0.400000]
+
+baseline T_1_0:
+    q: [0. 0. 0. 1.] +- [0.001 0.001 0.001]
+    t: [-0.050412553280592 0. 0.] +- [0.001 0.001 0.001]

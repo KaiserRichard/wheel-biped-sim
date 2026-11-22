@@ -1,0 +1,43 @@
+{
+  "name": "jump_box110",
+  "description": "Approach 110 mm box at .1 m/s while running the assumed jump cycle, including post-settle recovery.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.1,
+    "duration_s": 7.0,
+    "l0": 0.12,
+    "jump_at_s": 1.0
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 1.5,
+      "y": 0.0,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.11,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0,
+      "t_to": 1.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "DecisionParams.jump_min_h=.03 <= .110 <= jump_max_h=.12; jump_at_s = 1 s is the start of CROUCH (simcam contract)."
+    },
+    {
+      "t_from": 1.0,
+      "t_to": 2.4,
+      "advisory": "UNCERTAIN",
+      "note": "Jump gate spec (#169 table, tools/jump_gate): UNCERTAIN from CROUCH start until SETTLE dwell is met = LAND tick (CROUCH+1.07 s rounded to the 10 Hz tick) + 0.3 s dwell. The scripted SETTLE lasts 0.40 s but the gate may return to STAND earlier by design."
+    },
+    {
+      "t_from": 2.4,
+      "t_to": 7,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "Research gate returns to STAND after SETTLE; rebuild DecisionParams.confirm_n=3 fresh samples, no cached EMA promotion."
+    }
+  ]
+}

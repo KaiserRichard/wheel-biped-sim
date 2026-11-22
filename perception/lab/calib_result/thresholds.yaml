@@ -1,0 +1,48 @@
+# Acceptance policy for D435i 99005 Kalibr outputs.
+# Any locally selected limit is marked PROPOSED; these are review gates,
+# not validated physical-calibration limits.
+schema_version: 1
+source_context: "Factory references: calibration/lab/config/camchain_factory_serial-alias-6.yaml; IMU reference: calibration/lab/config/imu_d435i_provisional.yaml"
+thresholds:
+  reprojection_mean_px:
+    value: 0.75
+    source: "PROPOSED; conservative per-camera mean cap selected to accept the checked-in parser fixture while rejecting large mean residuals. Revisit using real D435i reports."
+  reprojection_std_px:
+    value: 0.90
+    source: "PROPOSED; conservative per-camera spread cap selected to accept the checked-in parser fixture while rejecting broad residual distributions. Revisit using real D435i reports."
+  gyro_residual_mean_rad_s:
+    value: 0.02
+    source: "PROPOSED; checked-in synthetic report is 0.01 rad/s; require a small residual mean."
+  gyro_residual_std_rad_s:
+    value: 0.02
+    source: "PROPOSED; checked-in synthetic report is 0.01 rad/s; require a small residual spread."
+  accel_residual_mean_m_s2:
+    value: 0.05
+    source: "PROPOSED; require accelerometer fit residual mean to remain small; validate against real reports."
+  accel_residual_std_m_s2:
+    value: 0.10
+    source: "PROPOSED; require accelerometer fit residual spread to remain small; validate against real reports."
+  abs_timeshift_s:
+    value: 0.030
+    source: "SOURCE-SUPPORTED search limit cited in calibration/lab/CALIBRATION_SECTION_2026-10-15.md; reaching this bound is treated as suspect."
+  chain_closure_abs:
+    value: 0.00001
+    source: "SOURCE-SUPPORTED transform-chain closure tolerance from calibration/lab/mac/summarize_kalibr.py; validation tolerance, not a calibration-quality limit."
+  imu_translation_delta_m:
+    value: 0.005
+    source: "ASSUMED review threshold in calibration/lab/README.md and CALIBRATION_SECTION_2026-10-15.md (5 mm)."
+  imu_rotation_delta_deg:
+    value: 2.0
+    source: "ASSUMED review threshold in calibration/lab/README.md and CALIBRATION_SECTION_2026-10-15.md (2 degrees)."
+  stereo_baseline_delta_m:
+    value: 0.001
+    source: "ASSUMED review threshold in calibration/lab/README.md (1 mm); compare to the exact factory camchain baseline (49.912553280592 mm), not nominal 50 mm."
+  intrinsics_delta_px:
+    value: 2.0
+    source: "PROPOSED maximum absolute drift for fx, fy, cx, cy against the SDK factory readback; review against real optical validation."
+  distortion_delta:
+    value: 0.02
+    source: "PROPOSED maximum per-coefficient drift against the factory rectified radtan zeros; accommodates the checked-in synthetic parser fixture and requires review against real optical validation."
+  distortion_abs:
+    value: 0.10
+    source: "PROPOSED sanity bound for pinhole-radtan coefficients; reject clearly non-rectified or pathological fits."

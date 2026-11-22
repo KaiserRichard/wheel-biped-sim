@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "tool_version": "1.0.0",
+  "evidence_label": "MEASURED partial historical excerpts, multiple sessions; NOT a combined qualification run",
+  "started_utc": null,
+  "ended_utc": null,
+  "host": {
+    "hostname": "pi-host",
+    "system": "Linux",
+    "machine": "UNKNOWN (not extracted)"
+  },
+  "complete": false,
+  "requested_window_s": 60,
+  "requested_sample_interval_s": 1,
+  "load": {
+    "mode": "idle",
+    "command": null,
+    "returncode": null,
+    "evidence_label": "ASSUMED replay mode; original workload UNKNOWN"
+  },
+  "samples": [
+    {
+      "phase": "before",
+      "clock_monotonic_ns": null,
+      "clock_realtime_utc": null,
+      "throttled": {
+        "stdout": "raw/snapshot-throttled.stdout",
+        "returncode": 0,
+        "error": null
+      },
+      "temperature": {
+        "stdout": "raw/snapshot-temperature.stdout",
+        "returncode": 0,
+        "error": null
+      },
+      "provenance_note": "Command text is MEASURED; successful return codes INFERRED from saved output. Window clocks UNKNOWN."
+    }
+  ],
+  "notes": [
+    "lsusb and kernel logs are context only: older sessions/camera; never assigned to a new-unit check window."
+  ],
+  "raw_files": [
+    {
+      "path": "raw/camera-plug-check.txt",
+      "sha256": "962e7ff0f51c442d0d39465b4f0dcdb98cd35a521bbf6de66230e6731156364d"
+    },
+    {
+      "path": "raw/provenance.json",
+      "sha256": "2ffd3c57bafda31eaa3b2db2bfb50b08e4d5ba1bb84e22dc4ccb7d5f6badba24"
+    },
+    {
+      "path": "raw/september-kernel.log",
+      "sha256": "f0061718083382a19b9bc71da9e18e140d3681dfaf8bea60a4afca3b53a8088c"
+    },
+    {
+      "path": "raw/september-lsusb-tree.txt",
+      "sha256": "9164dc6af194921338a916de407f96bcb0ca7f72d758bd878e54e2810200078f"
+    },
+    {
+      "path": "raw/session-addendum-excerpt.md",
+      "sha256": "366193d62e61054c9297f7f67b35bd4ec47bdab86e5e8c8739381e10b866210e"
+    },
+    {
+      "path": "raw/snapshot-temperature.stdout",
+      "sha256": "64f668bfdc311920cda9c10d8bcc5ba056b48df720d9f69ad9309b2a78c0c0c7"
+    },
+    {
+      "path": "raw/snapshot-throttled.stdout",
+      "sha256": "784055da53926ba691d89851b800f25728cd8b77de58ec4367d36ea3d01e3609"
+    }
+  ]
+}

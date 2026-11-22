@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "camera_node": "/camera/camera",
+  "qos_overrides_file": "../qos_overrides.yaml",
+  "topics": [
+    {
+      "name": "/camera/camera/infra1/image_rect_raw",
+      "type": "sensor_msgs/msg/Image",
+      "role": "image_left",
+      "required": true,
+      "nominal_hz": 30.0,
+      "rate_min_hz": 28.5,
+      "rate_max_hz": 31.5,
+      "max_gap_s": 0.1,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "n3_640x480_30, chosen by the owner 2026-10-19 as the single N2/N3/calibration profile; UNTESTED ON HARDWARE. Sources: docs/D435I_CALIBRATION_PLAN.md:94 (640x480 Y8/30, gyro/200 accel/100, emitter OFF); calibration/lab/pi/record_calib_take.sh:33 (same capture contract); tools/n4b_offline/db3_to_euroc.py:21 (640x480), :84-107 (separate IMU topics cannot attest unite method); experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md:7 (18.4 MB/s demand exceeds historical 16.6 MB/s). PROPOSED: +/-5% rate band; max_gap_s=0.2*(15/30)=0.1 preserves three nominal periods from config.json; drop_gap_factor=2 unchanged."
+    },
+    {
+      "name": "/camera/camera/infra2/image_rect_raw",
+      "type": "sensor_msgs/msg/Image",
+      "role": "image_right",
+      "required": true,
+      "nominal_hz": 30.0,
+      "rate_min_hz": 28.5,
+      "rate_max_hz": 31.5,
+      "max_gap_s": 0.1,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "n3_640x480_30, chosen by the owner 2026-10-19 as the single N2/N3/calibration profile; UNTESTED ON HARDWARE. Sources: docs/D435I_CALIBRATION_PLAN.md:94 (640x480 Y8/30, gyro/200 accel/100, emitter OFF); calibration/lab/pi/record_calib_take.sh:33 (same capture contract); tools/n4b_offline/db3_to_euroc.py:21 (640x480), :84-107 (separate IMU topics cannot attest unite method); experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md:7 (18.4 MB/s demand exceeds historical 16.6 MB/s). PROPOSED: +/-5% rate band; max_gap_s=0.2*(15/30)=0.1 preserves three nominal periods from config.json; drop_gap_factor=2 unchanged."
+    },
+    {
+      "name": "/camera/camera/infra1/camera_info",
+      "type": "sensor_msgs/msg/CameraInfo",
+      "role": "camera_info_left",
+      "required": true,
+      "nominal_hz": 30.0,
+      "rate_min_hz": 28.5,
+      "rate_max_hz": 31.5,
+      "max_gap_s": 0.1,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "n3_640x480_30, chosen by the owner 2026-10-19 as the single N2/N3/calibration profile; UNTESTED ON HARDWARE. Sources: docs/D435I_CALIBRATION_PLAN.md:94 (640x480 Y8/30, gyro/200 accel/100, emitter OFF); calibration/lab/pi/record_calib_take.sh:33 (same capture contract); tools/n4b_offline/db3_to_euroc.py:21 (640x480), :84-107 (separate IMU topics cannot attest unite method); experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md:7 (18.4 MB/s demand exceeds historical 16.6 MB/s). PROPOSED: +/-5% rate band; max_gap_s=0.2*(15/30)=0.1 preserves three nominal periods from config.json; drop_gap_factor=2 unchanged."
+    },
+    {
+      "name": "/camera/camera/infra2/camera_info",
+      "type": "sensor_msgs/msg/CameraInfo",
+      "role": "camera_info_right",
+      "required": true,
+      "nominal_hz": 30.0,
+      "rate_min_hz": 28.5,
+      "rate_max_hz": 31.5,
+      "max_gap_s": 0.1,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "n3_640x480_30, chosen by the owner 2026-10-19 as the single N2/N3/calibration profile; UNTESTED ON HARDWARE. Sources: docs/D435I_CALIBRATION_PLAN.md:94 (640x480 Y8/30, gyro/200 accel/100, emitter OFF); calibration/lab/pi/record_calib_take.sh:33 (same capture contract); tools/n4b_offline/db3_to_euroc.py:21 (640x480), :84-107 (separate IMU topics cannot attest unite method); experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md:7 (18.4 MB/s demand exceeds historical 16.6 MB/s). PROPOSED: +/-5% rate band; max_gap_s=0.2*(15/30)=0.1 preserves three nominal periods from config.json; drop_gap_factor=2 unchanged."
+    },
+    {
+      "name": "/camera/camera/gyro/sample",
+      "type": "sensor_msgs/msg/Imu",
+      "role": "gyro",
+      "required": true,
+      "nominal_hz": 200.0,
+      "rate_min_hz": 190.0,
+      "rate_max_hz": 210.0,
+      "max_gap_s": 0.05,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "SOURCE-SUPPORTED: inherited from experiments/2026-09-12-pi5-native-sensor-validation/n3_topics.json; PROPOSED: drop_gap_factor=2 (not supplied by n3_topics.json)"
+    },
+    {
+      "name": "/camera/camera/accel/sample",
+      "type": "sensor_msgs/msg/Imu",
+      "role": "accel",
+      "required": true,
+      "nominal_hz": 100.0,
+      "rate_min_hz": 95.0,
+      "rate_max_hz": 105.0,
+      "max_gap_s": 0.05,
+      "drop_gap_factor": 2.0,
+      "threshold_source": "SOURCE-SUPPORTED: inherited from experiments/2026-09-12-pi5-native-sensor-validation/n3_topics.json; PROPOSED: drop_gap_factor=2 (not supplied by n3_topics.json)"
+    },
+    {
+      "name": "/tf_static",
+      "type": "tf2_msgs/msg/TFMessage",
+      "role": "tf_static",
+      "required": true,
+      "threshold_source": "SOURCE-SUPPORTED: docs/NATIVE_PI5_BASELINE_ARCHITECTURE.md N3 requires relevant calibration/TF topics; n3_topics.json includes /tf_static"
+    }
+  ],
+  "pairing": {
+    "left_role": "image_left",
+    "right_role": "image_right",
+    "min_fraction": 0.99,
+    "threshold_source": "PROPOSED: exact header-stamp pairing with at most 1% unmatched images"
+  },
+  "storage": {
+    "storage_id": "sqlite3",
+    "max_write_rate_bps": 16600000,
+    "min_duration_s": 1.0,
+    "threshold_source": "PROPOSED: 16.6 MB/s comparison ceiling derived from SOURCE-SUPPORTED achieved throughput in experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md section 3 (1.66 GB / 100 s), below 18.4 MB/s required demand. This is not a sustained-write qualification or a measurement of the current destination. PROPOSED: min_duration_s=1. UNTESTED ON HARDWARE: retained historical value, NOT destination qualification. Before recording, max_write_rate_bps must be set in a reviewed destination-specific config from the qualified destination measured sustained fsync write rate; 18.4 MB/s demand exceeds historical 16.6 MB/s. Qualification target >=27.6 MB/s per docs/D435I_CALIBRATION_PLAN.md:160; docs/STORAGE_QUALIFICATION_DRAFT.md requires owner review."
+  },
+  "replay": {
+    "rate_relative_tolerance": 0.1,
+    "min_count_fraction": 0.99,
+    "threshold_source": "PROPOSED: replay rate within 10% and at least 99% of recorded samples; PROPOSED: playback factor, discovery delay, drain interval, spin interval and subscriber queue depths are diagnostic operating settings",
+    "playback_rate": 1.0,
+    "startup_delay_s": 3.0,
+    "spin_timeout_s": 0.05,
+    "drain_duration_s": 1.0,
+    "subscriber_depth": 1000,
+    "static_subscriber_depth": 100
+  },
+  "record": {
+    "duration_s": 20,
+    "command_timeout_s": 90,
+    "shutdown_grace_s": 15,
+    "node_list_timeout_s": 10,
+    "bag_info_timeout_s": 30,
+    "parameter_timeout_s": 30,
+    "topic_info_timeout_s": 15,
+    "threshold_source": "PROPOSED: bounded diagnostic window and command timeouts for Pi operation; PROPOSED: at least 80% of requested wall interval covered by bag receive-time span, allowing recorder startup/shutdown overhead; early self-exit requires 95% elapsed interval",
+    "min_elapsed_fraction": 0.95,
+    "min_recorded_duration_fraction": 0.8
+  },
+  "validation": {
+    "max_header_reversals": 0,
+    "max_header_repeated_stamps": 0,
+    "max_bag_receive_reversals": 0,
+    "max_parse_errors": 0,
+    "max_header_drop_count": 0,
+    "threshold_source": "PROPOSED: no reversed/repeated dynamic header stamps, receive-time reversals, malformed CDR headers or gaps over the configured nominal-period multiple"
+  },
+  "profile_note": "n3_640x480_30, chosen by the owner 2026-10-19 as the single N2/N3/calibration profile; UNTESTED ON HARDWARE. Sources: docs/D435I_CALIBRATION_PLAN.md:94 (640x480 Y8/30, gyro/200 accel/100, emitter OFF); calibration/lab/pi/record_calib_take.sh:33 (same capture contract); tools/n4b_offline/db3_to_euroc.py:21 (640x480), :84-107 (separate IMU topics cannot attest unite method); experiments/2026-10-14-SESSION_FACTS_ADDENDUM.md:7 (18.4 MB/s demand exceeds historical 16.6 MB/s). ROS policy: unite_imu_method=0, enable_sync=false; QoS path adjusted relative to this profiles directory."
+}

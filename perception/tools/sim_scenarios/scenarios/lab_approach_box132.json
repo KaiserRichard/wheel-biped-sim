@@ -1,0 +1,31 @@
+{
+  "name": "lab_approach_box132",
+  "description": "Lab-day 4-approach mirror: 132 mm box initially 2 m ahead, approach at .25 m/s; stops before near clipping.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.25,
+    "duration_s": 5.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 2.0,
+      "y": 0.0,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.132,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 5.0,
+      "advisory": "STOP_CANDIDATE",
+      "note": "Height .132 > DecisionParams.jump_max_h=.12; starts from NONE, so STOP_CANDIDATE; height_hysteresis_m=.01 retains STOP. detect.Params.min_forward=.30, max_forward=3.0; near_m=1.5 applies only to invalid planes."
+    }
+  ]
+}

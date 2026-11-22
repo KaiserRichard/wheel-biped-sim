@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- UNBUILT: ROS 2 Jazzy skeleton; no estimator or clock ingress wired. -->
+<package format="3">
+  <name>wbr_ros2_bridge</name>
+  <version>0.0.1</version>
+  <description>UNBUILT diagnostic EstimateSnapshot output bridge.</description>
+  <maintainer email="">WBR project (placeholder)</maintainer>
+  <license>TODO: project owner must assign a license before distribution</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>diagnostic_msgs</depend>
+  <depend>diagnostic_updater</depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

@@ -1,0 +1,40 @@
+{
+  "name": "two_boxes",
+  "description": "Near 46 mm box and farther 132 mm box offset laterally; nearest cluster controls advisory.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 0.8,
+      "y": -0.1,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.046,
+      "yaw_deg": 0
+    },
+    {
+      "type": "box",
+      "x_face": 1.6,
+      "y": 0.15,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.132,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "detect.process_frame selects minimum cluster.distance_m; near .046 is between DecisionParams.jump_min_h and jump_max_h. Partial occlusion and sufficient separate support assumed."
+    }
+  ]
+}

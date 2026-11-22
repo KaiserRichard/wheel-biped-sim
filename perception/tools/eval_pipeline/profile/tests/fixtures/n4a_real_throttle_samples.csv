@@ -1,0 +1,2 @@
+monotonic_ns,clock_domain,pid,cpu_count,per_core_cpu_pct_json,target_cpu_pct_one_core,thread_cpu_pct_json,process_start_ticks,rss_bytes,pss_bytes,cpu_freq_khz_json,thermal_c_json,throttled_raw,undervoltage_now,frequency_capped_now,throttled_now,soft_temperature_limit_now,undervoltage_occurred,frequency_capped_occurred,throttled_occurred,soft_temperature_limit_occurred,fan_state_json,sample_duration_ns
+1,CLOCK_MONOTONIC,10,4,"{}",UNKNOWN,UNKNOWN,1,100,90,"{}","{""thermal_zone0"":{""type"":""cpu-thermal"",""c"":63.0}}",0x50005,1,0,1,0,1,0,1,0,"{}",1

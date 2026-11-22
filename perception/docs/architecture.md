@@ -1,0 +1,5 @@
+# Perception architecture
+
+**FROM FILE.** RealSense images, depth and built-in IMU samples enter ROS 2 on the Pi. The obstacle path fits a floor plane, clusters elevated depth points, filters them over time and issues a corridor advisory. The localization path consumes timestamped images and IMU samples and publishes pose and tracking state. The local map fuses successive projected depth observations in a floor-relative elevation grid. [Phase 1 architecture](https://github.com/KaiserRichard/wbr-perception-phase1-runtime/blob/fde5721af0627eaf60c78d95296ab26924425e37/docs/NATIVE_PI5_BASELINE_ARCHITECTURE.md)
+
+**FROM FILE.** [Obstacle geometry](../tools/obstacle_decision), [plane estimator](../tools/ground_plane), [local map](../tools/local_map), [ORB wrapper](../ros2/wbr_orb_node), and [link health format](../tools/perception_health/SPEC.md) can be exercised with stored inputs or host fixtures. Depth and class detections serve different roles. The controller consumes bounded advisories and retains authority over balance and motors.

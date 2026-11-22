@@ -1,0 +1,27 @@
+{
+  "name": "step080",
+  "description": "80 mm step ahead of a stationary robot; assumed valid floor remains visible.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "step",
+      "x_face": 1.0,
+      "height": 0.08
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "DecisionParams.jump_min_h=.03 <= .08 <= jump_max_h=.12; valid plane and sufficient cluster support assumed."
+    }
+  ]
+}

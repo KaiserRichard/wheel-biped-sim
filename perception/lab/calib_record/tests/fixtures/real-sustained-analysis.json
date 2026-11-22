@@ -1,0 +1,234 @@
+{
+  "source": "/mnt/wbr-data/wbr-perception-phase1/2026-09-12/raw/sdk-sustained-01/frames.csv",
+  "method": "tool-relative whole windows, half-open [start,end)",
+  "timestamp_domain": "Not serialized by rs-data-collect; no synchronization claim",
+  "imu_precision": "Vendor CSV rounds vectors to 0.001; retain original CSV",
+  "windows": [
+    {
+      "start_seconds": 10.0,
+      "duration_seconds": 30.0,
+      "streams": {
+        "Infrared": {
+          "count": 450,
+          "whole_window_hz": 15.0,
+          "first_arrival_offset_seconds": 0.06237800000000071,
+          "last_arrival_silence_seconds": 0.0017240000000029454,
+          "max_arrival_gap_seconds": 0.06679000000000102,
+          "max_arrival_gap_with_boundaries_seconds": 0.06679000000000102,
+          "max_stamp_gap_seconds": 0.06667327880859375,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "timing_pass": true
+        },
+        "Gyro": {
+          "count": 6001,
+          "whole_window_hz": 200.03333333333333,
+          "first_arrival_offset_seconds": 0.004303000000000168,
+          "last_arrival_silence_seconds": 0.0016449999999963438,
+          "max_arrival_gap_seconds": 0.005317000000005123,
+          "max_arrival_gap_with_boundaries_seconds": 0.005317000000005123,
+          "max_stamp_gap_seconds": 0.005000114440917969,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.0037527078820196636,
+            -0.004130978170304949,
+            -0.0019806698883519415
+          ],
+          "mean_vector_norm": 0.008037517990070318,
+          "timing_pass": true
+        },
+        "Accel": {
+          "count": 3034,
+          "whole_window_hz": 101.13333333333334,
+          "first_arrival_offset_seconds": 0.001042999999999239,
+          "last_arrival_silence_seconds": 0.004152999999995188,
+          "max_arrival_gap_seconds": 0.010183000000001385,
+          "max_arrival_gap_with_boundaries_seconds": 0.010183000000001385,
+          "max_stamp_gap_seconds": 0.009892940521240234,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.366378707976269,
+            -4.340961107448912,
+            -8.715553065260382
+          ],
+          "mean_vector_norm": 9.746407982003243,
+          "timing_pass": true
+        }
+      }
+    },
+    {
+      "start_seconds": 40.0,
+      "duration_seconds": 30.0,
+      "streams": {
+        "Infrared": {
+          "count": 449,
+          "whole_window_hz": 14.966666666666667,
+          "first_arrival_offset_seconds": 0.06488799999999628,
+          "last_arrival_silence_seconds": 0.0659469999999942,
+          "max_arrival_gap_seconds": 0.06679099999999494,
+          "max_arrival_gap_with_boundaries_seconds": 0.06679099999999494,
+          "max_stamp_gap_seconds": 0.06667327880859375,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "timing_pass": true
+        },
+        "Gyro": {
+          "count": 6001,
+          "whole_window_hz": 200.03333333333333,
+          "first_arrival_offset_seconds": 0.003347000000005096,
+          "last_arrival_silence_seconds": 0.002065999999999235,
+          "max_arrival_gap_seconds": 0.005501000000002421,
+          "max_arrival_gap_with_boundaries_seconds": 0.005501000000002421,
+          "max_stamp_gap_seconds": 0.005000114440917969,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.003722712881186469,
+            -0.004474420929845026,
+            -0.0020161639726712214
+          ],
+          "mean_vector_norm": 0.007263791908295746,
+          "timing_pass": true
+        },
+        "Accel": {
+          "count": 3033,
+          "whole_window_hz": 101.1,
+          "first_arrival_offset_seconds": 0.0058530000000018845,
+          "last_arrival_silence_seconds": 0.0058169999999933,
+          "max_arrival_gap_seconds": 0.010089999999998156,
+          "max_arrival_gap_with_boundaries_seconds": 0.010089999999998156,
+          "max_stamp_gap_seconds": 0.009894132614135742,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.36640916584240024,
+            -4.339351137487636,
+            -8.718373557533795
+          ],
+          "mean_vector_norm": 9.745802691117092,
+          "timing_pass": true
+        }
+      }
+    },
+    {
+      "start_seconds": 70.0,
+      "duration_seconds": 30.0,
+      "streams": {
+        "Infrared": {
+          "count": 450,
+          "whole_window_hz": 15.0,
+          "first_arrival_offset_seconds": 0.0007179999999920028,
+          "last_arrival_silence_seconds": 0.06342300000000023,
+          "max_arrival_gap_seconds": 0.06679499999999905,
+          "max_arrival_gap_with_boundaries_seconds": 0.06679499999999905,
+          "max_stamp_gap_seconds": 0.06667327880859375,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "timing_pass": true
+        },
+        "Gyro": {
+          "count": 6001,
+          "whole_window_hz": 200.03333333333333,
+          "first_arrival_offset_seconds": 0.002947000000006028,
+          "last_arrival_silence_seconds": 0.0019810000000006767,
+          "max_arrival_gap_seconds": 0.005267000000003463,
+          "max_arrival_gap_with_boundaries_seconds": 0.005267000000003463,
+          "max_stamp_gap_seconds": 0.005000114440917969,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.0036908848525245793,
+            -0.0045924012664555905,
+            -0.002049658390268289
+          ],
+          "mean_vector_norm": 0.007971580293845057,
+          "timing_pass": true
+        },
+        "Accel": {
+          "count": 3033,
+          "whole_window_hz": 101.1,
+          "first_arrival_offset_seconds": 0.004187999999999192,
+          "last_arrival_silence_seconds": 0.002995999999996002,
+          "max_arrival_gap_seconds": 0.010419999999996321,
+          "max_arrival_gap_with_boundaries_seconds": 0.010419999999996321,
+          "max_stamp_gap_seconds": 0.009895086288452148,
+          "nonpositive_stamp_steps": 0,
+          "nonpositive_arrival_steps": 0,
+          "nonpositive_frame_steps": 0,
+          "missing_frame_numbers": 0,
+          "finite_values": true,
+          "mean_xyz": [
+            -0.36690273656445765,
+            -4.339764919221893,
+            -8.718757006264424
+          ],
+          "mean_vector_norm": 9.748758882545841,
+          "timing_pass": true
+        }
+      }
+    }
+  ],
+  "all_received_samples": {
+    "Infrared": {
+      "count": 1573,
+      "first_arrival_seconds": 0.19582,
+      "last_arrival_seconds": 105.003659,
+      "first_stamp_seconds": 1789206113.520395,
+      "last_stamp_seconds": 1789206218.329166,
+      "nonpositive_stamp_steps": 0,
+      "nonpositive_frame_steps": 0,
+      "missing_frame_numbers": 0,
+      "max_stamp_gap_seconds": 0.06667709350585938
+    },
+    "Gyro": {
+      "count": 20974,
+      "first_arrival_seconds": 0.20238,
+      "last_arrival_seconds": 105.047231,
+      "first_stamp_seconds": 1789206113.5353181,
+      "last_stamp_seconds": 1789206218.380778,
+      "nonpositive_stamp_steps": 0,
+      "nonpositive_frame_steps": 0,
+      "missing_frame_numbers": 0,
+      "max_stamp_gap_seconds": 0.005000114440917969
+    },
+    "Accel": {
+      "count": 10607,
+      "first_arrival_seconds": 0.14677500000000002,
+      "last_arrival_seconds": 105.042479,
+      "first_stamp_seconds": 1789206113.478434,
+      "last_stamp_seconds": 1789206218.376094,
+      "nonpositive_stamp_steps": 0,
+      "nonpositive_frame_steps": 0,
+      "missing_frame_numbers": 0,
+      "max_stamp_gap_seconds": 0.009895086288452148
+    }
+  },
+  "all_timing_windows_pass": true,
+  "N2": "NOT DECIDED: requires image, device/kernel logs, calibration context and health evidence"
+}

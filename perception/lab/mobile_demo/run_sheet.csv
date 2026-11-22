@@ -1,0 +1,2 @@
+run_id,bag_path,capture_type,mode,box_height_m,box_front_distance_m,box_width_m,lateral_offset_m,camera_height_m,camera_tilt_deg,wall_distance_m,floor_type,lighting,usb_disconnects,notes
+B2-H05-D1p0,L2-boxes-01/B2-H05-D1p0/rgbd-bag,static,rgbd,0.050,1.00,0.25,0.00,0.300,10,,matte vinyl,ceiling LED,0,example row - delete

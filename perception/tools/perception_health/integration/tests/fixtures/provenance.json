@@ -1,0 +1,6 @@
+{
+  "source": "tools/vio_adapter/real_replay/snapshots.jsonl",
+  "source_sha256": "14c6a1caf12bb2b458e96b09f7cef14620ae4bc883bc6f6c3efcc80b4062c7ce",
+  "selection": "first four lines, verbatim",
+  "evidence": "MEASURED real D435i input association; SYNTHETIC fake engine estimates"
+}

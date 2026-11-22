@@ -1,0 +1,31 @@
+{
+  "name": "edge_box110",
+  "description": "110 mm box: 10 mm below assumed jump limit, initial classification from NONE.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 1.0,
+      "y": 0.0,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.11,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "DecisionParams.jump_min_h=.03 <= .110 <= jump_max_h=.12. height_hysteresis_m=.01 governs later transitions, not initial classification."
+    }
+  ]
+}

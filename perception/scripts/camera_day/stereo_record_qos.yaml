@@ -1,0 +1,21 @@
+# Reliable readers require reliable publishers; inspect live endpoint QoS.
+/camera/camera/infra1/image_rect_raw:
+  reliability: reliable
+  durability: volatile
+  history: keep_last
+  depth: 100
+/camera/camera/infra2/image_rect_raw:
+  reliability: reliable
+  durability: volatile
+  history: keep_last
+  depth: 100
+/camera/camera/infra1/camera_info:
+  reliability: reliable
+  durability: volatile
+  history: keep_last
+  depth: 100
+/camera/camera/infra2/camera_info:
+  reliability: reliable
+  durability: volatile
+  history: keep_last
+  depth: 100

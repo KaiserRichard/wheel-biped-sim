@@ -1,0 +1,36 @@
+{
+  "tool_version": "1.1.0",
+  "clockmap": {
+    "window_size": 32,
+    "min_samples": 3,
+    "step_threshold_ns": 1000000,
+    "source": "SOURCE-SUPPORTED: tools/clockmap defaults; step threshold is PROPOSED by that tool. Matches phase-7 sender's default ClockMap."
+  },
+  "pty_timeout_s": {
+    "value": 10,
+    "rationale": "PROPOSED: bounded local subprocess/PTY diagnostic timeout; not a robot deadline."
+  },
+  "synthetic_pose_age_ns": {
+    "value": 1000000,
+    "rationale": "ASSUMED: synthetic source is one millisecond before the local software injection boundary."
+  },
+  "silence_policy_overrides": {
+    "pose_age_hold_us": 5000000,
+    "pose_age_timeout_us": 60000000,
+    "heartbeat_timeout_us": 60000000,
+    "source": "PROPOSED: diagnostic-only override isolates receipt-silence from source-age and heartbeat expiry. Never deploy these as safety limits."
+  },
+  "uart": {
+    "bauds": [
+      115200,
+      921600
+    ],
+    "bits_per_byte": 10,
+    "max_utilization": 1.0,
+    "rationale": "CALCULATED: ideal 8N1 = start + 8 data + stop bits. PROPOSED full-capacity comparison only; no hardware margin established. Baud rates required by phase-10."
+  },
+  "evidence_max_bytes": {
+    "value": 200000,
+    "source": "SOURCE-SUPPORTED: T10b requires retained evidence under 200 kB; full captures are temporary and excluded from the archive."
+  }
+}

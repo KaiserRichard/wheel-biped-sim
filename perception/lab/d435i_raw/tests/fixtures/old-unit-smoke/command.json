@@ -1,0 +1,52 @@
+{
+  "stage": "N2_SMOKE",
+  "verdict": "FAIL",
+  "automatic_checks_pass": false,
+  "utc_start": "2026-09-13T02:39:39.780414+00:00",
+  "duration_requested_seconds": 20,
+  "argv": [
+    "/opt/ros/jazzy/bin/rs-data-collect",
+    "--no-eth",
+    "-s",
+    "99003",
+    "-c",
+    "./wbr-evidence/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/profile.csv",
+    "-t",
+    "20",
+    "-f",
+    "./wbr-evidence/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/frames.csv"
+  ],
+  "shell_command": "/opt/ros/jazzy/bin/rs-data-collect --no-eth -s 99003 -c ./wbr-evidence/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/profile.csv -t 20 -f ./wbr-evidence/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/frames.csv",
+  "hostname": "pi-host",
+  "platform": "Linux-6.8.0-1064-raspi-aarch64-with-glibc2.39",
+  "boot_id": "a5a9b519-6883-4f44-b7fb-943c94c8f92c",
+  "n1_sha256": "0080054ff65bc63a42c344recorded-sample1b114219daf1eea60246d249277c2ee66849ef0",
+  "camera": {
+    "sysfs_path": "/sys/devices/platform/axi/1000120000.pcie/1f00300000.usb/xhci-hcd.1/usb5/5-1",
+    "sysfs_name": "5-1",
+    "speed_mbps": 5000.0,
+    "usb_descriptor_serial": "99004",
+    "idVendor": "8086",
+    "idProduct": "0b3a",
+    "busnum": "5",
+    "devnum": "2",
+    "product": "Intel(R) RealSense(TM) Depth Camera 435i",
+    "device_serial": "99003",
+    "firmware": "LOCAL_FIRMWARE_VERSION",
+    "sdk_usb_type_descriptor": "3.2",
+    "asic_serial": "99004",
+    "firmware_update_id": "99004",
+    "imu_type": "imu_sensor"
+  },
+  "failures": [],
+  "review_required": [
+    "Read unfiltered kernel and SDK logs",
+    "Review representative IR images"
+  ],
+  "N2": "NOT DECIDED: complete 300-second soak and human evidence review required",
+  "goal": "Measure native raw IR1/gyro/accel delivery and shutdown without ROS",
+  "hypothesis": "Direct SuperSpeed transport and scoped access sustain the exact baseline profile",
+  "input_source": "Physical D435i selected by SDK serial; not synthetic",
+  "monitor_interval_seconds": 1,
+  "raw_image_dataset_recorded": false
+}

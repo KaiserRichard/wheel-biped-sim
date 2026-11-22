@@ -1,0 +1,31 @@
+{
+  "name": "box132_approach",
+  "description": "Ideal robot-mounted depth camera approaching a 132 mm box; scripted motion continues through the box.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.25,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 1.2,
+      "y": 0.0,
+      "depth": 0.20,
+      "width": 0.30,
+      "height": 0.132,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.5,
+      "t_to": 2.0,
+      "advisory": "STOP_CANDIDATE",
+      "note": "Hypothesis after startup confirmation: 0.132 m exceeds the unchanged policy's assumed 0.12 m jump limit. Later close views are deliberately unlabelled."
+    }
+  ]
+}

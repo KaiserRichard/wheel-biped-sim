@@ -1,0 +1,91 @@
+Tue Oct 13 04:22:36 AM UTC 2026
+Bus 005 Device 002: ID 8086:0b3a Intel Corp. Intel(R) RealSense(TM) Depth Camera 435i
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=dwc2/1p, 480M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/2p, 480M
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/2p, 480M
+/:  Bus 005.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+    |__ Port 001: Dev 002, If 0, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 1, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 2, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 3, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 4, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 5, Class=Human Interface Device, Driver=usbhid, 5000M
+/sys/bus/usb/devices/5-1 serial=99006 speed=5000Mbps ver= 3.20 fw_bcd=5113
+total 0
+lrwxrwxrwx 1 root root 12 Sep 11 11:08 usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_serial-alias-7-video-index0 -> ../../video4
+lrwxrwxrwx 1 root root 12 Sep 11 11:08 usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_serial-alias-7-video-index1 -> ../../video5
+lrwxrwxrwx 1 root root 12 Sep 11 11:08 usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_serial-alias-7-video-index2 -> ../../video2
+lrwxrwxrwx 1 root root 12 Sep 11 11:08 usb-Intel_R__RealSense_TM__Depth_Camera_435i_Intel_R__RealSense_TM__Depth_Camera_435i_serial-alias-7-video-index3 -> ../../video3
+crw------- 1 root root 243, 0 Sep 11 11:08 /dev/hidraw0
+iio:device0
+iio:device1
+trigger0
+trigger1
+[    0.989527] usb usb4: Manufacturer: Linux 6.8.0-1064-raspi xhci-hcd
+[    0.989530] usb usb4: USB controller: xhci-hcd.1
+[    0.990106] hub 4-0:1.0: USB hub found
+[    0.990592] usb usb5: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.08
+[    0.990602] usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    0.990607] usb usb5: Product: xHCI Host Controller
+[    0.990610] usb usb5: Manufacturer: Linux 6.8.0-1064-raspi xhci-hcd
+[    0.990613] usb usb5: USB controller: xhci-hcd.1
+[    0.991228] hub 5-0:1.0: USB hub found
+[    1.314878] usb 5-1: new SuperSpeed USB device number 2 using xhci-hcd
+[    1.333127] usb 5-1: New USB device found, idVendor=8086, idProduct=0b3a, bcdDevice=51.13
+[    1.333133] usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[    1.333137] usb 5-1: Product: Intel(R) RealSense(TM) Depth Camera 435i
+[    1.333141] usb 5-1: Manufacturer: Intel(R) RealSense(TM) Depth Camera 435i
+[    1.333144] usb 5-1: SerialNumber: 99006
+[    1.359351] usbcore: registered new interface driver usbhid
+[    1.359366] usbhid: USB HID core driver
+[    1.363204] hid-generic 0003:8086:0B3A.0001: hiddev0,hidraw0: USB HID v1.10 Device [Intel(R) RealSense(TM) Depth Camera 435i Intel(R) RealSense(TM) Depth Camera 435i] on usb-xhci-hcd.1-1/input5
+[    1.365612] hid-sensor-hub 0003:8086:0B3A.0001: hiddev0,hidraw0: USB HID v1.10 Device [Intel(R) RealSense(TM) Depth Camera 435i Intel(R) RealSense(TM) Depth Camera 435i] on usb-xhci-hcd.1-1/input5
+[    5.116004] uvcvideo 5-1:1.1: Unknown video format 00000050-0000-0010-8000-00aa00389b71
+[    5.116438] usb 5-1: Found UVC 1.50 device Intel(R) RealSense(TM) Depth Camera 435i (8086:0b3a)
+[    5.117876] usbcore: registered new interface driver brcmfmac
+[    5.136082] uvcvideo 5-1:1.4: Unknown video format 36315752-1a66-a242-9065-d01814a8ef8a
+[    5.136097] usb 5-1: Found UVC 1.50 device Intel(R) RealSense(TM) Depth Camera 435i (8086:0b3a)
+[    5.158473] usbcore: registered new interface driver uvcvideo
+throttled=0x50000
+2026-10-13 11:22:01
+ 11:22:45 up 0 min,  1 user,  load average: 2.05, 0.64, 0.22
+reboot   system boot  6.8.0-1064-raspi Fri Sep 11 11:08   still running
+reboot   system boot  6.8.0-1064-raspi Fri Sep 11 11:08   still running
+shutdown system down  6.8.0-1064-raspi Mon Oct 12 23:25 - 11:08 (-31+12:17)
+reboot   system boot  6.8.0-1064-raspi Fri Sep 11 11:08 - 23:25 (31+12:17)
+shutdown system down  6.8.0-1064-raspi Mon Oct 12 18:14 - 11:08 (-31+07:05)
+reboot   system boot  6.8.0-1064-raspi Fri Sep 11 11:08 - 18:14 (31+07:05)
+crw-rw---- 1 root video 81,  2 Sep 11 11:08 /dev/video2
+crw-rw---- 1 root video 81,  3 Sep 11 11:08 /dev/video3
+crw-rw---- 1 root video 81, 22 Sep 11 11:08 /dev/video4
+crw-rw---- 1 root video 81, 23 Sep 11 11:08 /dev/video5
+uid=1000(richard) gid=1000(richard) groups=1000(richard),4(adm),20(dialout),24(cdrom),27(sudo),30(dip),44(video),101(lxd)
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/kernel-before-monotonic.log
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/structured/metadata.jsonl
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/structured/metadata.json
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/usb-permissions.json
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/structured-v2/metadata.jsonl
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/structured-v2/metadata.json
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/rs-enumerate-debug.txt
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/CAMERA_METADATA_SNAPSHOT/rs-enumerate-complete.txt
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/kernel-final-monotonic.log
+<local workspace>/wbr-evidence/2026-09-13-d435i-camera-capture-20260913T015621Z/kernel-before-utc.log
+ -2 673fedd0575b4eb69576c7224d1c82b3 Fri 2026-09-11 11:08:27 +07 Mon 2026-10-12 23:25:57 +07
+ -1 de9b8a43b13b4d458a3607b8cc9f05dd Fri 2026-09-11 11:08:28 +07 Tue 2026-10-13 11:20:22 +07
+  0 96fc15a93d77495082f4e7dd4b3a36a8 Fri 2026-09-11 11:08:29 +07 Tue 2026-10-13 11:22:55 +07
+Oct 13 11:20:06 pi-host systemd[2069]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+Oct 13 11:20:06 pi-host systemd[2069]: Removed slice app.slice - User Application Slice.
+Oct 13 11:20:06 pi-host systemd[2069]: Reached target shutdown.target - Shutdown.
+Oct 13 11:20:06 pi-host systemd[2069]: Finished systemd-exit.service - Exit the Session.
+Oct 13 11:20:06 pi-host systemd[2069]: Reached target exit.target - Exit the Session.
+Oct 13 11:20:06 pi-host (sd-pam)[2071]: pam_unix(systemd-user:session): session closed for user richard
+Oct 13 11:20:06 pi-host systemd[1]: : Deactivated successfully.
+Oct 13 11:20:06 pi-host systemd[1]: Stopped  - User Manager for UID 1000.
+Oct 13 11:20:06 pi-host systemd[1]: Stopping  - User Runtime Directory /run/user/1000...
+Oct 13 11:20:06 pi-host systemd[1]: run-user-1000.mount: Deactivated successfully.
+Oct 13 11:20:06 pi-host systemd[1]: : Deactivated successfully.
+Oct 13 11:20:06 pi-host systemd[1]: Stopped  - User Runtime Directory /run/user/1000.
+Oct 13 11:20:06 pi-host systemd[1]: Removed slice user-1000.slice - User Slice of UID 1000.
+Oct 13 11:20:06 pi-host systemd[1]: user-1000.slice: Consumed 2.814s CPU time.
+Oct 13 11:20:22 pi-host systemd[1]: systemd-timedated.service: Deactivated successfully.

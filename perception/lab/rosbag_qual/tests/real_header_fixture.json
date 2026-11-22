@@ -1,0 +1,108 @@
+{
+  "evidence_label": "MEASURED",
+  "source": "./Desktop/Research/wbr-data/2026-10-14-d435i-ramtest15s/take/stereo_imu.db3",
+  "source_sha256": "d9adff8ae17b4e9f8b89bf6a8a798ca1abfd19bf06575efdd7ea1befe05ea1fe",
+  "scope": "Exact CDR header prefixes and receive timestamps of three messages per stream; payloads omitted. Parser fixture only, not a gate PASS.",
+  "topics": [
+    {
+      "name": "/device_0/sensor_0/Infrared_1/image/data",
+      "type": "sensor_msgs/msg/Image",
+      "role": "image_left",
+      "rows": [
+        {
+          "bag_receive_stamp_ns": 23977455,
+          "ros_header_stamp_ns": 23977455,
+          "frame_id": "Infrared1",
+          "cdr_header_hex": "0001000000000000efdd6d010a000000496e6672617265643100"
+        },
+        {
+          "bag_receive_stamp_ns": 56296196,
+          "ros_header_stamp_ns": 56296196,
+          "frame_id": "Infrared1",
+          "cdr_header_hex": "000100000000000004035b030a000000496e6672617265643100"
+        },
+        {
+          "bag_receive_stamp_ns": 89046491,
+          "ros_header_stamp_ns": 89046491,
+          "frame_id": "Infrared1",
+          "cdr_header_hex": "0001000000000000dbbd4e050a000000496e6672617265643100"
+        }
+      ]
+    },
+    {
+      "name": "/device_0/sensor_0/Infrared_2/image/data",
+      "type": "sensor_msgs/msg/Image",
+      "role": "image_right",
+      "rows": [
+        {
+          "bag_receive_stamp_ns": 24651244,
+          "ros_header_stamp_ns": 24651244,
+          "frame_id": "Infrared2",
+          "cdr_header_hex": "0001000000000000ec2578010a000000496e6672617265643200"
+        },
+        {
+          "bag_receive_stamp_ns": 56320715,
+          "ros_header_stamp_ns": 56320715,
+          "frame_id": "Infrared2",
+          "cdr_header_hex": "0001000000000000cb625b030a000000496e6672617265643200"
+        },
+        {
+          "bag_receive_stamp_ns": 89067659,
+          "ros_header_stamp_ns": 89067659,
+          "frame_id": "Infrared2",
+          "cdr_header_hex": "00010000000000008b104f050a000000496e6672617265643200"
+        }
+      ]
+    },
+    {
+      "name": "/device_0/sensor_2/Gyro_0/imu/data",
+      "type": "sensor_msgs/msg/Imu",
+      "role": "gyro",
+      "rows": [
+        {
+          "bag_receive_stamp_ns": 71344509,
+          "ros_header_stamp_ns": 71344509,
+          "frame_id": "Gyro",
+          "cdr_header_hex": "00010000000000007da14004050000004779726f00"
+        },
+        {
+          "bag_receive_stamp_ns": 75645027,
+          "ros_header_stamp_ns": 75645027,
+          "frame_id": "Gyro",
+          "cdr_header_hex": "000100000000000063408204050000004779726f00"
+        },
+        {
+          "bag_receive_stamp_ns": 80624259,
+          "ros_header_stamp_ns": 80624259,
+          "frame_id": "Gyro",
+          "cdr_header_hex": "0001000000000000833ace04050000004779726f00"
+        }
+      ]
+    },
+    {
+      "name": "/device_0/sensor_2/Accel_0/imu/data",
+      "type": "sensor_msgs/msg/Imu",
+      "role": "accel",
+      "rows": [
+        {
+          "bag_receive_stamp_ns": 3444,
+          "ros_header_stamp_ns": 3444,
+          "frame_id": "Accel",
+          "cdr_header_hex": "0001000000000000740d000006000000416363656c00"
+        },
+        {
+          "bag_receive_stamp_ns": 8649686,
+          "ros_header_stamp_ns": 8649686,
+          "frame_id": "Accel",
+          "cdr_header_hex": "0001000000000000d6fb830006000000416363656c00"
+        },
+        {
+          "bag_receive_stamp_ns": 18372622,
+          "ros_header_stamp_ns": 18372622,
+          "frame_id": "Accel",
+          "cdr_header_hex": "00010000000000000e58180106000000416363656c00"
+        }
+      ]
+    }
+  ]
+}

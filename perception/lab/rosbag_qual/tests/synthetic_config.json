@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "topics": [
+    {"name": "/left", "type": "sensor_msgs/msg/Image", "role": "image_left", "required": true,
+     "nominal_hz": 2.0, "rate_min_hz": 1.5, "rate_max_hz": 2.5, "max_gap_s": 0.75,
+     "drop_gap_factor": 2.0, "threshold_source": "PROPOSED: synthetic fixture acceptance band"},
+    {"name": "/right", "type": "sensor_msgs/msg/Image", "role": "image_right", "required": true,
+     "nominal_hz": 2.0, "rate_min_hz": 1.5, "rate_max_hz": 2.5, "max_gap_s": 0.75,
+     "drop_gap_factor": 2.0, "threshold_source": "PROPOSED: synthetic fixture acceptance band"},
+    {"name": "/gyro", "type": "sensor_msgs/msg/Imu", "role": "gyro", "required": true,
+     "nominal_hz": 4.0, "rate_min_hz": 3.0, "rate_max_hz": 5.0, "max_gap_s": 0.375,
+     "drop_gap_factor": 2.0, "threshold_source": "PROPOSED: synthetic fixture acceptance band"},
+    {"name": "/accel", "type": "sensor_msgs/msg/Imu", "role": "accel", "required": true,
+     "nominal_hz": 4.0, "rate_min_hz": 3.0, "rate_max_hz": 5.0, "max_gap_s": 0.375,
+     "drop_gap_factor": 2.0, "threshold_source": "PROPOSED: synthetic fixture acceptance band"}
+  ],
+  "pairing": {"left_role": "image_left", "right_role": "image_right", "min_fraction": 1.0,
+               "threshold_source": "PROPOSED: fixture requires exact pairing"},
+  "storage": {"max_write_rate_bps": 1000000000, "min_duration_s": 0.5,
+               "threshold_source": "PROPOSED: synthetic fixture limit"},
+  "replay": {"rate_relative_tolerance": 0.1, "min_count_fraction": 0.99,
+              "threshold_source": "PROPOSED: synthetic fixture replay limit"},
+  "record": {"duration_s": 2, "command_timeout_s": 5, "shutdown_grace_s": 1,
+             "node_list_timeout_s": 1, "bag_info_timeout_s": 1, "parameter_timeout_s": 1,
+             "topic_info_timeout_s": 1, "threshold_source": "PROPOSED: test-only timeout"},
+  "validation": {"max_header_reversals": 0, "max_header_repeated_stamps": 0, "max_bag_receive_reversals": 0, "max_parse_errors": 0, "max_header_drop_count": 0, "threshold_source": "PROPOSED: no reversed/repeated dynamic header stamps, receive-time reversals, malformed CDR headers or gaps over the configured nominal-period multiple"}
+}

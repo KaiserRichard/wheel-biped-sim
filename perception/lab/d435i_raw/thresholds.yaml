@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "identity": {
+    "serial": {"value": "99005", "source": "SOURCE-SUPPORTED: phase-2 task; current SDK device serial, not ASIC/USB descriptor serial"},
+    "firmware": {"value": "LOCAL_FIRMWARE_VERSION", "source": "SOURCE-SUPPORTED: COMMON.md known current firmware; exact match required"},
+    "usb_type_regex": {"value": "^3(?:\\.[0-9]+)?$", "source": "SOURCE-SUPPORTED: phase-2 USB 3.x requirement; SDK USB type descriptor, not a physical bus-speed measurement"}
+  },
+  "profile": {
+    "width": {"value": 848, "source": "SOURCE-SUPPORTED: phase-2 stereo IR profile"},
+    "height": {"value": 480, "source": "SOURCE-SUPPORTED: phase-2 stereo IR profile"},
+    "ir_hz": {"value": 30, "source": "SOURCE-SUPPORTED: phase-2 stereo IR Y8 profile"},
+    "gyro_hz": {"value": 200, "source": "SOURCE-SUPPORTED: phase-2 raw gyro profile"},
+    "accel_hz_preference": {"value": [100, 200], "source": "SOURCE-SUPPORTED: phase-2 allowed accel profiles; PROPOSED: prefer 100, fall back to 200 only if offered"},
+    "emitter": {"value": 0, "source": "SOURCE-SUPPORTED: phase-2 emitter OFF"}
+  },
+  "capture": {
+    "duration_s": {"value": 60, "source": "SOURCE-SUPPORTED: phase-2 default bounded measurement window"},
+    "min_duration_s": {"value": 1, "source": "PROPOSED: minimum diagnostic capture duration"},
+    "max_duration_s": {"value": 600, "source": "PROPOSED: upper bound on camera acquisition"},
+    "worker_grace_s": {"value": 20, "source": "PROPOSED: combined SDK startup/shutdown deadline allowance; parent kills only its child"},
+    "queue_capacity": {"value": 4096, "source": "PROPOSED: bounded callback-to-writer queue; overflow is a FAIL"},
+    "ir_samples_per_stream": {"value": 3, "source": "PROPOSED: retain three raw PGM samples spaced over the measurement window"},
+    "poll_s": {"value": 0.05, "source": "PROPOSED: writer queue polling interval"}
+  },
+  "limits": {
+    "qualification_duration_s": {"value": 60, "source": "PROPOSED: require at least the task default interval for qualification"},
+    "min_samples": {"value": 2, "source": "PROPOSED: minimum for continuity and population standard deviation; full-window rate criterion remains mandatory"},
+    "rate_relative_tolerance": {"value": 0.05, "source": "PROPOSED: achieved count/window within 5% of the resolved nominal rate"},
+    "missing_frames_max": {"value": 0, "source": "PROPOSED: no gaps in frame numbers per stream"},
+    "nonincreasing_frames_max": {"value": 0, "source": "PROPOSED: no repeated/reversed frame numbers"},
+    "ir_max_receipt_gap_s": {"value": 0.1, "source": "PROPOSED: maximum IR receipt gap, including window boundaries"},
+    "imu_max_receipt_gap_s": {"value": 0.05, "source": "PROPOSED: maximum motion receipt gap, including window boundaries"},
+    "timestamp_duplicates_max": {"value": 0, "source": "PROPOSED: strictly increasing timestamps within each stream/clock domain"},
+    "timestamp_reversals_max": {"value": 0, "source": "PROPOSED: strictly increasing timestamps within each stream/clock domain"},
+    "timestamp_domain_changes_max": {"value": 0, "source": "PROPOSED: no SDK timestamp-domain transitions during a qualification window"},
+    "stereo_tolerance_ms": {"value": 0.01, "source": "PROPOSED: left/right SDK timestamps within 10 microseconds for equal frame numbers in the same reported domain"},
+    "unpaired_frames_max": {"value": 0, "source": "PROPOSED: every left/right frame number must pair"},
+    "local_g_m_s2": {"value": 9.80665, "source": "ASSUMED: standard gravity; configure independently measured local g if available"},
+    "accel_norm_error_m_s2": {"value": 0.5, "source": "PROPOSED: maximum error of mean sample accel norm from local g; plausibility only"},
+    "gyro_mean_norm_rad_s": {"value": 0.05, "source": "PROPOSED: norm of gyro mean vector; plausibility only, not bias calibration"},
+    "gyro_axis_std_rad_s": {"value": 0.03, "source": "PROPOSED: maximum per-axis population standard deviation, not noise density"},
+    "accel_axis_std_m_s2": {"value": 0.2, "source": "PROPOSED: maximum per-axis population standard deviation, not noise density"},
+    "ir_mean_min": {"value": 1, "source": "PROPOSED: minimum sampled Y8 mean; excludes all-zero imagery"},
+    "ir_mean_max": {"value": 254, "source": "PROPOSED: maximum sampled Y8 mean; excludes all-white imagery"},
+    "ir_saturated_fraction_max": {"value": 0.95, "source": "PROPOSED: maximum fraction of sampled Y8 pixels equal to 255"}
+  }
+}

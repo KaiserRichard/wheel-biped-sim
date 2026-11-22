@@ -1,0 +1,313 @@
+--- stereo_inertial_realsense_D435i.cc
++++ stereo_inertial_realsense_D435i.cc
+@@ -33,13 +33,13 @@
+ #include "librealsense2/rsutil.h"
+ 
+ #include <System.h>
++#include "wbr_native.hpp"
+ 
+ using namespace std;
+ 
+-bool b_continue_session;
++volatile sig_atomic_t b_continue_session = 1;
+ 
+ void exit_loop_handler(int s){
+-    cout << "Finishing session" << endl;
+     b_continue_session = false;
+ 
+ }
+@@ -94,7 +94,7 @@
+     return static_cast<rs2_option>(selected_sensor_option);
+ }
+ 
+-int main(int argc, char **argv) {
++int main(int argc, char **argv) try {
+ 
+     if (argc < 3 || argc > 4) {
+         cerr << endl
+@@ -116,53 +116,22 @@
+     sigIntHandler.sa_flags = 0;
+ 
+     sigaction(SIGINT, &sigIntHandler, NULL);
++    sigaction(SIGTERM, &sigIntHandler, NULL);
+     b_continue_session = true;
+ 
+     double offset = 0; // ms
+ 
+-    rs2::context ctx;
+-    rs2::device_list devices = ctx.query_devices();
+-    rs2::device selected_device;
+-    if (devices.size() == 0)
+-    {
+-        std::cerr << "No device connected, please connect a RealSense device" << std::endl;
+-        return 0;
+-    }
+-    else
+-        selected_device = devices[0];
+-
+-    std::vector<rs2::sensor> sensors = selected_device.query_sensors();
+-    int index = 0;
+-    // We can now iterate the sensors and print their names
+-    for (rs2::sensor sensor : sensors)
+-        if (sensor.supports(RS2_CAMERA_INFO_NAME)) {
+-            ++index;
+-            if (index == 1) {
+-                sensor.set_option(RS2_OPTION_ENABLE_AUTO_EXPOSURE, 1);
+-                sensor.set_option(RS2_OPTION_AUTO_EXPOSURE_LIMIT,5000);
+-                sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 0); // switch off emitter
+-            }
+-            // std::cout << "  " << index << " : " << sensor.get_info(RS2_CAMERA_INFO_NAME) << std::endl;
+-            get_sensor_option(sensor);
+-            if (index == 2){
+-                // RGB camera (not used here...)
+-                sensor.set_option(RS2_OPTION_EXPOSURE,100.f);
+-            }
+-
+-            if (index == 3){
+-                sensor.set_option(RS2_OPTION_ENABLE_MOTION_CORRECTION,0);
+-            }
+-
+-        }
++    wbr::Runtime runtime(argv[2], "stereo_inertial");
+ 
+     // Declare RealSense pipeline, encapsulating the actual device and sensors
+     rs2::pipeline pipe;
+     // Create a configuration for configuring the pipeline with a non default profile
+     rs2::config cfg;
+-    cfg.enable_stream(RS2_STREAM_INFRARED, 1, 640, 480, RS2_FORMAT_Y8, 30);
+-    cfg.enable_stream(RS2_STREAM_INFRARED, 2, 640, 480, RS2_FORMAT_Y8, 30);
+-    cfg.enable_stream(RS2_STREAM_ACCEL, RS2_FORMAT_MOTION_XYZ32F);
+-    cfg.enable_stream(RS2_STREAM_GYRO, RS2_FORMAT_MOTION_XYZ32F);
++    cfg.enable_device(runtime.serial);
++    cfg.enable_stream(RS2_STREAM_INFRARED, 1, 640, 480, RS2_FORMAT_Y8, runtime.fps);
++    cfg.enable_stream(RS2_STREAM_INFRARED, 2, 640, 480, RS2_FORMAT_Y8, runtime.fps);
++    cfg.enable_stream(RS2_STREAM_ACCEL, RS2_FORMAT_MOTION_XYZ32F, 200);
++    cfg.enable_stream(RS2_STREAM_GYRO, RS2_FORMAT_MOTION_XYZ32F, 200);
+ 
+     // IMU callback
+     std::mutex imu_mutex;
+@@ -174,17 +143,20 @@
+     vector<rs2_vector> v_gyro_data;
+ 
+     double prev_accel_timestamp = 0;
+-    rs2_vector prev_accel_data;
++    rs2_vector prev_accel_data{};
+     double current_accel_timestamp = 0;
+-    rs2_vector current_accel_data;
++    rs2_vector current_accel_data{};
++    bool have_accel = false;
+     vector<double> v_accel_timestamp_sync;
+     vector<rs2_vector> v_accel_data_sync;
+ 
+     cv::Mat imCV, imRightCV;
+-    int width_img, height_img;
++    int width_img = 640, height_img = 480;
+     double timestamp_image = -1.0;
+     bool image_ready = false;
+-    int count_im_buffer = 0; // count dropped frames
++    int count_im_buffer = 0; // received images overwritten in latest-frame slot
++    uint64_t source_frame_number = 0;
++    int source_domain = -1;
+ 
+     auto imu_callback = [&](const rs2::frame& frame)
+     {
+@@ -192,9 +164,10 @@
+ 
+         if(rs2::frameset fs = frame.as<rs2::frameset>())
+         {
++            if (!have_accel) return; // never fabricate startup IMU samples
+             count_im_buffer++;
+ 
+-            double new_timestamp_image = fs.get_timestamp()*1e-3;
++            double new_timestamp_image = fs.get_infrared_frame(1).get_timestamp()*1e-3;
+             if(abs(timestamp_image-new_timestamp_image)<0.001){
+                 // cout << "Two frames with the same timeStamp!!!\n";
+                 count_im_buffer--;
+@@ -204,10 +177,12 @@
+             rs2::video_frame ir_frameL = fs.get_infrared_frame(1);
+             rs2::video_frame ir_frameR = fs.get_infrared_frame(2);
+ 
+-            imCV = cv::Mat(cv::Size(width_img, height_img), CV_8U, (void*)(ir_frameL.get_data()), cv::Mat::AUTO_STEP);
+-            imRightCV = cv::Mat(cv::Size(width_img, height_img), CV_8U, (void*)(ir_frameR.get_data()), cv::Mat::AUTO_STEP);
+-
+-            timestamp_image = fs.get_timestamp()*1e-3;
++            imCV = cv::Mat(cv::Size(ir_frameL.get_width(), ir_frameL.get_height()), CV_8U, (void*)ir_frameL.get_data(), ir_frameL.get_stride_in_bytes()).clone();
++            imRightCV = cv::Mat(cv::Size(ir_frameR.get_width(), ir_frameR.get_height()), CV_8U, (void*)ir_frameR.get_data(), ir_frameR.get_stride_in_bytes()).clone();
++
++            timestamp_image = ir_frameL.get_timestamp()*1e-3;
++            source_frame_number = ir_frameL.get_frame_number();
++            source_domain = static_cast<int>(ir_frameL.get_frame_timestamp_domain());
+             image_ready = true;
+ 
+             while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
+@@ -227,7 +202,8 @@
+         {
+             if (m_frame.get_profile().stream_name() == "Gyro")
+             {
+-                // It runs at 200Hz
++                if (!have_accel) return;
++                // Explicitly requested at 200 Hz
+                 v_gyro_data.push_back(m_frame.get_motion_data());
+                 v_gyro_timestamp.push_back((m_frame.get_timestamp()+offset)*1e-3);
+                 //rs2_vector gyro_sample = m_frame.get_motion_data();
+@@ -235,7 +211,8 @@
+             }
+             else if (m_frame.get_profile().stream_name() == "Accel")
+             {
+-                // It runs at 60Hz
++                have_accel = true;
++                // Explicitly requested at 200 Hz
+                 prev_accel_timestamp = current_accel_timestamp;
+                 prev_accel_data = current_accel_data;
+ 
+@@ -259,7 +236,23 @@
+         }
+     };
+ 
++    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_STEREO, false, 0, file_name);
++    float imageScale = SLAM.GetImageScale();
++    runtime.arm();
++    if (!b_continue_session) {
++        runtime.stopping();
++        runtime.finish(SLAM, "signal_before_capture");
++        return 0;
++    }
++    bool processing_error = false, pipe_started = false;
++    try {
+     rs2::pipeline_profile pipe_profile = pipe.start(cfg, imu_callback);
++    pipe_started = true;
++    for (const auto& profile : pipe_profile.get_streams()) {
++        const bool motion = profile.stream_type() == RS2_STREAM_ACCEL || profile.stream_type() == RS2_STREAM_GYRO;
++        if (profile.fps() != (motion ? 200 : runtime.fps)) throw std::runtime_error("actual stream FPS disagrees with settings");
++        std::cout << "ACTIVE_STREAM " << profile.stream_name() << " fps=" << profile.fps() << std::endl;
++    }
+ 
+     vector<ORB_SLAM3::IMU::Point> vImuMeas;
+     rs2::stream_profile cam_left = pipe_profile.get_stream(RS2_STREAM_INFRARED, 1);
+@@ -267,21 +260,23 @@
+ 
+ 
+     rs2::stream_profile imu_stream = pipe_profile.get_stream(RS2_STREAM_GYRO);
+-    float* Rbc = cam_left.get_extrinsics_to(imu_stream).rotation;
+-    float* tbc = cam_left.get_extrinsics_to(imu_stream).translation;
++    const rs2_extrinsics extrinsic_bc = cam_left.get_extrinsics_to(imu_stream);
++    const float* Rbc = extrinsic_bc.rotation;
++    const float* tbc = extrinsic_bc.translation;
+     std::cout << "Tbc (left) = " << std::endl;
+     for(int i = 0; i<3; i++){
+         for(int j = 0; j<3; j++)
+-            std::cout << Rbc[i*3 + j] << ", ";
++            std::cout << Rbc[j*3 + i] << ", ";
+         std::cout << tbc[i] << "\n";
+     }
+ 
+-    float* Rlr = cam_right.get_extrinsics_to(cam_left).rotation;
+-    float* tlr = cam_right.get_extrinsics_to(cam_left).translation;
++    const rs2_extrinsics extrinsic_lr = cam_right.get_extrinsics_to(cam_left);
++    const float* Rlr = extrinsic_lr.rotation;
++    const float* tlr = extrinsic_lr.translation;
+     std::cout << "Tlr  = " << std::endl;
+     for(int i = 0; i<3; i++){
+         for(int j = 0; j<3; j++)
+-            std::cout << Rlr[i*3 + j] << ", ";
++            std::cout << Rlr[j*3 + i] << ", ";
+         std::cout << tlr[i] << "\n";
+     }
+ 
+@@ -317,22 +312,20 @@
+ 
+ 
+     // Create SLAM system. It initializes all system threads and gets ready to process frames.
+-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_STEREO, true, 0, file_name);
+-    float imageScale = SLAM.GetImageScale();
++
+ 
+     double timestamp;
++    unsigned callback_overwrites = 0;
++    uint64_t frame_number = 0;
++    int timestamp_domain = -1;
+     cv::Mat im, imRight;
+ 
+-    // Clear IMU vectors
+-    v_gyro_data.clear();
+-    v_gyro_timestamp.clear();
+-    v_accel_data_sync.clear();
+-    v_accel_timestamp_sync.clear();
++    // No unlocked post-start clear: callback owns the initial IMU buffers.
+ 
+     double t_resize = 0.f;
+     double t_track = 0.f;
+ 
+-    while (!SLAM.isShutDown())
++    while (b_continue_session && runtime.within_duration() && !SLAM.isShutDown())
+     {
+         std::vector<rs2_vector> vGyro;
+         std::vector<double> vGyro_times;
+@@ -341,8 +334,9 @@
+ 
+         {
+             std::unique_lock<std::mutex> lk(imu_mutex);
+-            if(!image_ready)
+-                cond_image_rec.wait(lk);
++            while (!image_ready && b_continue_session && runtime.within_duration())
++                cond_image_rec.wait_for(lk, std::chrono::milliseconds(50));
++            if (!b_continue_session || !runtime.within_duration()) break;
+ 
+ #ifdef COMPILEDWITHC11
+             std::chrono::steady_clock::time_point time_Start_Process = std::chrono::steady_clock::now();
+@@ -350,8 +344,9 @@
+             std::chrono::monotonic_clock::time_point time_Start_Process = std::chrono::monotonic_clock::now();
+ #endif
+ 
+-            if(count_im_buffer>1)
+-                cout << count_im_buffer -1 << " dropped frs\n";
++            callback_overwrites = count_im_buffer > 0 ? count_im_buffer - 1 : 0;
++            frame_number = source_frame_number;
++            timestamp_domain = source_domain;
+             count_im_buffer = 0;
+ 
+             while(v_gyro_timestamp.size() > v_accel_timestamp_sync.size())
+@@ -426,7 +421,15 @@
+     #endif
+ #endif
+         // Stereo images are already rectified.
+-        SLAM.TrackStereo(im, imRight, timestamp, vImuMeas);
++        const double track_start = runtime.begin(timestamp);
++        try { SLAM.TrackStereo(im, imRight, timestamp, vImuMeas); }
++        catch (...) {
++            runtime.record(timestamp, track_start, runtime.elapsed(), -1, -1, callback_overwrites, frame_number, timestamp_domain, vImuMeas.size(), false);
++            throw;
++        }
++        const double track_end = runtime.elapsed();
++        runtime.record(timestamp, track_start, track_end, SLAM.GetTrackingState(), (wbr::atlas(SLAM)->isImuInitialized() ? 1 : 0),
++                       callback_overwrites, frame_number, timestamp_domain, vImuMeas.size());
+ #ifdef REGISTER_TIMES
+     #ifdef COMPILEDWITHC11
+         std::chrono::steady_clock::time_point t_End_Track = std::chrono::steady_clock::now();
+@@ -442,7 +445,25 @@
+         // Clear the previous IMU measurements to load the new ones
+         vImuMeas.clear();
+     }
+-    cout << "System shutdown!\n";
++    } catch (const std::exception& error) {
++        std::cerr << "Processing failed: " << error.what() << std::endl;
++        processing_error = true;
++    }
++    runtime.stopping();
++    try { if (pipe_started) pipe.stop(); }
++    catch (const std::exception& error) {
++        std::ofstream marker(runtime.output + "/INCOMPLETE-stop.txt");
++        marker << error.what() << std::endl;
++        marker.close();
++        SLAM.Shutdown();
++        std::_Exit(1); // callbacks may still be live; do not destroy captures
++    }
++    runtime.finish(SLAM, processing_error ? "processing_error" : (b_continue_session ? "duration" : "signal"));
++    cout << "System shutdown and trajectory export complete!\n";
++    return processing_error ? 1 : 0;
++} catch (const std::exception& error) {
++    std::cerr << "Native headless failed: " << error.what() << std::endl;
++    return 1;
+ }
+ 
+ rs2_vector interpolateMeasure(const double target_time,

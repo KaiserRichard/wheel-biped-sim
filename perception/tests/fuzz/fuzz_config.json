@@ -1,0 +1,6 @@
+{
+  "iterations_per_c_codec": {"value": 1200, "source": "PROPOSED bounded host fuzz workload; must complete under 60 seconds on supported developer hosts"},
+  "python_mutations_per_target": {"value": 180, "source": "PROPOSED deterministic bounded sample count per parser"},
+  "per_input_timeout_seconds": {"value": 0.25, "source": "PROPOSED per-input hang guard; Unix interval timer granularity and signal support apply"},
+  "seed": {"value": 20261018, "source": "task date, fixed to make mutation runs repeatable"}
+}

@@ -1,0 +1,7 @@
+# HAND-MADE SYNTHETIC continuous densities, SI units; not a device measurement.
+accelerometer_noise_density: 0.002
+accelerometer_random_walk: 0.0003
+gyroscope_noise_density: 0.00017
+gyroscope_random_walk: 0.00002
+update_rate: 200.0
+rostopic: /imu0

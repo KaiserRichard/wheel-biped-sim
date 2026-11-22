@@ -1,0 +1,37 @@
+# INFERRED example only. Supply a verified headless Pi build and actual paths.
+binary: /TO-FILL/ORB_SLAM3/Examples/Stereo-Inertial/stereo_inertial_euroc
+headless: true  # Attests this binary constructs System(..., IMU_STEREO, false).
+args: ['{vocabulary}', '{settings}', '{dataset}', '{times}', 'wbr']
+vocabulary: /TO-FILL/ORB_SLAM3/Vocabulary/ORBvoc.txt
+settings: /TO-FILL/calibrated_stereo_inertial.yaml
+dataset: /TO-FILL/euroc
+# Same-stamp stereo PNGs and strict IMU interior coverage; see take_tools README.
+times: /TO-FILL/euroc/times_ns.txt
+dataset_manifest: /TO-FILL/euroc/manifest.json
+clock_domain: TO-FILL-dataset-clock-domain
+repeats: 3
+timeout_s: 300
+jump_threshold_m: 1.0  # INFERRED diagnostic threshold; not a gate budget.
+trajectory:
+  path: f_wbr.txt
+  time_unit: ns
+  sensor_frame: imu_camera
+  pose_direction: sensor-to-world
+  quaternion_order: xyzw
+extra_trajectories: [kf_wbr.txt]
+# Stock text exports omit epochs. Enable mount only with an instrumented engine
+# emitting one exact per-pose epoch record; never synthesize map/reset metadata.
+# mount: /TO-FILL/measured_mount.json
+# Add trajectory.epochs: epochs.jsonl when the engine provides it.
+# ground_truth:
+#   path: /TO-FILL/reference.csv
+#   evaluator: /TO-FILL/tools/trajectory_eval/traj_eval.py
+#   format: euroc_gt
+#   time_unit: ns
+#   frame: imu_camera  # base_link when mount conversion is enabled.
+#   clock_domain: TO-FILL-dataset-clock-domain
+#   clock_assumption: TO-FILL-justification-for-common-clock-and-epoch
+#   align: se3
+#   t_max_diff_s: '0.02'
+#   rpe_delta_s: '1'
+#   timeout_s: 60

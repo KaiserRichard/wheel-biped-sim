@@ -1,0 +1,9 @@
+{
+  "evidence_label": "MEASURED",
+  "source": "experiments/2026-09-13-d435i-post-reboot-20260913T023833Z/pi/timing-probe/data/frames.jsonl",
+  "source_stream": "Accel",
+  "source_fields": "sdk_timestamp_ms -> header_stamp_ns, host_steady_ns -> receive_ns",
+  "interpretation": "Adapted two-clock D435i timing evidence fixture. It is not a ROS2 sensor_msgs/header.stamp or rosbag2 DB3 fixture; it tests the CSV path and preserves the source-domain caveat.",
+  "source_sha256": "48acc4994162c10e82fb35d2533e82ad39459ca931cd7fe5a934c89004be7e48",
+  "conversion": "First 12 Accel rows, SDK decimal milliseconds multiplied by 1000000 using Decimal; receive_ns is original host_steady_ns. Source rows preserved in real_sdk_source.jsonl."
+}

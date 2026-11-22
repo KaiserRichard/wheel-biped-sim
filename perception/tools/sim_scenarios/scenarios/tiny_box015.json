@@ -1,0 +1,31 @@
+{
+  "name": "tiny_box015",
+  "description": "15 mm box, below detect.Params.min_obstacle_height = 0.02 m and the 30 mm decision minimum: no obstacle expected.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "box",
+      "x_face": 1.0,
+      "y": 0.0,
+      "depth": 0.2,
+      "width": 0.3,
+      "height": 0.015,
+      "yaw_deg": 0
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "NONE",
+      "note": "0.015 m < detect.Params.min_obstacle_height = 0.02 m, so no cluster is formed."
+    }
+  ]
+}

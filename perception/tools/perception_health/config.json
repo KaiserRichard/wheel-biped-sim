@@ -1,0 +1,22 @@
+{
+  "protocol_version": 3,
+  "message_type": 5,
+  "pose_age_hold_us": 100000,
+  "pose_age_timeout_us": 500000,
+  "receipt_silence_hold_us": 200000,
+  "receipt_silence_timeout_us": 500000,
+  "heartbeat_timeout_us": 500000,
+  "rearm_healthy_us": 1000000,
+  "transit_bound_us": 5000,
+  "heartbeat_period_ms": 100,
+  "threshold_rationales": {
+    "pose_age_hold_us": "PROPOSED: bounded grace interval for stale pose; requires owner/MCU validation.",
+    "pose_age_timeout_us": "PROPOSED: stale pose timeout beyond HOLD; requires owner/MCU validation.",
+    "receipt_silence_hold_us": "PROPOSED: tolerate brief gaps before downgrade; requires owner/MCU validation.",
+    "receipt_silence_timeout_us": "PROPOSED: missing health report timeout; requires owner/MCU validation.",
+    "heartbeat_timeout_us": "PROPOSED: heartbeat watchdog exercise value; requires owner/MCU validation.",
+    "rearm_healthy_us": "PROPOSED: uninterrupted healthy observation required before explicit local rearm; requires owner/MCU validation.",
+    "transit_bound_us": "PROPOSED: conservative Pi-send to MCU-receipt allowance; not measured.",
+    "heartbeat_period_ms": "PROPOSED: sender heartbeat cadence below watchdog timeout; requires link validation."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "image_rate_hz": {
+    "minimum": 25.0,
+    "maximum": 35.0,
+    "source": "PROPOSED; broad range around selected 30 Hz D435i stream, pending N2 measured profile"
+  },
+  "imu_rate_hz": {
+    "minimum": 180.0,
+    "maximum": 220.0,
+    "source": "PROPOSED; broad range around 200 Hz gyro-grid EuRoC export"
+  },
+  "imu_image_coverage_margin_ns": {
+    "minimum": 0,
+    "source": "PROPOSED; require IMU to cover both image endpoints; zero is a minimal margin until calibration offset is known"
+  },
+  "image_gap_ns": {
+    "maximum": 100000000,
+    "source": "PROPOSED; 3 image periods at nominal 30 Hz rounded conservatively"
+  },
+  "imu_gap_ns": {
+    "maximum": 15000000,
+    "source": "PROPOSED; 3 gyro periods at nominal 200 Hz"
+  },
+  "camera_count_difference": {
+    "maximum": 0,
+    "source": "PROPOSED; EuRoC left/right frame counts must match"
+  },
+  "stereo_stamp_mismatch_count": {
+    "maximum": 0,
+    "source": "PROPOSED; exact integer-ns stereo pairing required by this export path"
+  },
+  "imu_nonincreasing_pairs": {
+    "maximum": 0,
+    "source": "PROPOSED; strictly increasing timestamps required for ordered inertial integration"
+  },
+  "missing_png_file_count": {
+    "maximum": 0,
+    "source": "PROPOSED; all image CSV entries must resolve to exported PNG files"
+  },
+  "times_file_mismatch_count": {
+    "maximum": 0,
+    "source": "PROPOSED; both time lists must exactly match camera 0 stamps"
+  },
+  "image_nonincreasing_pairs": {
+    "maximum": 0,
+    "source": "PROPOSED; image timestamps must be strictly increasing for ordered stereo replay"
+  }
+}

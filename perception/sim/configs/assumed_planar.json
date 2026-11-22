@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "label": "SIMULATION: ASSUMED reduced planar WBR, newly synthesized LQR",
+  "upstream_commit": "6855ef8c6da20246251cfd473467c04112bf800f",
+  "physics": {
+    "wheel_radius": {"value": 0.0603, "unit": "m", "evidence": "SOURCE-SUPPORTED", "source": "https://github.com/nguyenbinh-shark/DM-jump/blob/6855ef8c6da20246251cfd473467c04112bf800f/User/APP/observe_task.c#L74", "note": "Observer constant, not a physical measurement."},
+    "wheel_mass": {"value": 0.6, "unit": "kg", "evidence": "ASSUMED", "source": "Phase1 teaching-model choice; combined wheel pair."},
+    "wheel_inertia": {"value": 0.0011, "unit": "kg m^2", "evidence": "ASSUMED", "source": "Combined rolling-axis inertia; retained as slider armature I/r^2."},
+    "leg_length": {"value": 0.16, "unit": "m", "evidence": "ASSUMED", "source": "Fixed axle-to-hip length selected within upstream commanded range; not fivebar geometry."},
+    "leg_mass": {"value": 0.5, "unit": "kg", "evidence": "ASSUMED", "source": "Combined equivalent rigid legs, not measured links."},
+    "leg_com": {"value": 0.08, "unit": "m", "evidence": "ASSUMED", "source": "COM above axle along equivalent leg."},
+    "leg_inertia": {"value": 0.0012, "unit": "kg m^2", "evidence": "ASSUMED", "source": "COM pitch inertia of combined equivalent legs."},
+    "body_mass": {"value": 2.0, "unit": "kg", "evidence": "ASSUMED", "source": "Body assembly mass unknown; illustrative choice."},
+    "body_com": {"value": 0.06, "unit": "m", "evidence": "ASSUMED", "source": "Body COM above hip along body axis."},
+    "body_inertia": {"value": 0.018, "unit": "kg m^2", "evidence": "ASSUMED", "source": "Body COM pitch inertia unknown; illustrative choice."},
+    "gravity": {"value": 9.81, "unit": "m/s^2", "evidence": "ASSUMED", "source": "Uniform gravity along world -z."},
+    "wheel_torque_limit": {"value": 2.0, "unit": "N m", "evidence": "ASSUMED", "source": "Aggregate wheel-pair input cap; not upstream per-wheel clamp or measured capability."},
+    "hip_torque_limit": {"value": 4.0, "unit": "N m", "evidence": "ASSUMED", "source": "Aggregate virtual hip torque cap; no fivebar VMC or joint mapping."}
+  },
+  "source_geometry_inventory_unused": {
+    "evidence": "SOURCE-SUPPORTED",
+    "source": "https://github.com/nguyenbinh-shark/DM-jump/blob/6855ef8c6da20246251cfd473467c04112bf800f/User/Algorithm/VMC/VMC_calc.c",
+    "unit": "m",
+    "l1_l4": 0.075,
+    "l2_l3": 0.14,
+    "l5": 0.08,
+    "note": "Reference inventory only. Full fivebar VMC is deferred; these dimensions do not define the reduced rigid leg."
+  },
+  "simulation": {
+    "dt_s": 0.002,
+    "integrator": "RK4",
+    "finite_difference_epsilon": 0.000001,
+    "evidence": "ASSUMED",
+    "source": "New synchronous 500 Hz simulation/control choice, not measured hardware timing."
+  },
+  "controller": {
+    "state_order": ["x_m", "leg_rad", "body_rad", "xdot_m_s", "legdot_rad_s", "bodydot_rad_s"],
+    "input_order": ["wheel_pair_Nm", "virtual_hip_pair_Nm"],
+    "Q_diagonal": [40.0, 200.0, 200.0, 8.0, 8.0, 8.0],
+    "R_diagonal": [0.8, 0.6],
+    "solver": "DARE",
+    "evidence": "ASSUMED",
+    "source": "New design weights on dimensional SI states/inputs; not recovered upstream gains.",
+    "cost": "sum dt*(state.T Q state + torque.T R torque); no exact continuous cost integration claim"
+  },
+  "protocol": {
+    "version": "predeclared-v1",
+    "duration_s": 10.0,
+    "initial_state": [0.0, 0.13962634015954636, -0.10471975511965978, 0.0, 0.0, 0.0],
+    "initial_note": "Independent absolute leg +8 deg, body -6 deg; same initial state in balance, push, open_loop.",
+    "push_start_s": 3.0,
+    "push_duration_s": 0.15,
+    "push_force_N": 6.0,
+    "push_location": "Body COM, world +x, xfrc_applied, no applied moment.",
+    "fall_angle_deg": 45.0,
+    "max_displacement_m": 1.5,
+    "settle_window_s": 1.0,
+    "recovery_deadline_s": 5.0,
+    "state_abs_tolerance": [0.02, 0.017453292519943295, 0.017453292519943295, 0.03, 0.05, 0.05],
+    "open_loop_min_tilt_growth": 5.0,
+    "open_loop_fall_deadline_s": 5.0,
+    "criteria": "BALANCE/PUSH: no fall, displacement <=1.5m, no numerical warning/reset, actuator caps respected, all six errors within tolerances continuously through final 1s, recovery within 5s of initial tilt or pulse end. PUSH must apply full declared impulse. OPEN_LOOP: exactly zero actuator controls, tilt grows >=5x and reaches 45deg by 5s on identical model.",
+    "evidence": "ASSUMED",
+    "source": "New bounded simulation experiment, declared before first run; not a hardware acceptance criterion."
+  }
+}

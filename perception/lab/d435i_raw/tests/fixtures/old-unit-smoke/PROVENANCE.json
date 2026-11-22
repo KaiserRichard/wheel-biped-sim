@@ -1,0 +1,20 @@
+{
+  "evidence_label": "MEASURED historical old-camera raw evidence, not current-unit qualification",
+  "sdk_serial": "99003",
+  "current_sdk_serial": "99005",
+  "files": [
+    {
+      "file": "frames.csv",
+      "source": "experiments/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/frames.csv",
+      "sha256": "de799e8709d66d1b211b679a8a25c8fced1c764db46b0d5bf6a5d5d155457916",
+      "transform": "NONE: byte-identical copy"
+    },
+    {
+      "file": "command.json",
+      "source": "experiments/2026-09-13-d435i-post-reboot-20260913T023833Z/smoke/command.json",
+      "sha256": "0c4c2ddb6052cdc8fa9e031decb033a73d28135895887a82c917fc3ed2cb06cc",
+      "transform": "Publication copy. Identity fields or line endings normalized.",
+      "source_sha256": "d5c4a9ec2f07511566ecb12b1d7e193396ce379ed0cfb9ef9cc27623ba16aef4"
+    }
+  ]
+}

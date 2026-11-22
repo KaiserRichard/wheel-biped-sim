@@ -1,0 +1,23 @@
+# Hand-written synthetic fixture, not a Pi readback. UNTESTED ON HARDWARE.
+/camera/camera:
+  ros__parameters:
+    camera_name: camera
+    depth_module:
+      infra_profile: 640x480x30
+      infra1_format: Y8
+      infra2_format: Y8
+      emitter_enabled: 0
+    enable_infra: false
+    enable_infra1: true
+    enable_infra2: true
+    enable_depth: false
+    enable_color: false
+    pointcloud:
+      enable: false
+    enable_sync: false
+    enable_gyro: true
+    enable_accel: true
+    gyro_fps: 200
+    accel_fps: 100
+    unite_imu_method: 0
+    publish_tf: true

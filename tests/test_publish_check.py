@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from publish_check import PNG_ALLOWLIST, ROOT, scan
+from publish_check import PERCEPTION_IMAGE_ALLOWLIST, PNG_ALLOWLIST, ROOT, scan
 
 
 def check_case(tmp_path, name, rejected, accepted, safe_name="doc.md"):
@@ -144,6 +144,44 @@ def test_changed_allowed_png(tmp_path):
     path.parent.mkdir(parents=True)
     path.write_bytes((ROOT / rel).read_bytes() + b'changed')
     assert scan(tmp_path)
+
+
+@pytest.mark.parametrize('rel', sorted(PERCEPTION_IMAGE_ALLOWLIST))
+def test_perception_image_requires_reviewed_bytes_and_path(tmp_path, rel):
+    target = tmp_path / rel
+    target.parent.mkdir(parents=True)
+    original = (ROOT / rel).read_bytes()
+    target.write_bytes(original)
+    assert scan(tmp_path) == []
+
+    target.write_bytes(original + b'changed')
+    assert scan(tmp_path) == [f'changed allow-listed perception image: {rel}']
+
+    target.unlink()
+    other = target.with_name(f'unreviewed{target.suffix}')
+    other.write_bytes(original)
+    assert scan(tmp_path) == [f'unreviewed perception image: {other.relative_to(tmp_path).as_posix()}']
+
+
+@pytest.mark.parametrize('suffix', ['.png', '.jpg', '.gif'])
+def test_perception_image_size_limit_is_independent_of_digest(tmp_path, monkeypatch, suffix):
+    import hashlib
+    import publish_check
+
+    rel = 'perception/media/synthetic' + suffix
+    target = tmp_path / rel
+    target.parent.mkdir(parents=True)
+    raw = b'invented oversized image'
+    target.write_bytes(raw)
+    monkeypatch.setitem(publish_check.PERCEPTION_IMAGE_ALLOWLIST, rel, hashlib.sha256(raw).hexdigest())
+    monkeypatch.setitem(publish_check.PERCEPTION_IMAGE_LIMITS, suffix, len(raw) - 1)
+    assert scan(tmp_path) == [f'oversize perception image: {rel}']
+
+
+def test_perception_jpeg_allowlist_does_not_apply_outside_perception(tmp_path):
+    rel = next(path for path in PERCEPTION_IMAGE_ALLOWLIST if path.endswith('.jpg'))
+    (tmp_path / 'out.jpg').write_bytes((ROOT / rel).read_bytes())
+    assert 'prohibited file: out.jpg' in scan(tmp_path)
 
 
 def test_compressed_text_bounded_and_scanned(tmp_path, monkeypatch):

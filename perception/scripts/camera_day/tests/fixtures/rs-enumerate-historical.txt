@@ -1,0 +1,56 @@
+# HISTORICAL SDK fixture: D435i 99003, 2026-09-13. Not current D435 calibration.
+Device info:
+    Name                          : 	RealSense D435I
+    Serial Number                 : 	99003
+    Firmware Version              : 	5.17.3.10
+ Intrinsic of "Depth" / 640x480 / {Z16}
+  Width:      	640
+  Height:     	480
+  PPX:        	319.104309082031
+  PPY:        	239.556167602539
+  Fx:         	388.527435302734
+  Fy:         	388.527435302734
+  Distortion: 	Brown Conrady
+  Coeffs:     	0  	0  	0  	0  	0
+  FOV (deg):  	78.95 x 63.41
+
+ Intrinsic of "Color" / 640x480 / {YUYV/RGB8/BGR8/RGBA8/BGRA8}
+  Width:      	640
+  Height:     	480
+  PPX:        	320.641967773438
+  PPY:        	241.636184692383
+  Fx:         	604.780822753906
+  Fy:         	604.301452636719
+  Distortion: 	Inverse Brown Conrady
+  Coeffs:     	0  	0  	0  	0  	0
+  FOV (deg):  	55.77 x 43.32
+
+ Intrinsic of "Infrared 1" / 640x480 / {Y8}
+  Width:      	640
+  Height:     	480
+  PPX:        	319.104309082031
+  PPY:        	239.556167602539
+  Fx:         	388.527435302734
+  Fy:         	388.527435302734
+  Distortion: 	Brown Conrady
+  Coeffs:     	0  	0  	0  	0  	0
+  FOV (deg):  	78.95 x 63.41
+
+ Intrinsic of "Infrared 2" / 640x480 / {Y8}
+  Width:      	640
+  Height:     	480
+  PPX:        	319.104309082031
+  PPY:        	239.556167602539
+  Fx:         	388.527435302734
+  Fy:         	388.527435302734
+  Distortion: 	Brown Conrady
+  Coeffs:     	0  	0  	0  	0  	0
+  FOV (deg):  	78.95 x 63.41
+
+Extrinsic from "Infrared 1"	  To	  "Infrared 2" :
+ Rotation Matrix:
+   1   0   0
+   0   1   0
+   0   0   1
+
+ Translation Vector: -0.0500313304364681  0  0

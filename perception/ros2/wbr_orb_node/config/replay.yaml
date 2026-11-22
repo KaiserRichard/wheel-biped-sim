@@ -1,0 +1,18 @@
+wbr_orb_node:
+  ros__parameters:
+    use_sim_time: true
+    source_domain: ros_header
+    # Override with a unique ID bound to this bag/playback process.
+    source_session: unbound
+    # Must name a NEW output directory; override at launch.
+    output_directory: ""
+    left_topic: /camera/camera/infra1/image_rect_raw
+    right_topic: /camera/camera/infra2/image_rect_raw
+    imu_topic: /camera/camera/imu
+    source_header_is_d435i_time: false
+    clockmap_file: ""
+    pi_clock_session: ""
+    # Numeric bounds come from defaults.json via generated C++ defaults.
+    # Supply actual optical->camera-IMU geometry in a separate parameter file:
+    # T_camera_left_optical_imu_camera: [16 measured row-major SE(3) values]
+    # extrinsic_provenance: "MEASURED unit/profile artifact path and SHA-256"

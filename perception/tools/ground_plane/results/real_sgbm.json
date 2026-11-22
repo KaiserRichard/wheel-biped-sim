@@ -1,0 +1,1208 @@
+{
+ "summary": {
+  "frames": 148,
+  "valid": 148,
+  "camera_height_m_p5_p50_p95": [
+   0.103,
+   0.231,
+   0.326
+  ],
+  "pitch_deg_p5_p50_p95": [
+   -5.429,
+   0.275,
+   22.709
+  ],
+  "inlier_fraction_p5_p50_p95": [
+   0.065,
+   0.103,
+   0.197
+  ],
+  "note": "No ground truth; handheld low-height loop over glossy tiles. Inspection only."
+ },
+ "frames": [
+  {
+   "pair": 0,
+   "valid": true,
+   "camera_height_m": 0.2508215500914503,
+   "pitch_deg": 0.1844938075894235,
+   "roll_deg": -1.02718287692809,
+   "inlier_fraction": 0.08207070707070707
+  },
+  {
+   "pair": 15,
+   "valid": true,
+   "camera_height_m": 0.24405878147953844,
+   "pitch_deg": 4.908745536928273,
+   "roll_deg": 10.772536956954017,
+   "inlier_fraction": 0.06709852073866383
+  },
+  {
+   "pair": 30,
+   "valid": true,
+   "camera_height_m": 0.16581224074802636,
+   "pitch_deg": -5.125892945775996,
+   "roll_deg": 4.064677304634952,
+   "inlier_fraction": 0.07386419149975575
+  },
+  {
+   "pair": 45,
+   "valid": true,
+   "camera_height_m": 0.2139074172789766,
+   "pitch_deg": 0.8912968484891438,
+   "roll_deg": 6.920707054745728,
+   "inlier_fraction": 0.07681927710843374
+  },
+  {
+   "pair": 60,
+   "valid": true,
+   "camera_height_m": 0.2138539098115334,
+   "pitch_deg": -2.757306158154693,
+   "roll_deg": -2.062412806971367,
+   "inlier_fraction": 0.0961725276860307
+  },
+  {
+   "pair": 75,
+   "valid": true,
+   "camera_height_m": 0.2345041161793192,
+   "pitch_deg": -0.9172508457826343,
+   "roll_deg": 0.4850459022200541,
+   "inlier_fraction": 0.11011760132179998
+  },
+  {
+   "pair": 90,
+   "valid": true,
+   "camera_height_m": 0.24700790228782704,
+   "pitch_deg": -0.1213137614173581,
+   "roll_deg": 0.703091193359629,
+   "inlier_fraction": 0.09701346867070076
+  },
+  {
+   "pair": 105,
+   "valid": true,
+   "camera_height_m": 0.2465592350667911,
+   "pitch_deg": 0.30359931621890013,
+   "roll_deg": 1.4899630644541162,
+   "inlier_fraction": 0.0877430589145787
+  },
+  {
+   "pair": 120,
+   "valid": true,
+   "camera_height_m": 0.1923866462328103,
+   "pitch_deg": -2.8720681231231167,
+   "roll_deg": 6.752543774902139,
+   "inlier_fraction": 0.07392511730345686
+  },
+  {
+   "pair": 135,
+   "valid": true,
+   "camera_height_m": 0.1042109642646056,
+   "pitch_deg": -13.59809923103385,
+   "roll_deg": -2.278727145059374,
+   "inlier_fraction": 0.06741028128031037
+  },
+  {
+   "pair": 150,
+   "valid": true,
+   "camera_height_m": 0.24672860023442925,
+   "pitch_deg": 0.25051970247963185,
+   "roll_deg": 0.6781101819044487,
+   "inlier_fraction": 0.08967834853576573
+  },
+  {
+   "pair": 165,
+   "valid": true,
+   "camera_height_m": 0.2262600961596316,
+   "pitch_deg": -1.9240135479387648,
+   "roll_deg": -0.70487012512289,
+   "inlier_fraction": 0.15157958687727824
+  },
+  {
+   "pair": 180,
+   "valid": true,
+   "camera_height_m": 0.2278745411202299,
+   "pitch_deg": -2.0915157488194955,
+   "roll_deg": -1.091768224081439,
+   "inlier_fraction": 0.14313515617398073
+  },
+  {
+   "pair": 195,
+   "valid": true,
+   "camera_height_m": 0.23401656895836886,
+   "pitch_deg": -1.0744407998175587,
+   "roll_deg": 0.8780680042313718,
+   "inlier_fraction": 0.17093394077448748
+  },
+  {
+   "pair": 210,
+   "valid": true,
+   "camera_height_m": 0.11634605631654996,
+   "pitch_deg": 6.980566553286807,
+   "roll_deg": 21.364734001794872,
+   "inlier_fraction": 0.0541385948026949
+  },
+  {
+   "pair": 225,
+   "valid": true,
+   "camera_height_m": 0.14959515393774922,
+   "pitch_deg": 4.89437248954446,
+   "roll_deg": 19.10121536277232,
+   "inlier_fraction": 0.05024352730069213
+  },
+  {
+   "pair": 240,
+   "valid": true,
+   "camera_height_m": 0.1833856407957363,
+   "pitch_deg": 2.0740998803781587,
+   "roll_deg": 4.902162418756734,
+   "inlier_fraction": 0.14722524483133842
+  },
+  {
+   "pair": 255,
+   "valid": true,
+   "camera_height_m": 0.2302265996283119,
+   "pitch_deg": 11.052963577069574,
+   "roll_deg": -2.1567233313692853,
+   "inlier_fraction": 0.20563913519976088
+  },
+  {
+   "pair": 270,
+   "valid": true,
+   "camera_height_m": 0.21505229683406443,
+   "pitch_deg": 9.834203139030937,
+   "roll_deg": 0.9103717763807903,
+   "inlier_fraction": 0.1942254812098992
+  },
+  {
+   "pair": 285,
+   "valid": true,
+   "camera_height_m": 0.2318017111874313,
+   "pitch_deg": 14.33017510071479,
+   "roll_deg": -1.007097042630979,
+   "inlier_fraction": 0.2014030725512832
+  },
+  {
+   "pair": 300,
+   "valid": true,
+   "camera_height_m": 0.2934958389452952,
+   "pitch_deg": 21.428580012178358,
+   "roll_deg": -14.320087972980394,
+   "inlier_fraction": 0.19796650717703348
+  },
+  {
+   "pair": 315,
+   "valid": true,
+   "camera_height_m": 0.34269184231528016,
+   "pitch_deg": 21.656456403570314,
+   "roll_deg": -13.045930592664531,
+   "inlier_fraction": 0.18853391684901533
+  },
+  {
+   "pair": 330,
+   "valid": true,
+   "camera_height_m": 0.34882653344431885,
+   "pitch_deg": 18.071435571791763,
+   "roll_deg": -2.1793992533754785,
+   "inlier_fraction": 0.16253327728737565
+  },
+  {
+   "pair": 345,
+   "valid": true,
+   "camera_height_m": 0.3145791970378419,
+   "pitch_deg": 24.38838052703228,
+   "roll_deg": 10.728316955328713,
+   "inlier_fraction": 0.12975630611372382
+  },
+  {
+   "pair": 360,
+   "valid": true,
+   "camera_height_m": 0.33775011593965926,
+   "pitch_deg": 13.95496660103292,
+   "roll_deg": -12.271503865564071,
+   "inlier_fraction": 0.18346900438321853
+  },
+  {
+   "pair": 375,
+   "valid": true,
+   "camera_height_m": 0.30419670355890716,
+   "pitch_deg": 20.265831011350972,
+   "roll_deg": -12.554790474740647,
+   "inlier_fraction": 0.17602838077540334
+  },
+  {
+   "pair": 390,
+   "valid": true,
+   "camera_height_m": 0.17379317276375925,
+   "pitch_deg": 1.683556949026037,
+   "roll_deg": 2.4623233650931433,
+   "inlier_fraction": 0.1891426109435588
+  },
+  {
+   "pair": 405,
+   "valid": true,
+   "camera_height_m": 0.23621309997396572,
+   "pitch_deg": 9.674078837906908,
+   "roll_deg": -7.552634236078823,
+   "inlier_fraction": 0.19070904645476772
+  },
+  {
+   "pair": 420,
+   "valid": true,
+   "camera_height_m": 0.24307841565814925,
+   "pitch_deg": 23.045259657071725,
+   "roll_deg": 11.039302298912654,
+   "inlier_fraction": 0.2501049685094472
+  },
+  {
+   "pair": 435,
+   "valid": true,
+   "camera_height_m": 0.3022564488199494,
+   "pitch_deg": 13.653416135209788,
+   "roll_deg": -24.283526260337183,
+   "inlier_fraction": 0.18556701030927836
+  },
+  {
+   "pair": 450,
+   "valid": true,
+   "camera_height_m": 0.3274646681618699,
+   "pitch_deg": 23.160683025384284,
+   "roll_deg": -9.209496081991158,
+   "inlier_fraction": 0.1699721642310369
+  },
+  {
+   "pair": 465,
+   "valid": true,
+   "camera_height_m": 0.2261681385241629,
+   "pitch_deg": 11.336722911897493,
+   "roll_deg": 0.869059359111194,
+   "inlier_fraction": 0.18813451776649745
+  },
+  {
+   "pair": 480,
+   "valid": true,
+   "camera_height_m": 0.26084127217215375,
+   "pitch_deg": 25.499314012190695,
+   "roll_deg": 7.29124921450086,
+   "inlier_fraction": 0.24666385728332632
+  },
+  {
+   "pair": 495,
+   "valid": true,
+   "camera_height_m": 0.23345800297839064,
+   "pitch_deg": 27.920793211904073,
+   "roll_deg": 6.17864412259292,
+   "inlier_fraction": 0.19388038942976357
+  },
+  {
+   "pair": 510,
+   "valid": true,
+   "camera_height_m": 0.23867303510774096,
+   "pitch_deg": 17.248865627232654,
+   "roll_deg": 7.103253231234785,
+   "inlier_fraction": 0.18836354417543416
+  },
+  {
+   "pair": 525,
+   "valid": true,
+   "camera_height_m": 0.24150826319462504,
+   "pitch_deg": -0.3813714550063034,
+   "roll_deg": 0.2302261304166688,
+   "inlier_fraction": 0.11532274281118038
+  },
+  {
+   "pair": 540,
+   "valid": true,
+   "camera_height_m": 0.2876799183093663,
+   "pitch_deg": 4.164428679467082,
+   "roll_deg": 5.703423228331083,
+   "inlier_fraction": 0.1327763145944964
+  },
+  {
+   "pair": 555,
+   "valid": true,
+   "camera_height_m": 0.23964117363241427,
+   "pitch_deg": -0.1319739034765712,
+   "roll_deg": 2.8438384991602206,
+   "inlier_fraction": 0.15573546802510688
+  },
+  {
+   "pair": 570,
+   "valid": true,
+   "camera_height_m": 0.2332431857492491,
+   "pitch_deg": -1.3414083273491977,
+   "roll_deg": -0.06358035000187572,
+   "inlier_fraction": 0.1862576934718999
+  },
+  {
+   "pair": 585,
+   "valid": true,
+   "camera_height_m": 0.21921816996946009,
+   "pitch_deg": -2.421959786234903,
+   "roll_deg": 1.7460471277976666,
+   "inlier_fraction": 0.12572161642078256
+  },
+  {
+   "pair": 600,
+   "valid": true,
+   "camera_height_m": 0.23099153371864956,
+   "pitch_deg": -1.4632252314211278,
+   "roll_deg": 1.1515745568473204,
+   "inlier_fraction": 0.14622460712916827
+  },
+  {
+   "pair": 615,
+   "valid": true,
+   "camera_height_m": 0.2317403585564525,
+   "pitch_deg": -1.1023589136954965,
+   "roll_deg": 1.7853360962068883,
+   "inlier_fraction": 0.1511607456911713
+  },
+  {
+   "pair": 630,
+   "valid": true,
+   "camera_height_m": 0.27937841352897996,
+   "pitch_deg": 0.6081014493230741,
+   "roll_deg": 2.6140922457839406,
+   "inlier_fraction": 0.06449969431424496
+  },
+  {
+   "pair": 645,
+   "valid": true,
+   "camera_height_m": 0.22680030069795676,
+   "pitch_deg": -1.6138483118868048,
+   "roll_deg": 0.2519884087127788,
+   "inlier_fraction": 0.11629279811097992
+  },
+  {
+   "pair": 660,
+   "valid": true,
+   "camera_height_m": 0.2985497807793409,
+   "pitch_deg": 7.087392693035585,
+   "roll_deg": -5.397594830076017,
+   "inlier_fraction": 0.0801626488527447
+  },
+  {
+   "pair": 675,
+   "valid": true,
+   "camera_height_m": 0.24837714161815522,
+   "pitch_deg": 0.32619200974770846,
+   "roll_deg": 4.080266716867247,
+   "inlier_fraction": 0.052201012855473315
+  },
+  {
+   "pair": 690,
+   "valid": true,
+   "camera_height_m": 0.22656833534364573,
+   "pitch_deg": -1.6007693097919087,
+   "roll_deg": -0.027601775347849185,
+   "inlier_fraction": 0.0858590597729192
+  },
+  {
+   "pair": 705,
+   "valid": true,
+   "camera_height_m": 0.13312688519997792,
+   "pitch_deg": -11.465028041927559,
+   "roll_deg": -5.657622951481334,
+   "inlier_fraction": 0.06593406593406594
+  },
+  {
+   "pair": 720,
+   "valid": true,
+   "camera_height_m": 0.25241668536565587,
+   "pitch_deg": 1.1765227363502515,
+   "roll_deg": -3.2689821250086037,
+   "inlier_fraction": 0.1050958391771856
+  },
+  {
+   "pair": 735,
+   "valid": true,
+   "camera_height_m": 0.3693832734119289,
+   "pitch_deg": 20.246163932793575,
+   "roll_deg": 0.425397346978004,
+   "inlier_fraction": 0.08197137776272334
+  },
+  {
+   "pair": 750,
+   "valid": true,
+   "camera_height_m": 0.335146863957703,
+   "pitch_deg": 12.755204148907008,
+   "roll_deg": 4.336500860614985,
+   "inlier_fraction": 0.09343539395956402
+  },
+  {
+   "pair": 765,
+   "valid": true,
+   "camera_height_m": 0.41229638735461827,
+   "pitch_deg": 26.14440589272493,
+   "roll_deg": 11.993960933807893,
+   "inlier_fraction": 0.09524845846935075
+  },
+  {
+   "pair": 780,
+   "valid": true,
+   "camera_height_m": 0.11794972765062992,
+   "pitch_deg": 17.70650964843563,
+   "roll_deg": 9.060831341282919,
+   "inlier_fraction": 0.0706401766004415
+  },
+  {
+   "pair": 795,
+   "valid": true,
+   "camera_height_m": 0.07569135693402733,
+   "pitch_deg": 16.393247852109894,
+   "roll_deg": 5.236536244693322,
+   "inlier_fraction": 0.08827785817655572
+  },
+  {
+   "pair": 810,
+   "valid": true,
+   "camera_height_m": 0.07576578733315933,
+   "pitch_deg": 0.2995861919850479,
+   "roll_deg": 28.126787337636586,
+   "inlier_fraction": 0.11130525947929408
+  },
+  {
+   "pair": 825,
+   "valid": true,
+   "camera_height_m": 0.3207449155411159,
+   "pitch_deg": 19.30417569319786,
+   "roll_deg": 20.09027266542813,
+   "inlier_fraction": 0.08393209632846427
+  },
+  {
+   "pair": 840,
+   "valid": true,
+   "camera_height_m": 0.28272606218412666,
+   "pitch_deg": 12.669023258188556,
+   "roll_deg": 23.85929792951878,
+   "inlier_fraction": 0.06204724409448819
+  },
+  {
+   "pair": 855,
+   "valid": true,
+   "camera_height_m": 0.19168208546870527,
+   "pitch_deg": -5.512475836196704,
+   "roll_deg": -1.1554814490244356,
+   "inlier_fraction": 0.12291992277282339
+  },
+  {
+   "pair": 870,
+   "valid": true,
+   "camera_height_m": 0.244521712816969,
+   "pitch_deg": 13.012666441855128,
+   "roll_deg": 5.03823045048459,
+   "inlier_fraction": 0.12334082091076169
+  },
+  {
+   "pair": 885,
+   "valid": true,
+   "camera_height_m": 0.32421715477934687,
+   "pitch_deg": 12.222644263919806,
+   "roll_deg": 4.829092233407744,
+   "inlier_fraction": 0.09128205128205129
+  },
+  {
+   "pair": 900,
+   "valid": true,
+   "camera_height_m": 0.2519956895480821,
+   "pitch_deg": 0.6865964948663096,
+   "roll_deg": -2.16590680756019,
+   "inlier_fraction": 0.06677495036996932
+  },
+  {
+   "pair": 915,
+   "valid": true,
+   "camera_height_m": 0.24332604152908013,
+   "pitch_deg": 0.1254972478337089,
+   "roll_deg": -2.2304676411306454,
+   "inlier_fraction": 0.06640933415211861
+  },
+  {
+   "pair": 930,
+   "valid": true,
+   "camera_height_m": 0.19416401939224956,
+   "pitch_deg": -5.95771065555586,
+   "roll_deg": -8.201580048320219,
+   "inlier_fraction": 0.043030953658972984
+  },
+  {
+   "pair": 945,
+   "valid": true,
+   "camera_height_m": 0.22697969073500102,
+   "pitch_deg": -1.5882290155154353,
+   "roll_deg": 1.0307654643596822,
+   "inlier_fraction": 0.09017531678528033
+  },
+  {
+   "pair": 960,
+   "valid": true,
+   "camera_height_m": 0.22681173956635234,
+   "pitch_deg": -1.7645216728833317,
+   "roll_deg": -3.606937840656486,
+   "inlier_fraction": 0.09119956180390724
+  },
+  {
+   "pair": 975,
+   "valid": true,
+   "camera_height_m": 0.21437000422058672,
+   "pitch_deg": -2.715212884860818,
+   "roll_deg": -0.44849730198540166,
+   "inlier_fraction": 0.10972312855411578
+  },
+  {
+   "pair": 990,
+   "valid": true,
+   "camera_height_m": 0.19854707694147278,
+   "pitch_deg": -4.224076039703097,
+   "roll_deg": -0.3677327668448034,
+   "inlier_fraction": 0.14243893513859665
+  },
+  {
+   "pair": 1005,
+   "valid": true,
+   "camera_height_m": 0.22019700726674732,
+   "pitch_deg": -2.225039441534035,
+   "roll_deg": 0.9345787711706052,
+   "inlier_fraction": 0.1980909090909091
+  },
+  {
+   "pair": 1020,
+   "valid": true,
+   "camera_height_m": 0.2284790563668802,
+   "pitch_deg": -1.6129602822828608,
+   "roll_deg": -0.02763575235088518,
+   "inlier_fraction": 0.1825892441047628
+  },
+  {
+   "pair": 1035,
+   "valid": true,
+   "camera_height_m": 0.2297998609624036,
+   "pitch_deg": -1.3143312928433728,
+   "roll_deg": -0.1652049779707318,
+   "inlier_fraction": 0.16645408163265307
+  },
+  {
+   "pair": 1050,
+   "valid": true,
+   "camera_height_m": 0.2588083605684537,
+   "pitch_deg": 1.6410219704698206,
+   "roll_deg": -5.857473689659282,
+   "inlier_fraction": 0.045004500450045004
+  },
+  {
+   "pair": 1065,
+   "valid": true,
+   "camera_height_m": 0.13696814829559528,
+   "pitch_deg": -5.2729956675907985,
+   "roll_deg": -1.8587707343786832,
+   "inlier_fraction": 0.1639008620689655
+  },
+  {
+   "pair": 1080,
+   "valid": true,
+   "camera_height_m": 0.24664286644596478,
+   "pitch_deg": 27.519806007383647,
+   "roll_deg": 6.507639061843495,
+   "inlier_fraction": 0.15221774193548387
+  },
+  {
+   "pair": 1095,
+   "valid": true,
+   "camera_height_m": 0.2127707986054185,
+   "pitch_deg": 4.175135094236515,
+   "roll_deg": 8.69986108425501,
+   "inlier_fraction": 0.11005971520440974
+  },
+  {
+   "pair": 1110,
+   "valid": true,
+   "camera_height_m": 0.25019492781705416,
+   "pitch_deg": 1.388540117853709,
+   "roll_deg": 0.614142894253794,
+   "inlier_fraction": 0.08161137440758294
+  },
+  {
+   "pair": 1125,
+   "valid": true,
+   "camera_height_m": 0.26319303643419417,
+   "pitch_deg": 2.3713059395291634,
+   "roll_deg": 1.1239570666995027,
+   "inlier_fraction": 0.10248793167471222
+  },
+  {
+   "pair": 1140,
+   "valid": true,
+   "camera_height_m": 0.2257574315451837,
+   "pitch_deg": -2.3187391938325237,
+   "roll_deg": -1.29057832981767,
+   "inlier_fraction": 0.16649411764705882
+  },
+  {
+   "pair": 1155,
+   "valid": true,
+   "camera_height_m": 0.22500356163234397,
+   "pitch_deg": -1.898501932634877,
+   "roll_deg": 0.0737954645144866,
+   "inlier_fraction": 0.1778270509977827
+  },
+  {
+   "pair": 1170,
+   "valid": true,
+   "camera_height_m": 0.22837858478809103,
+   "pitch_deg": -1.6889776083656372,
+   "roll_deg": -2.51570257550006,
+   "inlier_fraction": 0.18534445686763568
+  },
+  {
+   "pair": 1185,
+   "valid": true,
+   "camera_height_m": 0.2392775129532116,
+   "pitch_deg": -0.3972324191864285,
+   "roll_deg": -0.867359539573436,
+   "inlier_fraction": 0.21071617103642443
+  },
+  {
+   "pair": 1200,
+   "valid": true,
+   "camera_height_m": 0.24869241805365416,
+   "pitch_deg": 2.8124632128610147,
+   "roll_deg": -6.062996720506822,
+   "inlier_fraction": 0.13707768452765226
+  },
+  {
+   "pair": 1215,
+   "valid": true,
+   "camera_height_m": 0.22662859769920643,
+   "pitch_deg": -2.0371125485916854,
+   "roll_deg": -0.19918192538555812,
+   "inlier_fraction": 0.210990990990991
+  },
+  {
+   "pair": 1230,
+   "valid": true,
+   "camera_height_m": 0.24110263510624116,
+   "pitch_deg": -0.7511582936165341,
+   "roll_deg": -0.7876091875783682,
+   "inlier_fraction": 0.10069184741959611
+  },
+  {
+   "pair": 1245,
+   "valid": true,
+   "camera_height_m": 0.11910925575798077,
+   "pitch_deg": -12.057662392042003,
+   "roll_deg": 11.142840900964334,
+   "inlier_fraction": 0.0959950708564387
+  },
+  {
+   "pair": 1260,
+   "valid": true,
+   "camera_height_m": 0.1490324854210912,
+   "pitch_deg": -8.441559333864888,
+   "roll_deg": 16.330683695676473,
+   "inlier_fraction": 0.0950392927308448
+  },
+  {
+   "pair": 1275,
+   "valid": true,
+   "camera_height_m": 0.2804733852241768,
+   "pitch_deg": 21.21565112175369,
+   "roll_deg": 2.90085922143876,
+   "inlier_fraction": 0.09763181411974978
+  },
+  {
+   "pair": 1290,
+   "valid": true,
+   "camera_height_m": 0.05705210450334911,
+   "pitch_deg": 2.7119473233613336,
+   "roll_deg": 29.29010782434266,
+   "inlier_fraction": 0.10719131614654002
+  },
+  {
+   "pair": 1305,
+   "valid": true,
+   "camera_height_m": 0.1802788980771567,
+   "pitch_deg": 14.153200073924502,
+   "roll_deg": 2.7091899053009865,
+   "inlier_fraction": 0.13511972633979474
+  },
+  {
+   "pair": 1320,
+   "valid": true,
+   "camera_height_m": 0.22619366671038085,
+   "pitch_deg": -2.0344944271943324,
+   "roll_deg": -0.3234172706017353,
+   "inlier_fraction": 0.09073833261089438
+  },
+  {
+   "pair": 1335,
+   "valid": true,
+   "camera_height_m": 0.08934657852263346,
+   "pitch_deg": 6.755303059983052,
+   "roll_deg": 24.358101352241903,
+   "inlier_fraction": 0.16090712742980562
+  },
+  {
+   "pair": 1350,
+   "valid": true,
+   "camera_height_m": 0.11256615514687329,
+   "pitch_deg": 10.736080819270821,
+   "roll_deg": 24.775866004298464,
+   "inlier_fraction": 0.19514627659574468
+  },
+  {
+   "pair": 1365,
+   "valid": true,
+   "camera_height_m": 0.10191970619847579,
+   "pitch_deg": 12.917087404729148,
+   "roll_deg": 27.174020977854717,
+   "inlier_fraction": 0.18978343527855843
+  },
+  {
+   "pair": 1380,
+   "valid": true,
+   "camera_height_m": 0.2299109073142751,
+   "pitch_deg": 10.126206228144067,
+   "roll_deg": -13.431608898121413,
+   "inlier_fraction": 0.12193675889328064
+  },
+  {
+   "pair": 1395,
+   "valid": true,
+   "camera_height_m": 0.2549382223516049,
+   "pitch_deg": 1.83777777916588,
+   "roll_deg": 1.9088866824314528,
+   "inlier_fraction": 0.09134934953945495
+  },
+  {
+   "pair": 1410,
+   "valid": true,
+   "camera_height_m": 0.2667726048001028,
+   "pitch_deg": 2.4037918300360515,
+   "roll_deg": -5.088417790859943,
+   "inlier_fraction": 0.08990955843234616
+  },
+  {
+   "pair": 1425,
+   "valid": true,
+   "camera_height_m": 0.20994910266105848,
+   "pitch_deg": -3.6701246265152343,
+   "roll_deg": 1.4038163780279425,
+   "inlier_fraction": 0.11366448647693124
+  },
+  {
+   "pair": 1440,
+   "valid": true,
+   "camera_height_m": 0.21164018021263553,
+   "pitch_deg": -2.910618342730867,
+   "roll_deg": 1.5752369488851883,
+   "inlier_fraction": 0.09402700687598377
+  },
+  {
+   "pair": 1455,
+   "valid": true,
+   "camera_height_m": 0.22293130539452485,
+   "pitch_deg": -1.956649439125237,
+   "roll_deg": 1.1267419566696573,
+   "inlier_fraction": 0.15384615384615385
+  },
+  {
+   "pair": 1470,
+   "valid": true,
+   "camera_height_m": 0.2179191342095262,
+   "pitch_deg": -2.592816793887128,
+   "roll_deg": 0.8628732173901443,
+   "inlier_fraction": 0.1308188922867822
+  },
+  {
+   "pair": 1485,
+   "valid": true,
+   "camera_height_m": 0.23544459121545855,
+   "pitch_deg": -1.298908224417563,
+   "roll_deg": -0.673448995664737,
+   "inlier_fraction": 0.1569502948609941
+  },
+  {
+   "pair": 1500,
+   "valid": true,
+   "camera_height_m": 0.23151202287686662,
+   "pitch_deg": -1.2028483767809062,
+   "roll_deg": 1.412446236193323,
+   "inlier_fraction": 0.17683202313183338
+  },
+  {
+   "pair": 1515,
+   "valid": true,
+   "camera_height_m": 0.2312779425605355,
+   "pitch_deg": -1.381987415281981,
+   "roll_deg": 1.2712586782621713,
+   "inlier_fraction": 0.15018621973929236
+  },
+  {
+   "pair": 1530,
+   "valid": true,
+   "camera_height_m": 0.38817560267232426,
+   "pitch_deg": 22.084053414083126,
+   "roll_deg": -1.304769927948506,
+   "inlier_fraction": 0.14022517911975435
+  },
+  {
+   "pair": 1545,
+   "valid": true,
+   "camera_height_m": 0.3173047867738141,
+   "pitch_deg": 15.90828103760166,
+   "roll_deg": -19.545626651129506,
+   "inlier_fraction": 0.18987574781408192
+  },
+  {
+   "pair": 1560,
+   "valid": true,
+   "camera_height_m": 0.22358416794934788,
+   "pitch_deg": 4.449953244235459,
+   "roll_deg": 8.971058732097664,
+   "inlier_fraction": 0.1268536564697907
+  },
+  {
+   "pair": 1575,
+   "valid": true,
+   "camera_height_m": 0.1956922799266938,
+   "pitch_deg": -0.6239465440103562,
+   "roll_deg": 7.170795839083892,
+   "inlier_fraction": 0.10814504373177843
+  },
+  {
+   "pair": 1590,
+   "valid": true,
+   "camera_height_m": 0.25792502615767404,
+   "pitch_deg": 1.3898213331445728,
+   "roll_deg": 1.7660507397758027,
+   "inlier_fraction": 0.07571853320118929
+  },
+  {
+   "pair": 1605,
+   "valid": true,
+   "camera_height_m": 0.23614273515579087,
+   "pitch_deg": 3.174126225107824,
+   "roll_deg": 6.989336815145045,
+   "inlier_fraction": 0.0737913486005089
+  },
+  {
+   "pair": 1620,
+   "valid": true,
+   "camera_height_m": 0.29190797477951735,
+   "pitch_deg": 12.042671084919736,
+   "roll_deg": 15.746954073802058,
+   "inlier_fraction": 0.06866699458927693
+  },
+  {
+   "pair": 1635,
+   "valid": true,
+   "camera_height_m": 0.21398476109656359,
+   "pitch_deg": -1.153140384280829,
+   "roll_deg": 9.836399343678098,
+   "inlier_fraction": 0.07199612403100775
+  },
+  {
+   "pair": 1650,
+   "valid": true,
+   "camera_height_m": 0.2294251529875945,
+   "pitch_deg": -1.4883397431416978,
+   "roll_deg": -0.3736157140127712,
+   "inlier_fraction": 0.1025241204560959
+  },
+  {
+   "pair": 1665,
+   "valid": true,
+   "camera_height_m": 0.2339826912628725,
+   "pitch_deg": -0.9831774181619904,
+   "roll_deg": 0.580291499863204,
+   "inlier_fraction": 0.10849750073507791
+  },
+  {
+   "pair": 1680,
+   "valid": true,
+   "camera_height_m": 0.22242051903889798,
+   "pitch_deg": -2.0875113918250032,
+   "roll_deg": 0.24392058639875386,
+   "inlier_fraction": 0.09469435968107097
+  },
+  {
+   "pair": 1695,
+   "valid": true,
+   "camera_height_m": 0.2295667573272186,
+   "pitch_deg": -1.5706693152881746,
+   "roll_deg": 0.34666841354575606,
+   "inlier_fraction": 0.09629555865365465
+  },
+  {
+   "pair": 1710,
+   "valid": true,
+   "camera_height_m": 0.23940844859601887,
+   "pitch_deg": 0.5206328098787871,
+   "roll_deg": 5.257175768704909,
+   "inlier_fraction": 0.07128210135728932
+  },
+  {
+   "pair": 1725,
+   "valid": true,
+   "camera_height_m": 0.1121048077263774,
+   "pitch_deg": -14.155214478680136,
+   "roll_deg": 2.8917633747644484,
+   "inlier_fraction": 0.06857757777342986
+  },
+  {
+   "pair": 1740,
+   "valid": true,
+   "camera_height_m": 0.25565043237780005,
+   "pitch_deg": 1.245024956213232,
+   "roll_deg": 1.1739226426319136,
+   "inlier_fraction": 0.08134669650676267
+  },
+  {
+   "pair": 1755,
+   "valid": true,
+   "camera_height_m": 0.23268385105816367,
+   "pitch_deg": -1.0352015371046361,
+   "roll_deg": 0.542899845745083,
+   "inlier_fraction": 0.10570141065830721
+  },
+  {
+   "pair": 1770,
+   "valid": true,
+   "camera_height_m": 0.1849198975781227,
+   "pitch_deg": -5.175098253529738,
+   "roll_deg": -2.7387618904267375,
+   "inlier_fraction": 0.07607943879063334
+  },
+  {
+   "pair": 1785,
+   "valid": true,
+   "camera_height_m": 0.09896213925941538,
+   "pitch_deg": 7.791502722145657,
+   "roll_deg": 0.05553007708615453,
+   "inlier_fraction": 0.0675768588547294
+  },
+  {
+   "pair": 1800,
+   "valid": true,
+   "camera_height_m": 0.19756239659389616,
+   "pitch_deg": 26.840461017502403,
+   "roll_deg": 0.15537170997518945,
+   "inlier_fraction": 0.06995073891625615
+  },
+  {
+   "pair": 1815,
+   "valid": true,
+   "camera_height_m": 0.1980234569905959,
+   "pitch_deg": -1.4402308592752373,
+   "roll_deg": 5.575138276849113,
+   "inlier_fraction": 0.08687126188842044
+  },
+  {
+   "pair": 1830,
+   "valid": true,
+   "camera_height_m": 0.24938572038063678,
+   "pitch_deg": 0.8484095151689994,
+   "roll_deg": 1.4153791398855131,
+   "inlier_fraction": 0.0831858407079646
+  },
+  {
+   "pair": 1845,
+   "valid": true,
+   "camera_height_m": 0.23041117080553514,
+   "pitch_deg": -1.3254806506733836,
+   "roll_deg": 0.262481851915198,
+   "inlier_fraction": 0.10509648688767936
+  },
+  {
+   "pair": 1860,
+   "valid": true,
+   "camera_height_m": 0.24395288195313095,
+   "pitch_deg": -0.2804106550681798,
+   "roll_deg": 0.6292963968279117,
+   "inlier_fraction": 0.09759491154839992
+  },
+  {
+   "pair": 1875,
+   "valid": true,
+   "camera_height_m": 0.24170144238369456,
+   "pitch_deg": -0.38320845559309397,
+   "roll_deg": 0.5135263607344048,
+   "inlier_fraction": 0.09173856987007835
+  },
+  {
+   "pair": 1890,
+   "valid": true,
+   "camera_height_m": 0.22659475026594972,
+   "pitch_deg": -1.6706749184016039,
+   "roll_deg": -0.2991938059324475,
+   "inlier_fraction": 0.11028110870847257
+  },
+  {
+   "pair": 1905,
+   "valid": true,
+   "camera_height_m": 0.2826660576769521,
+   "pitch_deg": 10.246829121074796,
+   "roll_deg": 14.308440915362475,
+   "inlier_fraction": 0.06499707659325668
+  },
+  {
+   "pair": 1920,
+   "valid": true,
+   "camera_height_m": 0.23789699791611413,
+   "pitch_deg": 1.9375172413197286,
+   "roll_deg": 9.12359545276685,
+   "inlier_fraction": 0.07115327601541654
+  },
+  {
+   "pair": 1935,
+   "valid": true,
+   "camera_height_m": 0.2740023243419509,
+   "pitch_deg": 8.30858182065382,
+   "roll_deg": 17.91926292802844,
+   "inlier_fraction": 0.06520226617632442
+  },
+  {
+   "pair": 1950,
+   "valid": true,
+   "camera_height_m": 0.2435418352185862,
+   "pitch_deg": 0.16750334861576888,
+   "roll_deg": -2.201920382116206,
+   "inlier_fraction": 0.07832639302002777
+  },
+  {
+   "pair": 1965,
+   "valid": true,
+   "camera_height_m": 0.22873599073928275,
+   "pitch_deg": -1.7726340940351342,
+   "roll_deg": -0.24645694402647936,
+   "inlier_fraction": 0.1029021151008362
+  },
+  {
+   "pair": 1980,
+   "valid": true,
+   "camera_height_m": 0.23360765179235846,
+   "pitch_deg": -1.328947953240016,
+   "roll_deg": -0.0533229000000325,
+   "inlier_fraction": 0.10124963101446423
+  },
+  {
+   "pair": 1995,
+   "valid": true,
+   "camera_height_m": 0.21427904652935625,
+   "pitch_deg": -2.9367102499868842,
+   "roll_deg": -0.08518336852016106,
+   "inlier_fraction": 0.0935854942483915
+  },
+  {
+   "pair": 2010,
+   "valid": true,
+   "camera_height_m": 0.23530588976409472,
+   "pitch_deg": -0.8650191665028978,
+   "roll_deg": 0.6356766385438254,
+   "inlier_fraction": 0.10391138123713362
+  },
+  {
+   "pair": 2025,
+   "valid": true,
+   "camera_height_m": 0.08962704118920081,
+   "pitch_deg": 7.09022353913568,
+   "roll_deg": -1.8506835455521833,
+   "inlier_fraction": 0.0677731673582296
+  },
+  {
+   "pair": 2040,
+   "valid": true,
+   "camera_height_m": 0.23044376005688735,
+   "pitch_deg": -1.5799977045385658,
+   "roll_deg": -0.05266970857157481,
+   "inlier_fraction": 0.1071533995867362
+  },
+  {
+   "pair": 2055,
+   "valid": true,
+   "camera_height_m": 0.26788286172517944,
+   "pitch_deg": 7.765246460764423,
+   "roll_deg": 14.683775137201215,
+   "inlier_fraction": 0.07154041886866315
+  },
+  {
+   "pair": 2070,
+   "valid": true,
+   "camera_height_m": 0.10263382289107192,
+   "pitch_deg": 7.8578915399273574,
+   "roll_deg": 0.11655187579778234,
+   "inlier_fraction": 0.06735092864125122
+  },
+  {
+   "pair": 2085,
+   "valid": true,
+   "camera_height_m": 0.2531218058502738,
+   "pitch_deg": 1.1245817570771741,
+   "roll_deg": 1.1198070303812655,
+   "inlier_fraction": 0.08501383946223803
+  },
+  {
+   "pair": 2100,
+   "valid": true,
+   "camera_height_m": 0.23146606746466522,
+   "pitch_deg": -0.6844141193582068,
+   "roll_deg": 0.7928062496353194,
+   "inlier_fraction": 0.10019685039370078
+  },
+  {
+   "pair": 2115,
+   "valid": true,
+   "camera_height_m": 0.11109345911260501,
+   "pitch_deg": -14.861425456178138,
+   "roll_deg": 5.332562166427506,
+   "inlier_fraction": 0.07116878010419739
+  },
+  {
+   "pair": 2130,
+   "valid": true,
+   "camera_height_m": 0.2155087581730732,
+   "pitch_deg": -2.8895944401994402,
+   "roll_deg": -0.447656913573188,
+   "inlier_fraction": 0.09681894757704886
+  },
+  {
+   "pair": 2145,
+   "valid": true,
+   "camera_height_m": 0.22417465864820668,
+   "pitch_deg": -2.3936981374130646,
+   "roll_deg": -1.2483732636536997,
+   "inlier_fraction": 0.10531457600625244
+  },
+  {
+   "pair": 2160,
+   "valid": true,
+   "camera_height_m": 0.22572733027246916,
+   "pitch_deg": -2.0125463020785954,
+   "roll_deg": -0.7409487707241897,
+   "inlier_fraction": 0.10445256195083424
+  },
+  {
+   "pair": 2175,
+   "valid": true,
+   "camera_height_m": 0.22544943081200458,
+   "pitch_deg": -1.7931187408323213,
+   "roll_deg": -0.9135775693159764,
+   "inlier_fraction": 0.10773480662983426
+  },
+  {
+   "pair": 2190,
+   "valid": true,
+   "camera_height_m": 0.15222202256591671,
+   "pitch_deg": 16.520695801916208,
+   "roll_deg": 4.005345731720254,
+   "inlier_fraction": 0.06574326960593055
+  },
+  {
+   "pair": 2205,
+   "valid": true,
+   "camera_height_m": 0.21973658145780744,
+   "pitch_deg": -2.32766697521753,
+   "roll_deg": -3.8274355626084016,
+   "inlier_fraction": 0.08842270365650426
+  }
+ ]
+}

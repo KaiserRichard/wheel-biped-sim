@@ -1,0 +1,12 @@
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=dwc2/1p, 480M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/2p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/2p, 480M
+/:  Bus 005.Port 001: Dev 001, Class=root_hub, Driver=xhci-hcd/1p, 5000M
+    |__ Port 001: Dev 002, If 0, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 1, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 2, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 3, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 4, Class=Video, Driver=uvcvideo, 5000M
+    |__ Port 001: Dev 002, If 5, Class=Human Interface Device, Driver=usbhid, 5000M

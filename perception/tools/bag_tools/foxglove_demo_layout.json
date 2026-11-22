@@ -1,0 +1,76 @@
+{
+  "configById": {
+    "Image!color": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [0, 0, 0],
+        "targetOffset": [0, 0, 0],
+        "targetOrientation": [0, 0, 0, 1],
+        "thetaOffset": 60,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {"type": "point"},
+      "imageMode": {
+        "imageTopic": "/camera/camera/color/image_raw",
+        "calibrationTopic": "/camera/camera/color/camera_info"
+      },
+      "synchronize": false,
+      "foxglovePanelTitle": "Color"
+    },
+    "3D!detector": {
+      "topics": {
+        "/wbr_obstacle_node/markers": {"visible": true},
+        "/wbr_obstacle_node/depth_points": {"visible": true, "colorField": "height", "pointSize": 3},
+        "/wbr_obstacle_node/obstacle_points": {"visible": true}
+      },
+      "cameraState": {
+        "distance": 1.28,
+        "perspective": true,
+        "phi": 57.5,
+        "target": [1, 0, 0.4],
+        "targetOffset": [0, 0, 0],
+        "targetOrientation": [0, 0, 0, 1],
+        "thetaOffset": 180,
+        "fovy": 45,
+        "near": 0.01,
+        "far": 100
+      },
+      "followMode": "follow-none",
+      "fixedFrame": "wbr_ground",
+      "scene": {},
+      "transforms": {"showLabel": false, "axisScale": 0.1},
+      "imageMode": {},
+      "synchronize": false,
+      "foxglovePanelTitle": "Ground aligned detector output"
+    },
+    "RawMessages!advisory": {
+      "topicPath": "/wbr_obstacle_node/advisory",
+      "diffEnabled": false,
+      "defaultExpanded": false,
+      "foxglovePanelTitle": "Advisory height and distance"
+    }
+  },
+  "layout": {
+    "first": "Image!color",
+    "second": {
+      "first": "3D!detector",
+      "second": "RawMessages!advisory",
+      "direction": "column",
+      "splitPercentage": 78
+    },
+    "direction": "row",
+    "splitPercentage": 42
+  },
+  "globalVariables": {},
+  "playbackConfig": {"speed": 1},
+  "userNodes": {}
+}

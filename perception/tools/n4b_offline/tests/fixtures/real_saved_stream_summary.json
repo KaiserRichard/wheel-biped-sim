@@ -1,0 +1,7 @@
+{
+  "evidence_label": "MEASURED",
+  "source": "experiments/2026-10-14-db3-to-euroc/README.md, Real-file check 2026-10-14",
+  "bag_sha256": "d9adff8ae17b4e9f8b89bf6a8a798ca1abfd19bf06575efdd7ea1befe05ea1fe",
+  "streams": {"ir1_count": 447, "ir2_count": 447, "ir_rate_hz": 29.992, "gyro_count": 2971, "gyro_rate_hz": 200.159, "accel_count": 1507, "accel_rate_hz": 100.978},
+  "note": "Saved summary evidence only; no DB3 was present in the shared checkout, so this is not an executable bag fixture or a qualification PASS."
+}

@@ -1,0 +1,38 @@
+{
+  "ingress_capacity": {
+    "value": 256,
+    "rationale": "PROPOSED combined callback mailbox bound; at most 256 MiB decoded pixels at the configured per-image cap, plus bounded core buffers. Pi memory/backlog still needs measurement."
+  },
+  "image_capacity": {
+    "value": 8,
+    "rationale": "PROPOSED per-side unmatched image bound, consistent with vio_adapter development default."
+  },
+  "imu_capacity": {
+    "value": 4096,
+    "rationale": "PROPOSED combined camera IMU sample bound, consistent with vio_adapter development default."
+  },
+  "event_capacity": {
+    "value": 32768,
+    "rationale": "PROPOSED retained runtime event window; overwrite loss is reported."
+  },
+  "max_imu_gap_ns": {
+    "value": 50000000,
+    "rationale": "PROPOSED development guard from tools/vio_adapter; not a qualified sensor limit."
+  },
+  "max_image_bytes": {
+    "value": 1048576,
+    "rationale": "PROPOSED 1 MiB MONO8 payload cap, enough for 1280x800 IR; bounds callback copy/memory and rejects unexpected profiles."
+  },
+  "max_ros_step_ns": {
+    "value": 1000000000,
+    "rationale": "PROPOSED ordinary replay clock increment guard for clock_policy.hpp; restart after seek."
+  },
+  "worker_poll_ms": {
+    "value": 2,
+    "rationale": "PROPOSED idle runner poll period; no measured scheduling guarantee."
+  },
+  "qos_depth": {
+    "value": 16,
+    "rationale": "PROPOSED DDS sensor-data keep-last bound; DDS loss is separate from application counters."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "ramp100",
+  "description": "Gentle ramp rises 100 mm over .8 m; assumes a separate flat floor fit and detected raised ramp surface.",
+  "status": "ASSUMED scene",
+  "robot": {
+    "start_x": 0.0,
+    "speed_m_s": 0.0,
+    "duration_s": 6.0,
+    "l0": 0.12,
+    "jump_at_s": null
+  },
+  "obstacles": [
+    {
+      "type": "ramp",
+      "x_start": 1.0,
+      "length": 0.8,
+      "rise": 0.1,
+      "width": 0.6
+    }
+  ],
+  "expected": [
+    {
+      "t_from": 0.0,
+      "t_to": 6.0,
+      "advisory": "JUMP_CANDIDATE",
+      "note": "ASSUMED ramp cluster height between DecisionParams.jump_min_h=.03 and jump_max_h=.12; slope ~7.1 deg < detect.Params.top_normal_deg=25. Floor/ramp segmentation may invalidate this expectation."
+    }
+  ]
+}

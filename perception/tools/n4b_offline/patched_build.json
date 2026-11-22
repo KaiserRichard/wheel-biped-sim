@@ -1,0 +1,5 @@
+{
+  "sha256": null,
+  "status": "UNKNOWN",
+  "rationale": "2026-10-14 SESSION_FACTS_ADDENDUM §5 says patch-4 rebuild was interrupted; no completed patched binary checksum is recorded. Populate sha256 only from a verified patched Pi build receipt."
+}

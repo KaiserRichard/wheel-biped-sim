@@ -1,0 +1,5 @@
+{
+  "status": "PROPOSED",
+  "provenance": "UNKNOWN real mount. Synthetic forward-facing, co-located camera example ONLY; measure final mount before use.",
+  "T_base_camera": [[0,0,1,0],[-1,0,0,0],[0,-1,0,0],[0,0,0,1]]
+}

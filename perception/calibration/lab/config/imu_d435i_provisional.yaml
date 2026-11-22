@@ -1,0 +1,11 @@
+# OPEN: ASSUMED placeholders until stationary Allan variance measurements.
+# Provenance: docs/D435I_CALIBRATION_PLAN.md quantity register / section 5;
+# experiments/2026-10-13-n4b-d435i-prep/calibration_notes.md.
+# Continuous-time densities, NOT sampled standard deviations or variances.
+# Raw SDK motion axes; D435i imu_camera, never STM32 imu_body.
+rostopic: /imu0
+update_rate: 200.0  # Hz, combined gyro grid; raw accel is 100 Hz
+gyroscope_noise_density: 1.0e-3  # rad/s/sqrt(Hz), ASSUMED
+accelerometer_noise_density: 1.0e-2  # m/s^2/sqrt(Hz), ASSUMED
+gyroscope_random_walk: 1.0e-6  # rad/s^2/sqrt(Hz), ASSUMED
+accelerometer_random_walk: 1.0e-4  # m/s^3/sqrt(Hz), ASSUMED
