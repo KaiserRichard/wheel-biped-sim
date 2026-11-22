@@ -11,6 +11,20 @@ import zlib
 
 ROOT = Path(__file__).resolve().parent
 MAX_TEXT_BYTES = 10 * 1024 * 1024
+MAX_HARDWARE_KICAD_BYTES = 24 * 1024 * 1024
+HARDWARE_KICAD_HEADERS = {
+    ".kicad_pcb": "(kicad_pcb",
+    ".kicad_sch": "(kicad_sch",
+    ".kicad_sym": "(kicad_symbol_lib",
+}
+PDF_ALLOWED_METADATA = {
+    "title": {"", "WBR power board schematic", "WBR control board schematic"},
+    "author": {""},
+    "creator": {"", "Eeschema-PDF"},
+    "producer": {"", "KiCad PDF"},
+    "subject": {""},
+    "keywords": {""},
+}
 # Split sample signatures so policy code and tests are scanned too, without exemptions.
 blocked_words = ("con" + "ductor", "work" + "er", "tick" + "et")
 blocked_names = ("thesis" + "_text.txt", "Thuyet_minh_Binh" + ".pdf")
@@ -30,12 +44,12 @@ blocked_patterns = [
     re.compile(r"(?i)(?:api[_-]?key|access[_-]?token|secret)\s*[:=]\s*['\"]?[A-Za-z0-9/_+=.-]{12,}"),
     re.compile(r"(?i)(?:/" + "home" + r"/|/" + "Users" + r"/)[^/\s]+"),
     re.compile(r"(?i)[A-Z]:(?!//)[\\/]+[^\s\"<>]+"),
-    re.compile(r"(?i)/mnt/[a-z]/[^\s\"'<>]+"),
+    re.compile(r"(?i)/" + r"mnt/[a-z]/[^\s\"'<>]+"),
     re.compile(r"\b(?:gh[pousr]_" + r"[A-Za-z0-9]{20,}|github_pat_" + r"[A-Za-z0-9_]{20,})\b"),
     re.compile(r"\bsk-" + r"(?:proj-|svcacct-|ant-(?:api\d+-)?)?[A-Za-z0-9_-]{20,}\b"),
     re.compile(r"(?i)\b(?:student[ _-]?(?:id|number)|matriculation|mssv|mã\s+số\s+sinh\s+viên)\s*[:=#-]?\s*\d{8,10}\b"),
     re.compile(r"(?i)\b\d{8,10}\s*\(?\s*(?:student[ _-]?id|mssv)\b"),
-    re.compile(r"(?i)\b(?:codex|claude)[_-]+[a-z0-9]+\b|\bagy\b"),
+    re.compile(r"(?i)\b(?:co" + r"dex|cl" + r"aude)[_-]+[a-z0-9]+\b|\ba" + r"gy\b"),
     re.compile(r"(?i)\b(?:licen[cs]e|serial)[ _-]?(?:number|no\.?|key)\s*[:=#-]\s*[A-Z0-9][A-Z0-9-]{5,}\b"),
     re.compile(r"\bT\d{1,2}\b"),
 ]
@@ -43,8 +57,8 @@ FORBIDDEN_SUFFIXES = {
     ".npz", ".jpg", ".jpeg", ".webp", ".lic", ".step", ".stp", ".stl", ".obj", ".dae", ".slx",
     ".pdf", ".docx", ".bag", ".db3", ".pt", ".onnx", ".pem", ".pyc",
 }
-FORBIDDEN_DIRS = {".venv", "venv", ".env", ".aws", ".agents", ".codex", ".claude", "__pycache__", ".pytest_cache"}
-# Grandfather only these existing public PNG bytes; this does not grant new rights.
+FORBIDDEN_DIRS = {".venv", "venv", ".env", ".aws", ".agents", ".co" + "dex", ".cl" + "aude", "__pycache__", ".pytest_cache"}
+# Only these reviewed PNG paths and exact bytes are accepted.
 PNG_ALLOWLIST = {
     'media/figures/gains.png': 'e6b34ddc3e9ba2e1b4b6874e0585fbeedba911e84eb9a5d72ed62c37a79f8838',
     'media/figures/hip_boundary.png': 'cc5e50c3498a0178e7b09aec53bb983d433552909bee83a8157d43685b620054',
@@ -157,6 +171,22 @@ def mp4_metadata(raw):
     return b"".join(chunks) + raw[offset:]
 
 
+def hardware_pdf_text(raw):
+    """Inspect PDF metadata and visible text with a PDF parser."""
+    import pymupdf
+
+    with pymupdf.open(stream=raw, filetype="pdf") as pdf:
+        if not pdf.is_pdf or pdf.is_repaired or pdf.needs_pass or not pdf.page_count:
+            raise ValueError("invalid or unreadable PDF")
+        if pdf.get_xml_metadata() or pdf.embfile_count():
+            raise ValueError("unexpected XMP metadata or embedded files")
+        metadata = pdf.metadata
+        if any((metadata.get(key) or "") not in allowed
+               for key, allowed in PDF_ALLOWED_METADATA.items()):
+            raise ValueError("unapproved PDF metadata")
+        return "\n".join(page.get_text() for page in pdf)
+
+
 def scan(root=None):
     root = Path(root) if root is not None else ROOT
     problems = []
@@ -179,7 +209,11 @@ def scan(root=None):
                 problems.append(f"prohibited symlink: {rel}")
                 continue
             suffix = path.suffix.lower()
-            if (suffix in FORBIDDEN_SUFFIXES or name.lower().startswith(("trial_", ".env", "id_"))
+            under_hardware = len(path.relative_to(root).parts) > 1 and rel.startswith("hardware/")
+            is_hardware_pdf = under_hardware and suffix == ".pdf"
+            kicad_header = HARDWARE_KICAD_HEADERS.get(suffix) if under_hardware else None
+            if ((suffix in FORBIDDEN_SUFFIXES and not is_hardware_pdf)
+                    or name.lower().startswith(("trial_", ".env", "id_"))
                     or name.lower() == ".git" or blocked_path.lower() in rel.lower()):
                 problems.append(f"prohibited file: {rel}")
             if any(n.lower() in rel.lower() for n in blocked_names) or IMU_MODELS.search(rel):
@@ -192,7 +226,8 @@ def scan(root=None):
             if suffix == ".gz" and rel not in GZIP_ALLOWLIST:
                 problems.append(f"unapproved compressed data: {rel}")
                 continue
-            if not is_video and path.stat().st_size > MAX_TEXT_BYTES:
+            size_limit = MAX_HARDWARE_KICAD_BYTES if kicad_header else MAX_TEXT_BYTES
+            if not is_video and path.stat().st_size > size_limit:
                 problems.append(f"oversize text or opaque data: {rel}")
                 continue
             raw = path.read_bytes()
@@ -214,7 +249,25 @@ def scan(root=None):
                 except (ValueError, IndexError, zlib.error):
                     problems.append(f"unreadable PNG metadata: {rel}")
                     continue
-            if suffix == ".gif":
+            if is_hardware_pdf:
+                try:
+                    text = hardware_pdf_text(raw)
+                except ImportError:
+                    problems.append(f"PDF inspection requires PyMuPDF: {rel}")
+                    continue
+                except (ValueError, RuntimeError):
+                    problems.append(f"unreadable or unapproved PDF metadata: {rel}")
+                    continue
+            elif kicad_header:
+                try:
+                    text = raw.decode("utf-8-sig")
+                except UnicodeDecodeError:
+                    problems.append(f"unreadable KiCad text: {rel}")
+                    continue
+                if not re.match(re.escape(kicad_header) + r"\s", text.lstrip()) or "\0" in text:
+                    problems.append(f"unreadable KiCad text: {rel}")
+                    continue
+            elif suffix == ".gif":
                 text = "\n".join(v.decode("ascii", errors="ignore") for v in re.findall(rb"\x21\xfe[\x01-\xff]([\x20-\x7e]+)", raw))
             elif is_video:
                 if suffix == ".mp4":

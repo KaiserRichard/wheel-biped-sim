@@ -58,7 +58,7 @@ def test_student_id(tmp_path):
 
 
 def test_account_label(tmp_path):
-    check_case(tmp_path, 'doc.md', 'codex' + '-z', 'AI assistance was used; human and upstream credits are retained.')
+    check_case(tmp_path, 'doc.md', 'co' + 'dex-z', 'AI assistance was used; human and upstream credits are retained.')
 
 
 def test_personal_home(tmp_path):
@@ -96,7 +96,7 @@ def test_standalone_provider_tokens(tmp_path, prefix):
     check_case(tmp_path, 'doc.md', prefix + 'FAKE' * 12, 'Store credentials outside this tree.')
 
 
-@pytest.mark.parametrize('value', ['claude' + '-b', 'codex' + '-k', 'a' + 'gy', 'Student number: ' + '2099' + '9999', 'MSSV ' + '2099' + '9999', 'License number: ' + '1234' + '5678'])
+@pytest.mark.parametrize('value', ['cl' + 'aude-b', 'co' + 'dex-k', 'a' + 'gy', 'Student number: ' + '2099' + '9999', 'MSSV ' + '2099' + '9999', 'License number: ' + '1234' + '5678'])
 def test_private_contexts(tmp_path, value):
     check_case(tmp_path, 'doc.md', value, 'MIT motor frames; MIT software license; upstream author seek.')
 
@@ -119,7 +119,7 @@ def test_receipts_require_relative_paths(tmp_path, value):
     check_case(tmp_path, 'receipt.json', json.dumps({'nested': [{'input_path': value}]}), json.dumps({'input_path': 'inputs/data.csv'}), 'receipt.json')
 
 
-@pytest.mark.parametrize('name', ['.venv', '.agents', '.codex', '.claude', '__pycache__', '.pytest_cache'])
+@pytest.mark.parametrize('name', ['.venv', '.agents', '.co' + 'dex', '.cl' + 'aude', '__pycache__', '.pytest_cache'])
 def test_environment_directories(tmp_path, name):
     path = tmp_path / name
     path.mkdir()
@@ -184,7 +184,7 @@ def test_mp4_metadata_and_compressed_samples(tmp_path):
 
 def test_credits_and_mit_packet_fields(tmp_path):
     path = tmp_path / 'doc.md'
-    path.write_text('Claude and Codex assistance. MIT mode P16 | V12 | Kp12 | Kd12 | T' + '12.')
+    path.write_text('Cl' + 'aude and Co' + 'dex assistance. MIT mode P16 | V12 | Kp12 | Kd12 | T' + '12.')
     assert scan(tmp_path) == []
     path.write_text(path.read_text() + ' Internal label T' + '12.')
     assert scan(tmp_path)
