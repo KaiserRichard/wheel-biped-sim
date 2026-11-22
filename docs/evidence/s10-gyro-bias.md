@@ -24,7 +24,7 @@
 | Motor, contact and encoder sensitivity | 24/24 | 23/24 |
 | Mean pitch shift, +0.20 m/s² forward acceleration bias | +1.31° | +1.47° |
 
-[Download the summary CSV](../../results/evidence/s10-gyro-bias_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/s10-gyro-bias_summary.csv).
 
 ## What this teaches
 

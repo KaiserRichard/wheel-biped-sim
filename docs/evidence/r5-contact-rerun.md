@@ -19,7 +19,7 @@
 | G1 B05 alternate-contact passes / falls | 0/17 and 0 falls | 0/17 and 2 falls |
 | G1 V1+B15 alternate-contact passes / falls | 0/17 and 0 falls | 0/17 and 2 falls |
 
-[Download the summary CSV](../../results/evidence/r5-contact-rerun_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/r5-contact-rerun_summary.csv).
 
 ## What this teaches
 

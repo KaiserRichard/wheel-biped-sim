@@ -19,7 +19,7 @@
 | Isolated +0.0036 rad/s² gyro-bias ramp | 9/9 | 0/9 | 0/9 |
 | Combined disturbance | 9/9 | 0/9 | 7/9 |
 
-[Download the summary CSV](../../results/evidence/s6-estimator-in-loop_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/s6-estimator-in-loop_summary.csv).
 
 ## What this teaches
 

@@ -24,7 +24,7 @@
 | Matched G1 V1+B15 | 20 ms | 0/40 | 2 |
 | Matched S5 | 20 ms | 17/40 | 6 |
 
-[Download the summary CSV](../../results/evidence/g2-monte-carlo_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/g2-monte-carlo_summary.csv).
 
 ## What this teaches
 

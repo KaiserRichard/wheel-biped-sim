@@ -22,7 +22,7 @@
 | Extended cohort, S7 → S8 | 36/50 | 41/50 |
 | Unstable points at rolling coefficient 0.020 | 270/270, legacy explicit hinge torque | 0/270, world law |
 
-[Download the summary CSV](../../results/evidence/s8-rest-and-rolling_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/s8-rest-and-rolling_summary.csv).
 
 ## What this teaches
 

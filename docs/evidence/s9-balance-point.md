@@ -22,7 +22,7 @@
 | Extended | 41/50 → 50/50 | 0.260 → 0.206 m/s | 0.281 → 0.276 m |
 | World rolling | 8/10 → 10/10 | 0.272 → 0.198 m/s | 0.301 → 0.308 m |
 
-[Download the summary CSV](../../results/evidence/s9-balance-point_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/s9-balance-point_summary.csv).
 
 ## What this teaches
 

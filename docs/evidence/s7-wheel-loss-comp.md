@@ -17,7 +17,7 @@
 | Shared, 3–6 ms transport | 79/200 → 147/200 | 25 → 0 | 0.145 → 0.025 m/s |
 | Extended, 6–9 ms transport | 22/48 → 35/48 | 4 → 0 | 0.136 → 0.018 m/s |
 
-[Download the summary CSV](../../results/evidence/s7-wheel-loss-comp_summary.csv). Blank cells indicate a quantity outside the comparison or a gain edge unavailable at an unstable nominal point.
+[Download the summary CSV](../../results/evidence/s7-wheel-loss-comp_summary.csv).
 
 ## What this teaches
 
