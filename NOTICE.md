@@ -18,8 +18,34 @@ Files in `media/` are simulation clips rendered from saved runs of this project.
 
 ## MIT license text
 
-The two upstream projects are identified above for attribution. The repository's own MIT license applies to its original files only.
+The MIT permission and warranty text below accompanies the two upstream
+copyright notices above. See [DM-jump](https://github.com/nguyenbinh-shark/DM-jump)
+and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+The repository's own MIT license is in [LICENSE](LICENSE).
 
 ## P3 analysis slice
 
 The log codec/importer, identification formulas, tests and synthetic rehearsal are imported as a reviewed file snapshot, without private Git history. Human ownership and existing upstream attribution are retained; AI assistance included Claude and Codex. No upstream firmware source is added in this slice. See [analysis provenance](docs/provenance/analyses.md) and the relative source manifest under `analyses/logsysid/` for original and sanitized hashes and limitations. No real-robot logs are included. This preparation does not establish permission for future hardware data or withheld source material.
+
+## Batch 2 simulation methods and C additions
+
+The S5 predictor template, S7 wheel-loss feedforward, S8 stop re-anchor, and S10 estimator are standalone additions from the simulation work. The S5, S7, and S8 methods were exercised around the DM-jump-derived controller in that work. Trần Nguyên Bình and dmBots retain the credit and MIT copyright notices above. This slice uses new files and includes no copies of their chassis tasks, drive code, or hardware headers. The owner review governs the licence for new first-party code and original explanatory text.

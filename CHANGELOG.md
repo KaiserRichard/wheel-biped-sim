@@ -2,6 +2,10 @@
 
 ## 22 November 2026
 
+- Add the S5 delay-augmented gain design and C template with caller-supplied tables.
+- Add the S10 adaptive estimator, S7 wheel-loss feedforward, and S8 stop-position re-anchor with host-compiled C checks.
+- Add world-referenced rolling resistance with a primitive coast-down check and a seeded paired-trial scoring rehearsal.
+- Document the [methods and simulation scope](docs/methods/batch-2.md).
 - README: add the Simscape replay video of the M14 mission (MP4 plus GIF preview), replacing the single replay frame.
 - README: show the MATLAB studio Simscape model (replay frame, model structure, M14 plots) and mark the earlier failed Simscape balance as superseded.
 - Add the MATLAB studio M16 result: two clean runs of the accepted M14 mission in separate MATLAB processes are bit-identical and all 14 first-release gates pass. Adds a summary page and a gate CSV. Simulation only; studio source not yet released.
