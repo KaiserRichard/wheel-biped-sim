@@ -1,0 +1,2 @@
+PASS: existing MinGW C compiler; -std=c11 -O0 -ffp-contract=off
+Six source-derived functions; host CAN send stub; explicit input clamp wrapper

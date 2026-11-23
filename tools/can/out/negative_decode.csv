@@ -1,0 +1,3 @@
+time_s,bus,id,hex,axis,kind,Position,Velocity,Kp,Kd,Torque,MotorID,State,MOS_Temperature,Rotor_Temperature,validation,frame_bits
+0.1,1,1911,0000000000000000,,unknown,nan,nan,nan,nan,nan,nan,nan,nan,nan,unknown_id,126
+0.2,1,17,1200000000000000,L_front,feedback,-12.5,-30.0,nan,nan,-10.0,2,1,0,0,payload_id_mismatch,124

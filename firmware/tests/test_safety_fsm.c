@@ -1,0 +1,774 @@
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+#include "safety_fsm.h"
+
+#include <assert.h>
+#include <math.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define S11_CHECK(expr)                                                   \
+    do {                                                                  \
+        if (!(expr)) {                                                    \
+            fprintf(stderr, "%s:%d: %s: Assertion `%s' failed.\n",        \
+                    __FILE__, __LINE__, __func__, #expr);                 \
+            abort();                                                      \
+        }                                                                 \
+    } while (0)
+
+#undef assert
+#define assert(expr) S11_CHECK(expr)
+
+static SafetyInputs make_disarmed_clean_inputs(void)
+{
+    SafetyInputs in;
+    memset(&in, 0, sizeof(in));
+    in.dt_ms              = 2u;
+    in.boot_self_test_ok  = 1u;
+    in.dump_continuity_ok = 1u;
+    in.v_bus_v            = 0.5f;   /* Discharged < 5 V */
+    in.v_batt_ocv_v       = 24.0f;  /* Healthy 6S battery OCV > 20.5 V */
+    in.imu_est_valid      = 1u;
+    in.ground_left        = 1u;
+    in.ground_right       = 1u;
+    in.radio_age_ms       = 4u;
+    in.host_age_ms        = 20u;
+    in.host_valid         = 1u;
+    return in;
+}
+
+static void reach_armed(SafetyFsm *fsm, SafetyOutput *out)
+{
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(fsm, &in, out);
+    assert(out->state == SAFETY_STATE_PRECHARGE);
+    assert(out->permit_out == 1u);
+    assert(out->can_enable_cmd == 0u); /* Must NOT enable CAN before K1 closed */
+
+    /* K2 + Kpre closed, K1 still open -> still in PRECHARGE, no CAN enable */
+    in.local_reset_req = 0u;
+    in.local_arm_req   = 0u;
+    in.k2_closed       = 1u;
+    in.kpre_closed     = 1u;
+    in.v_bus_v         = 18.0f;
+    safety_fsm_step(fsm, &in, out);
+    assert(out->state == SAFETY_STATE_PRECHARGE);
+    assert(out->can_enable_cmd == 0u);
+
+    /* K1 closed, Kpre open, dV <= 1 V -> sends CAN 0xFC enable; waits for 6 healthy drives */
+    in.kpre_closed     = 0u;
+    in.k1_closed       = 1u;
+    in.precharge_dv_ok = 1u;
+    in.v_bus_v         = 24.0f;
+    in.drives_healthy_6 = 0u;
+    safety_fsm_step(fsm, &in, out);
+    assert(out->state == SAFETY_STATE_PRECHARGE);
+    assert(out->can_enable_cmd == 1u);
+
+    /* All 6 drives report healthy -> ARMED */
+    in.drives_healthy_6 = 1u;
+    in.radio_arm_sw     = 1u;
+    safety_fsm_step(fsm, &in, out);
+    assert(out->state == SAFETY_STATE_ARMED);
+    assert(out->reason == SAFETY_REASON_PRECHARGE_OK);
+    assert(out->torque_enable == 0u);
+    assert(out->permit_out == 1u);
+}
+
+static void reach_balancing(SafetyFsm *fsm, SafetyOutput *out)
+{
+    reach_armed(fsm, out);
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.k1_closed         = 1u;
+    in.k2_closed         = 1u;
+    in.v_bus_v           = 24.0f;
+    in.drives_healthy_6  = 1u;
+    in.radio_arm_sw      = 1u;
+    in.stand_handoff_req = 1u;
+    in.pitch_deg         = 2.0f;
+    safety_fsm_step(fsm, &in, out);
+    assert(out->state == SAFETY_STATE_BALANCING);
+    assert(out->torque_enable == 1u);
+}
+
+static void test_disarmed_faults_and_estop(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+
+    /* 1. DISARMED -> FAULT on each boot/pre-arm fault condition */
+    for (uint32_t c = 0u; c < 5u; ++c) {
+        safety_fsm_init(&fsm);
+        SafetyInputs in = make_disarmed_clean_inputs();
+        if (c == 0u) {
+            in.boot_self_test_ok = 0u;
+        } else if (c == 1u) {
+            in.bor3_fault = 1u;
+        } else if (c == 2u) {
+            in.can_bus_off = 1u;
+        } else if (c == 3u) {
+            in.clamp_fault = 1u;
+        } else {
+            in.v_bus_v = 5.5f; /* Link > 5 V while disarmed */
+        }
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_FAULT);
+        assert(out.permit_out == 0u);
+        assert(out.can_disable_cmd == 1u);
+    }
+
+    /* 2. Missing dump continuity blocks DISARMED -> PRECHARGE */
+    safety_fsm_init(&fsm);
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.dump_continuity_ok = 0u;
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED);
+
+    /* 3. DISARMED -> ESTOP */
+    in = make_disarmed_clean_inputs();
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+    assert(out.can_abort_tx == 1u && out.can_disable_cmd == 1u);
+}
+
+static void test_precharge_transitions(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+
+    /* PRECHARGE -> FAULT on > 600 ms timeout (no auto-retry) */
+    safety_fsm_init(&fsm);
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_PRECHARGE);
+
+    in.local_reset_req = 0u;
+    in.local_arm_req   = 0u;
+    in.k2_closed       = 1u;
+    in.kpre_closed     = 1u;
+    in.dt_ms           = 100u;
+    for (uint32_t i = 0u; i < 6u; ++i) {
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_PRECHARGE);
+    }
+    safety_fsm_step(&fsm, &in, &out); /* 700 ms > 600 ms */
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_PRECHARGE_TIMEOUT);
+
+    /* PRECHARGE -> FAULT on mirror mismatch */
+    safety_fsm_init(&fsm);
+    in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.mirror_mismatch = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_MIRROR_MISMATCH);
+
+    /* PRECHARGE -> FAULT on drive enable fail */
+    safety_fsm_init(&fsm);
+    in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.drive_enable_fail = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_DRIVE_ENABLE_FAIL);
+
+    /* PRECHARGE -> ESTOP */
+    safety_fsm_init(&fsm);
+    in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+}
+
+static void test_armed_transitions(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+
+    /* ARMED -> DISARMED (clean disarm on radio arm SW LOW) */
+    safety_fsm_init(&fsm);
+    reach_armed(&fsm, &out);
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.k1_closed        = 1u;
+    in.k2_closed        = 1u;
+    in.v_bus_v          = 24.0f;
+    in.drives_healthy_6 = 1u;
+    in.radio_arm_sw     = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED);
+    assert(out.reason == SAFETY_REASON_CLEAN_DISARM);
+    assert(out.can_disable_cmd == 1u);
+    assert(out.permit_out == 0u);
+
+    /* ARMED -> BALANCING blocked if pitch > 5 deg or airborne, allowed when ok */
+    safety_fsm_init(&fsm);
+    reach_armed(&fsm, &out);
+    in.radio_arm_sw      = 1u;
+    in.stand_handoff_req = 1u;
+    in.pitch_deg         = 6.0f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ARMED);
+
+    in.pitch_deg   = 3.0f;
+    in.ground_left = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ARMED);
+
+    in.ground_left = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+
+    /* ARMED -> FAULT (S11 fault) & ARMED -> ESTOP */
+    safety_fsm_init(&fsm);
+    reach_armed(&fsm, &out);
+    in.stand_handoff_req = 0u;
+    in.s11_fault         = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_S11_FAULT);
+
+    safety_fsm_init(&fsm);
+    reach_armed(&fsm, &out);
+    in.s11_fault  = 0u;
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+}
+
+static void test_balancing_stop_rest_cycle_and_radio_policies(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+
+    /* 1. Default RADIO_LOSS_BRAKE_BALANCE (policy c): host loss -> CONTROLLED_STOP -> REST -> BALANCING -> REST -> DISARMED */
+    safety_fsm_init(&fsm);
+    assert(fsm.config.radio_loss_policy == SAFETY_RADIO_LOSS_BRAKE_BALANCE);
+    reach_balancing(&fsm, &out);
+
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.k1_closed        = 1u;
+    in.k2_closed        = 1u;
+    in.v_bus_v          = 24.0f;
+    in.drives_healthy_6 = 1u;
+    in.radio_arm_sw     = 1u;
+    in.v_target_m_s     = 1.2f;
+    in.yaw_target_rad_s = 0.6f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(fabsf(out.v_ref_m_s - 1.2f) < 1e-5f);
+
+    /* Host timeout > 150 ms -> BALANCING -> CONTROLLED_STOP */
+    in.host_age_ms = 152u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_HOST_LOSS);
+    assert(out.torque_enable == 1u);
+    assert(out.host_lost == 1u && out.host_revoke == 1u);
+
+    /* Run 600 ms brake ramp (in 100 ms steps for concise check) */
+    in.dt_ms = 100u;
+    for (uint32_t i = 0u; i < 6u; ++i) {
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    }
+    assert(fabsf(out.v_ref_m_s) < 1e-6f);
+    assert(fabsf(out.yaw_ref_rad_s) < 1e-6f);
+
+    /* Disturbed velocity prevents REST confirmation */
+    in.v_est_m_s = 0.10f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+
+    /* Quiet rest dwell for 250 ms -> CONTROLLED_STOP -> REST */
+    in.v_est_m_s = 0.005f;
+    in.dt_ms     = 50u;
+    for (uint32_t i = 0u; i < 4u; ++i) {
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    }
+    safety_fsm_step(&fsm, &in, &out); /* 250 ms dwell reached */
+    assert(out.state == SAFETY_STATE_REST);
+    assert(out.rest_confirmed == 1u);
+    assert(out.torque_enable == 1u);
+
+    /* REST -> BALANCING requires explicit local re-grant + fresh host */
+    in.host_age_ms       = 10u;
+    in.host_valid        = 1u;
+    in.local_regrant_req = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+
+    in.local_regrant_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.host_lost == 0u);
+
+    /* Voluntary stop -> CONTROLLED_STOP -> REST -> clean DISARMED (arm SW LOW at REST) */
+    in.local_regrant_req  = 0u;
+    in.voluntary_stop_req = 1u;
+    in.dt_ms              = 2u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_VOLUNTARY_STOP);
+
+    in.voluntary_stop_req = 0u;
+    in.dt_ms              = 600u;
+    safety_fsm_step(&fsm, &in, &out); /* Brake complete */
+    in.dt_ms              = 250u;
+    safety_fsm_step(&fsm, &in, &out); /* Rest dwell complete */
+    assert(out.state == SAFETY_STATE_REST);
+
+    in.radio_arm_sw = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED);
+    assert(out.reason == SAFETY_REASON_CLEAN_DISARM);
+
+    /* 2. Optional RADIO_LOSS_TORQUE_OFF: RF loss > 150 ms -> immediate FAULT from BALANCING, STOP, REST */
+    SafetyConfig off_cfg = safety_config_with_radio_policy(RADIO_LOSS_TORQUE_OFF);
+    safety_fsm_init_with_config(&fsm, &off_cfg);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.radio_age_ms = 152u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_RADIO_LOSS_FAULT);
+
+    /* 3. Optional RADIO_LOSS_BRAKE_BALANCE (policy c): RF loss > 150 ms ->
+     *    CONTROLLED_STOP -> REST (keep balancing in place), even if receiver
+     *    zeros radio_arm_sw on RF loss, while deliberate radio e-stop switch,
+     *    lab tilt limit (12 deg), PD7 ESTOP, and drive/CAN/power faults still
+     *    override immediately! */
+    SafetyConfig opt_cfg = safety_config_with_radio_policy(RADIO_LOSS_BRAKE_BALANCE);
+    assert(opt_cfg.radio_loss_policy == RADIO_LOSS_BRAKE_BALANCE);
+    safety_fsm_init_with_config(&fsm, &opt_cfg);
+    reach_balancing(&fsm, &out);
+
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 0u; /* failsafe zeroed during RF loss */
+    in.radio_age_ms = 200u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_RADIO_LOSS_BRAKE);
+    assert(out.radio_lost == 1u);
+    assert(out.torque_enable == 1u);
+    assert(out.host_lost == 1u);
+
+    in.dt_ms = 100u;
+    for (uint32_t i = 0u; i < 6u; ++i) {
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    }
+    in.dt_ms = 150u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+    assert(out.torque_enable == 1u);
+    assert(out.radio_lost == 1u);
+    assert(out.rest_confirmed == 1u);
+
+    /* Stays upright in REST while radio remains lost (does NOT disarm or fault) */
+    in.dt_ms = 2u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+    assert(out.torque_enable == 1u);
+
+    /* When radio returns fresh with arm SW HIGH + local re-grant -> back to BALANCING */
+    in.radio_age_ms = 4u;
+    in.radio_arm_sw = 1u;
+    in.local_regrant_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.reason == SAFETY_REASON_LOCAL_REGRANT);
+
+    /* Radio loss again -> CONTROLLED_STOP -> REST -> radio returns with arm SW LOW -> clean DISARMED */
+    in.local_regrant_req = 0u;
+    in.radio_age_ms = 200u;
+    in.radio_arm_sw = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    in.dt_ms = 600u; safety_fsm_step(&fsm, &in, &out);
+    in.dt_ms = 250u; safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+
+    in.radio_age_ms = 4u; /* Fresh radio with arm SW LOW -> clean disarm */
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED);
+    assert(out.reason == SAFETY_REASON_CLEAN_DISARM);
+
+    /* Lab-mode 12 deg tilt limit & radio e-stop override REST under RADIO_LOSS_BRAKE_BALANCE */
+    opt_cfg = safety_config_with_radio_policy(RADIO_LOSS_BRAKE_BALANCE);
+    opt_cfg.tilt_limit_deg = 12.0f;
+    safety_fsm_init_with_config(&fsm, &opt_cfg);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u; in.radio_age_ms = 200u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    in.pitch_deg = 13.0f;
+    in.dt_ms = 20u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_TILT_LIMIT);
+
+    /* Radio e-stop switch overrides REST even in BRAKE_BALANCE policy */
+    opt_cfg = safety_config_with_radio_policy(RADIO_LOSS_BRAKE_BALANCE);
+    safety_fsm_init_with_config(&fsm, &opt_cfg);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u; in.radio_age_ms = 200u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.dt_ms = 600u; safety_fsm_step(&fsm, &in, &out);
+    in.dt_ms = 250u; safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+    in.radio_estop_sw = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_RADIO_ESTOP_SW);
+}
+
+static void test_fault_overrides_power_tilt_and_reset_guards(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyInputs in;
+
+    /* 1. Mild loaded sag (18.0 V) keeps BALANCING ON, inhibits jump & signals set-down;
+     *    Hard UV (< 15 V) latches FAULT */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.v_bus_v = 18.0f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.torque_enable == 1u);
+    assert(out.inhibit_jump == 1u);
+    assert(out.mild_sag_setdown == 1u);
+
+    /* Transient regen spike tapers regen_scale without faulting */
+    in.v_bus_v = 26.3f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(fabsf(out.regen_scale - 0.5f) < 1e-4f);
+
+    /* Persistent OV (> 28 V) past 20 ms deglitch latches FAULT */
+    in.v_bus_v = 28.5f;
+    in.dt_ms   = 10u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING); /* 10 ms < 20 ms */
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_PERSISTENT_OV);
+
+    /* 2. Tilt limit dwell (30 deg for 20 ms) + arm SW LOW during BALANCING -> FAULT */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.pitch_deg = 31.0f;
+    in.dt_ms     = 10u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_TILT_LIMIT);
+
+    /* 3. BALANCING -> ESTOP, CONTROLLED_STOP -> FAULT, CONTROLLED_STOP -> ESTOP,
+     *    REST -> FAULT, REST -> ESTOP, hard UV, and immediate drive OV */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+
+    /* Hard UV (< 15 V) -> BALANCING -> FAULT */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 14.5f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_HARD_UV);
+
+    /* Immediate drive OV (> 32 V) -> BALANCING -> FAULT on single tick */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 32.5f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_PERSISTENT_OV);
+
+    /* CONTROLLED_STOP -> FAULT (optional TORQUE_OFF policy, RF loss > 150 ms) */
+    {
+        SafetyConfig off_cfg2 = safety_config_with_radio_policy(RADIO_LOSS_TORQUE_OFF);
+        safety_fsm_init_with_config(&fsm, &off_cfg2);
+    }
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.voluntary_stop_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    in.radio_age_ms = 160u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_RADIO_LOSS_FAULT);
+
+    /* Default policy c: the same RF loss during CONTROLLED_STOP must NOT fault (keep balancing) */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.voluntary_stop_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    in.radio_age_ms = 160u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state != SAFETY_STATE_FAULT);
+    assert(out.torque_enable != 0u);
+
+    /* CONTROLLED_STOP -> ESTOP */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.voluntary_stop_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+
+    /* REST -> FAULT (optional TORQUE_OFF policy, RF loss > 150 ms) */
+    {
+        SafetyConfig off_cfg3 = safety_config_with_radio_policy(RADIO_LOSS_TORQUE_OFF);
+        safety_fsm_init_with_config(&fsm, &off_cfg3);
+    }
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.voluntary_stop_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.voluntary_stop_req = 0u;
+    in.dt_ms = 600u; safety_fsm_step(&fsm, &in, &out);
+    in.dt_ms = 250u; safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+    in.radio_age_ms = 160u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_RADIO_LOSS_FAULT);
+
+    /* REST -> ESTOP */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 1u;
+    in.voluntary_stop_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    in.voluntary_stop_req = 0u;
+    in.dt_ms = 600u; safety_fsm_step(&fsm, &in, &out);
+    in.dt_ms = 250u; safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_REST);
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+
+    /* 4. FAULT -> ESTOP, FAULT -> DISARMED guards, and ESTOP -> DISARMED guards */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 0u; /* Arm SW LOW while balancing -> FAULT */
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_ARM_SW_DROPPED);
+
+    /* Manual reset blocked while K1 closed or link >= 5 V or arm SW HIGH */
+    in.local_reset_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT); /* K1/K2 still closed, v_bus 24 V */
+
+    in.k1_closed = 0u; in.k2_closed = 0u; in.v_bus_v = 6.0f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT); /* Link still >= 5 V */
+
+    in.v_bus_v = 2.0f; in.radio_arm_sw = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT); /* Arm SW still HIGH */
+
+    in.radio_arm_sw = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED); /* All guards satisfied -> DISARMED */
+
+    /* FAULT -> ESTOP -> DISARMED requires hw_reset_ack + local_reset_req */
+    in = make_disarmed_clean_inputs();
+    in.boot_self_test_ok = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+
+    /* Release estop, clean conditions, missing hw_reset_ack -> stays ESTOP */
+    in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.hw_reset_ack    = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP);
+
+    in.hw_reset_ack = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED);
+}
+
+static void test_s11_state_wiring_in_safety_fsm(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyInputs in;
+    S11PacketFrame frame;
+
+    /* 1. S11_ARMING holds PRECHARGE until S11 reaches S11_FRESH */
+    safety_fsm_init(&fsm);
+    in = make_disarmed_clean_inputs();
+    in.local_reset_req = 1u;
+    in.local_arm_req   = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_PRECHARGE);
+
+    in.local_reset_req  = 0u;
+    in.local_arm_req    = 0u;
+    in.k1_closed        = 1u;
+    in.k2_closed        = 1u;
+    in.precharge_dv_ok  = 1u;
+    in.v_bus_v          = 24.0f;
+    in.drives_healthy_6 = 1u;
+    in.radio_arm_sw     = 1u;
+
+    memset(&frame, 0, sizeof(frame));
+    frame.mode = S11_ARMING;
+    frame.valid = 0u;
+    frame.authority = 0.0;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_PRECHARGE);
+    assert(out.can_enable_cmd == 1u);
+    assert(out.torque_enable == 0u);
+
+    /* Once S11 completes 3 groups and outputs S11_FRESH -> enters ARMED */
+    frame.mode = S11_FRESH;
+    frame.valid = 1u;
+    frame.authority = 1.0;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_ARMED);
+    assert(out.reason == SAFETY_REASON_PRECHARGE_OK);
+
+    /* Stand handoff into BALANCING with S11_FRESH */
+    in.stand_handoff_req = 1u;
+    in.v_target_m_s      = 0.40f;
+    in.yaw_target_rad_s  = 0.20f;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.torque_enable == 1u);
+
+    in.stand_handoff_req = 0u;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(fabsf(out.v_ref_m_s - 0.40f) < 1e-6f);
+    assert(out.inhibit_trim == 0u && out.inhibit_jump == 0u);
+
+    /* 2. Stale S11_PREDICT (1..2 misses): maintains full authority (1.0) */
+    frame.mode = S11_PREDICT;
+    frame.valid = 1u;
+    frame.authority = 1.0;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.torque_enable == 1u);
+    assert(fabsf(out.v_ref_m_s - 0.40f) < 1e-6f);
+
+    /* 3. Stale S11_LIMIT (3..4 misses): scales authority to 75% and inhibits trim & jump */
+    frame.mode = S11_LIMIT;
+    frame.valid = 1u;
+    frame.authority = 0.75;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+    assert(out.torque_enable == 1u);
+    assert(fabsf(out.v_ref_m_s - 0.30f) < 1e-6f);
+    assert(fabsf(out.yaw_ref_rad_s - 0.15f) < 1e-6f);
+    assert(out.inhibit_trim == 1u && out.inhibit_jump == 1u);
+
+    /* 4. Stale cutoff S11_TIMEOUT, frozen axis S11_STUCK, and S11_INVALID -> immediate latched FAULT */
+    const enum S11Mode pkt_faults[3] = { S11_TIMEOUT, S11_STUCK, S11_INVALID };
+    for (uint32_t k = 0u; k < 3u; ++k) {
+        safety_fsm_init(&fsm);
+        reach_balancing(&fsm, &out);
+        frame.mode = pkt_faults[k];
+        frame.valid = 0u;
+        frame.authority = 0.0;
+        safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+        assert(out.state == SAFETY_STATE_FAULT);
+        assert(out.reason == SAFETY_REASON_S11_FAULT);
+        assert(out.torque_enable == 0u);
+        assert(out.permit_out == 0u);
+        assert(out.can_disable_cmd == 1u && out.can_abort_tx == 1u);
+        assert(out.host_revoke == 1u);
+    }
+
+    /* 5. S11_DRIVE_FAULT -> immediate latched FAULT with SAFETY_REASON_DRIVE_FAULT */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    frame.mode = S11_DRIVE_FAULT;
+    frame.valid = 0u;
+    frame.authority = 0.0;
+    safety_fsm_step_with_s11(&fsm, &in, &frame, &out);
+    assert(out.state == SAFETY_STATE_FAULT);
+    assert(out.reason == SAFETY_REASON_DRIVE_FAULT);
+    assert(out.torque_enable == 0u);
+    assert(out.permit_out == 0u);
+    assert(out.can_disable_cmd == 1u && out.can_abort_tx == 1u);
+}
+
+int main(void)
+{
+    test_disarmed_faults_and_estop();
+    test_precharge_transitions();
+    test_armed_transitions();
+    test_balancing_stop_rest_cycle_and_radio_policies();
+    test_fault_overrides_power_tilt_and_reset_guards();
+    test_s11_state_wiring_in_safety_fsm();
+    printf("test_safety_fsm: ALL PASSED\n");
+    return 0;
+}

@@ -1,0 +1,13 @@
+{
+    "Result": "PASS",
+    "SourceVectors": 810.0,
+    "VNTCommandChecks": 1890.0,
+    "FeedbackVectors": 576.0,
+    "LifecycleChecks": 24.0,
+    "DecodedFrames": 12024.0,
+    "MaxCDecodeError": 0.0000037967033001962136,
+    "MaxPythonLogDifference": 0.0,
+    "WallSeconds": 12.6281781,
+    "TempDrive": "E:",
+    "PlantSimulatedSeconds": 0.0
+}

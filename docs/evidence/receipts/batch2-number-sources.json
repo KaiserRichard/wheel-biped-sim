@@ -1,0 +1,72 @@
+[
+  {
+    "claim": "13 mOhm, 0.050 V, 3.846 A",
+    "source": "hardware-revision/HW1_FIX2_REPORT.md",
+    "sha256": "a7b354ea2a1ad4f55882b344ebfd37e814a650117ccccddb075b7fd345b509f3",
+    "line": 38,
+    "excerpt": "The nominal calculation is `I = V/R = 0.050 V / 0.013 ohm = 3.846153846 A`, rounded to 3.846 A in the note. The old calculation used 0.016 ohm and gave 3.125 A. The replacement also removes the obsolete “3 A auxiliary only” assumption. This is a nominal threshold calculation, not a measured trip current. [COMPUTED: `fix_hw1.py`, `evidence/corrections.json`]"
+  },
+  {
+    "claim": "six independent findings",
+    "source": "s11-fix2/FIX2_REPORT.md",
+    "sha256": "68bc4e27926ec60cf07888a1c82895cbf30d3fe2ff0ae327a47152a565f306df",
+    "line": 5,
+    "excerpt": "All 6 required fixes from `review2/CHECK.md` have been implemented in `fixed/s11_packet_policy.h`, `fixed/s11_packet_policy.c`, `tests/`, and `CMakeLists.txt`, while leaving `orig/` and `review2/reviewer_probes.c` untouched."
+  },
+  {
+    "claim": "18-byte header",
+    "source": "pi/link/pi_link/protocol.py",
+    "sha256": "d225a1786b4405809aa30f6b41d228557ede0afd0664aac479fcef4cd7eb3349",
+    "line": 16,
+    "excerpt": "USB_LINK_HEADER_SIZE: int = 18"
+  },
+  {
+    "claim": "48-byte short payload",
+    "source": "pi/link/pi_link/messages.py",
+    "sha256": "4815bf911ab57292738b777c6c128eef33778b69edf09a634029e822b104c819",
+    "line": 23,
+    "excerpt": "MSG_CMD_TWIST_SHORT_SIZE: int = 48"
+  },
+  {
+    "claim": "56-byte full payload",
+    "source": "pi/link/pi_link/messages.py",
+    "sha256": "4815bf911ab57292738b777c6c128eef33778b69edf09a634029e822b104c819",
+    "line": 22,
+    "excerpt": "MSG_CMD_TWIST_SIZE: int = 56"
+  },
+  {
+    "claim": "6 ms transport age",
+    "source": "firmware/firmware/s11_packet_policy.c",
+    "sha256": "c089a8f6ecad523879a425cc95496918c52ec29ebddef886029f78c05ca0b4da",
+    "line": 54,
+    "excerpt": "    c.max_transport_age_ms = 6.0;"
+  },
+  {
+    "claim": "16 ms total age",
+    "source": "firmware/firmware/s11_packet_policy.c",
+    "sha256": "c089a8f6ecad523879a425cc95496918c52ec29ebddef886029f78c05ca0b4da",
+    "line": 55,
+    "excerpt": "    c.max_total_age_ms = 16.0;"
+  },
+  {
+    "claim": "19/19 Pi suites, 8 unit and 11 cross",
+    "source": "pi/link/evidence/tests.txt",
+    "sha256": "e8a1a4bf4d1a0355954718098e0db49a7facb6886b973f11c4a28e3a5e28429d",
+    "line": 24,
+    "excerpt": "SUMMARY: 19/19 test suites passed (8 unit, 11 cross)."
+  },
+  {
+    "claim": "26/26 host Debug",
+    "source": "firmware/evidence/host-debug.txt",
+    "sha256": "6bf29a3e03f6dec6a6c56b3774cb93605835b649b8557534afe0fbb15c7b055f",
+    "line": 420,
+    "excerpt": "SUMMARY: 26/26 host tests passed (Debug)."
+  },
+  {
+    "claim": "26/26 host Release",
+    "source": "firmware/evidence/host-release.txt",
+    "sha256": "7c6055b68c212b9e6a373cd010bf6f45eb37de1e8b21467da560441557a6a23e",
+    "line": 420,
+    "excerpt": "SUMMARY: 26/26 host tests passed (Release)."
+  }
+]

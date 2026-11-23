@@ -1,0 +1,24 @@
+=== pi_link Unit Tests (Pure Python) ===
+  [PASS] test_crc32c_known_vectors
+  [PASS] test_cobs_vectors_and_edge_cases
+  [PASS] test_header_and_versioning
+  [PASS] test_catalog_and_all_message_roundtrips
+  [PASS] test_telem_and_flight_record_decoders
+  [PASS] test_corrupted_frames_and_streaming_decoder
+  [PASS] test_tx_rate_gate_matches_host_gate
+  [PASS] test_loopback_transport_and_endpoints
+
+=== pi_link Cross Tests (Python <-> C shared library libc_ref.so) ===
+  [PASS] test_cross_crc32c_and_cobs
+  [PASS] test_cross_cmd_twist_0x01
+  [PASS] test_cross_cmd_mode_0x02
+  [PASS] test_cross_time_sync_req_0x03
+  [PASS] test_cross_param_op_0x04
+  [PASS] test_cross_telem_fast_0x81
+  [PASS] test_cross_telem_health_0x82
+  [PASS] test_cross_time_sync_resp_0x83
+  [PASS] test_cross_fault_snapshot_0x84_and_flight_record
+  [PASS] test_cross_bench_raw_log_0x85
+  [PASS] test_cross_corrupted_and_error_parity
+
+SUMMARY: 19/19 test suites passed (8 unit, 11 cross).

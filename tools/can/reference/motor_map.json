@@ -1,0 +1,62 @@
+[
+  {
+    "axis": "L_front",
+    "bus": 1,
+    "study_command_id": 1,
+    "study_feedback_id": 17,
+    "firmware_command_id": 8,
+    "firmware_feedback_id": 4,
+    "firmware_bus": 2,
+    "profile": "hip"
+  },
+  {
+    "axis": "L_rear",
+    "bus": 2,
+    "study_command_id": 2,
+    "study_feedback_id": 18,
+    "firmware_command_id": 6,
+    "firmware_feedback_id": 3,
+    "firmware_bus": 2,
+    "profile": "hip"
+  },
+  {
+    "axis": "L_wheel",
+    "bus": 3,
+    "study_command_id": 3,
+    "study_feedback_id": 19,
+    "firmware_command_id": 1,
+    "firmware_feedback_id": 0,
+    "firmware_bus": 2,
+    "profile": "wheel"
+  },
+  {
+    "axis": "R_front",
+    "bus": 1,
+    "study_command_id": 4,
+    "study_feedback_id": 20,
+    "firmware_command_id": 8,
+    "firmware_feedback_id": 4,
+    "firmware_bus": 1,
+    "profile": "hip"
+  },
+  {
+    "axis": "R_rear",
+    "bus": 2,
+    "study_command_id": 5,
+    "study_feedback_id": 21,
+    "firmware_command_id": 6,
+    "firmware_feedback_id": 3,
+    "firmware_bus": 1,
+    "profile": "hip"
+  },
+  {
+    "axis": "R_wheel",
+    "bus": 3,
+    "study_command_id": 6,
+    "study_feedback_id": 22,
+    "firmware_command_id": 0,
+    "firmware_feedback_id": 0,
+    "firmware_bus": 1,
+    "profile": "wheel"
+  }
+]

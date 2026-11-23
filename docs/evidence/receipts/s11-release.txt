@@ -1,0 +1,298 @@
+Start testing: Nov 23 18:58 +07
+----------------------------------------------------------
+1/18 Testing: test_a1_latched_frame
+1/18 Test: test_a1_latched_frame
+Execution path omitted
+Execution path omitted
+"test_a1_latched_frame" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a1_latched_frame
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a1_latched_frame" end time: Nov 23 18:58 +07
+"test_a1_latched_frame" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/18 Testing: test_a2_arming_state_machine
+2/18 Test: test_a2_arming_state_machine
+Execution path omitted
+Execution path omitted
+"test_a2_arming_state_machine" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a2_arming_state_machine
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a2_arming_state_machine" end time: Nov 23 18:58 +07
+"test_a2_arming_state_machine" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/18 Testing: test_a3_transport_age_limit_window
+3/18 Test: test_a3_transport_age_limit_window
+Execution path omitted
+Execution path omitted
+"test_a3_transport_age_limit_window" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a3_transport_age_limit_window
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a3_transport_age_limit_window" end time: Nov 23 18:58 +07
+"test_a3_transport_age_limit_window" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/18 Testing: test_a4_stuck_detector
+4/18 Test: test_a4_stuck_detector
+Execution path omitted
+Execution path omitted
+"test_a4_stuck_detector" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a4_stuck_detector
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a4_stuck_detector" end time: Nov 23 18:58 +07
+"test_a4_stuck_detector" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/18 Testing: test_a5_stale_out_of_order
+5/18 Test: test_a5_stale_out_of_order
+Execution path omitted
+Execution path omitted
+"test_a5_stale_out_of_order" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a5_stale_out_of_order
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a5_stale_out_of_order" end time: Nov 23 18:58 +07
+"test_a5_stale_out_of_order" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/18 Testing: test_a6_plausibility_limits
+6/18 Test: test_a6_plausibility_limits
+Execution path omitted
+Execution path omitted
+"test_a6_plausibility_limits" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a6_plausibility_limits
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a6_plausibility_limits" end time: Nov 23 18:58 +07
+"test_a6_plausibility_limits" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/18 Testing: test_a7_wheel_angle_wrap
+7/18 Test: test_a7_wheel_angle_wrap
+Execution path omitted
+Execution path omitted
+"test_a7_wheel_angle_wrap" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a7_wheel_angle_wrap
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a7_wheel_angle_wrap" end time: Nov 23 18:58 +07
+"test_a7_wheel_angle_wrap" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/18 Testing: test_a8_isolated_invalid
+8/18 Test: test_a8_isolated_invalid
+Execution path omitted
+Execution path omitted
+"test_a8_isolated_invalid" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a8_isolated_invalid
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a8_isolated_invalid" end time: Nov 23 18:58 +07
+"test_a8_isolated_invalid" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/18 Testing: test_a11_variable_dt
+9/18 Test: test_a11_variable_dt
+Execution path omitted
+Execution path omitted
+"test_a11_variable_dt" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a11_variable_dt
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a11_variable_dt" end time: Nov 23 18:58 +07
+"test_a11_variable_dt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/18 Testing: test_a12_predict_cap_precedence
+10/18 Test: test_a12_predict_cap_precedence
+Execution path omitted
+Execution path omitted
+"test_a12_predict_cap_precedence" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a12_predict_cap_precedence
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a12_predict_cap_precedence" end time: Nov 23 18:58 +07
+"test_a12_predict_cap_precedence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/18 Testing: test_nan_and_inf
+11/18 Test: test_nan_and_inf
+Execution path omitted
+Execution path omitted
+"test_nan_and_inf" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_nan_and_inf
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_nan_and_inf" end time: Nov 23 18:58 +07
+"test_nan_and_inf" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/18 Testing: test_stale_packet_sequence
+12/18 Test: test_stale_packet_sequence
+Execution path omitted
+Execution path omitted
+"test_stale_packet_sequence" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_stale_packet_sequence
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_stale_packet_sequence" end time: Nov 23 18:58 +07
+"test_stale_packet_sequence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/18 Testing: test_a9_timer_wrap
+13/18 Test: test_a9_timer_wrap
+Execution path omitted
+Execution path omitted
+"test_a9_timer_wrap" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a9_timer_wrap
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a9_timer_wrap" end time: Nov 23 18:58 +07
+"test_a9_timer_wrap" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/18 Testing: test_a10_isr_snapshot
+14/18 Test: test_a10_isr_snapshot
+Execution path omitted
+Execution path omitted
+"test_a10_isr_snapshot" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a10_isr_snapshot
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a10_isr_snapshot" end time: Nov 23 18:58 +07
+"test_a10_isr_snapshot" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/18 Testing: test_latch_and_rearm
+15/18 Test: test_latch_and_rearm
+Execution path omitted
+Execution path omitted
+"test_latch_and_rearm" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_latch_and_rearm
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_latch_and_rearm" end time: Nov 23 18:58 +07
+"test_latch_and_rearm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/18 Testing: test_age_budget
+16/18 Test: test_age_budget
+Execution path omitted
+Execution path omitted
+"test_age_budget" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_age_budget
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_age_budget" end time: Nov 23 18:58 +07
+"test_age_budget" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/18 Testing: test_a10_concurrent_mailbox
+17/18 Test: test_a10_concurrent_mailbox
+Execution path omitted
+Execution path omitted
+"test_a10_concurrent_mailbox" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+PASS: test_a10_concurrent_mailbox (reads=282487)
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"test_a10_concurrent_mailbox" end time: Nov 23 18:58 +07
+"test_a10_concurrent_mailbox" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/18 Testing: reviewer_probes
+18/18 Test: reviewer_probes
+Execution path omitted
+Execution path omitted
+"reviewer_probes" start time: Nov 23 18:58 +07
+Output:
+----------------------------------------------------------
+check,result,actual,expected
+A4_slow_frozen_angle,PASS,6,6
+A2_partial_mailbox_startup,PASS,8,8
+A10_generation_wrap_fresh,PASS,1,1
+A10_generation_wrap_healthy,PASS,1,1
+A9_u16_modular,PASS,236,236
+A9_u32_modular,PASS,4000,4000
+A12_explicit_unhealthy,PASS,5,5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"reviewer_probes" end time: Nov 23 18:58 +07
+"reviewer_probes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 23 18:58 +07

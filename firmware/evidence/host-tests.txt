@@ -1,0 +1,426 @@
+Start testing: Nov 23 21:33 +07
+----------------------------------------------------------
+1/26 Testing: test_crc32c_cobs
+1/26 Test: test_crc32c_cobs
+Command: host test executable (path omitted)
+Directory: build
+"test_crc32c_cobs" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_crc32c_cobs: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_crc32c_cobs" end time: Nov 23 21:33 +07
+"test_crc32c_cobs" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/26 Testing: test_usb_link
+2/26 Test: test_usb_link
+Command: host test executable (path omitted)
+Directory: build
+"test_usb_link" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_usb_link: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_usb_link" end time: Nov 23 21:33 +07
+"test_usb_link" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/26 Testing: test_damiao_mit
+3/26 Test: test_damiao_mit
+Command: host test executable (path omitted)
+Directory: build
+"test_damiao_mit" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_damiao_mit: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_damiao_mit" end time: Nov 23 21:33 +07
+"test_damiao_mit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/26 Testing: test_safety_fsm
+4/26 Test: test_safety_fsm
+Command: host test executable (path omitted)
+Directory: build
+"test_safety_fsm" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_safety_fsm: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_safety_fsm" end time: Nov 23 21:33 +07
+"test_safety_fsm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/26 Testing: test_s11_packet_policy
+5/26 Test: test_s11_packet_policy
+Command: host test executable (path omitted)
+Directory: build
+"test_s11_packet_policy" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_s11_packet_policy: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_s11_packet_policy" end time: Nov 23 21:33 +07
+"test_s11_packet_policy" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/26 Testing: test_log_packer
+6/26 Test: test_log_packer
+Command: host test executable (path omitted)
+Directory: build
+"test_log_packer" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_log_packer: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_log_packer" end time: Nov 23 21:33 +07
+"test_log_packer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/26 Testing: test_can_sched
+7/26 Test: test_can_sched
+Command: host test executable (path omitted)
+Directory: build
+"test_can_sched" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_can_sched: ALL PASSED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_can_sched" end time: Nov 23 21:33 +07
+"test_can_sched" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/26 Testing: test_balance_ctrl
+8/26 Test: test_balance_ctrl
+Command: host test executable (path omitted)
+Directory: build
+"test_balance_ctrl" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+test_balance_ctrl: ALL PASSED
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"test_balance_ctrl" end time: Nov 23 21:33 +07
+"test_balance_ctrl" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/26 Testing: test_a1_latched_frame
+9/26 Test: test_a1_latched_frame
+Command: host test executable (path omitted)
+Directory: build
+"test_a1_latched_frame" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a1_latched_frame
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a1_latched_frame" end time: Nov 23 21:33 +07
+"test_a1_latched_frame" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/26 Testing: test_a2_arming_state_machine
+10/26 Test: test_a2_arming_state_machine
+Command: host test executable (path omitted)
+Directory: build
+"test_a2_arming_state_machine" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a2_arming_state_machine
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a2_arming_state_machine" end time: Nov 23 21:33 +07
+"test_a2_arming_state_machine" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/26 Testing: test_a3_transport_age_limit_window
+11/26 Test: test_a3_transport_age_limit_window
+Command: host test executable (path omitted)
+Directory: build
+"test_a3_transport_age_limit_window" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a3_transport_age_limit_window
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a3_transport_age_limit_window" end time: Nov 23 21:33 +07
+"test_a3_transport_age_limit_window" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/26 Testing: test_a4_stuck_detector
+12/26 Test: test_a4_stuck_detector
+Command: host test executable (path omitted)
+Directory: build
+"test_a4_stuck_detector" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a4_stuck_detector
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a4_stuck_detector" end time: Nov 23 21:33 +07
+"test_a4_stuck_detector" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/26 Testing: test_a5_stale_out_of_order
+13/26 Test: test_a5_stale_out_of_order
+Command: host test executable (path omitted)
+Directory: build
+"test_a5_stale_out_of_order" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a5_stale_out_of_order
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a5_stale_out_of_order" end time: Nov 23 21:33 +07
+"test_a5_stale_out_of_order" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/26 Testing: test_a6_plausibility_limits
+14/26 Test: test_a6_plausibility_limits
+Command: host test executable (path omitted)
+Directory: build
+"test_a6_plausibility_limits" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a6_plausibility_limits
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a6_plausibility_limits" end time: Nov 23 21:33 +07
+"test_a6_plausibility_limits" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/26 Testing: test_a7_wheel_angle_wrap
+15/26 Test: test_a7_wheel_angle_wrap
+Command: host test executable (path omitted)
+Directory: build
+"test_a7_wheel_angle_wrap" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a7_wheel_angle_wrap
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"test_a7_wheel_angle_wrap" end time: Nov 23 21:33 +07
+"test_a7_wheel_angle_wrap" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/26 Testing: test_a8_isolated_invalid
+16/26 Test: test_a8_isolated_invalid
+Command: host test executable (path omitted)
+Directory: build
+"test_a8_isolated_invalid" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a8_isolated_invalid
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a8_isolated_invalid" end time: Nov 23 21:33 +07
+"test_a8_isolated_invalid" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/26 Testing: test_a9_timer_wrap
+17/26 Test: test_a9_timer_wrap
+Command: host test executable (path omitted)
+Directory: build
+"test_a9_timer_wrap" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a9_timer_wrap
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a9_timer_wrap" end time: Nov 23 21:33 +07
+"test_a9_timer_wrap" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/26 Testing: test_a10_isr_snapshot
+18/26 Test: test_a10_isr_snapshot
+Command: host test executable (path omitted)
+Directory: build
+"test_a10_isr_snapshot" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a10_isr_snapshot
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a10_isr_snapshot" end time: Nov 23 21:33 +07
+"test_a10_isr_snapshot" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/26 Testing: test_a10_concurrent_mailbox
+19/26 Test: test_a10_concurrent_mailbox
+Command: host test executable (path omitted)
+Directory: build
+"test_a10_concurrent_mailbox" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a10_concurrent_mailbox (reads=98698)
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"test_a10_concurrent_mailbox" end time: Nov 23 21:33 +07
+"test_a10_concurrent_mailbox" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/26 Testing: test_a11_variable_dt
+20/26 Test: test_a11_variable_dt
+Command: host test executable (path omitted)
+Directory: build
+"test_a11_variable_dt" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a11_variable_dt
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a11_variable_dt" end time: Nov 23 21:33 +07
+"test_a11_variable_dt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/26 Testing: test_a12_predict_cap_precedence
+21/26 Test: test_a12_predict_cap_precedence
+Command: host test executable (path omitted)
+Directory: build
+"test_a12_predict_cap_precedence" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_a12_predict_cap_precedence
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_a12_predict_cap_precedence" end time: Nov 23 21:33 +07
+"test_a12_predict_cap_precedence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/26 Testing: test_age_budget
+22/26 Test: test_age_budget
+Command: host test executable (path omitted)
+Directory: build
+"test_age_budget" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_age_budget
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_age_budget" end time: Nov 23 21:33 +07
+"test_age_budget" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/26 Testing: test_nan_and_inf
+23/26 Test: test_nan_and_inf
+Command: host test executable (path omitted)
+Directory: build
+"test_nan_and_inf" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_nan_and_inf
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_nan_and_inf" end time: Nov 23 21:33 +07
+"test_nan_and_inf" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/26 Testing: test_stale_packet_sequence
+24/26 Test: test_stale_packet_sequence
+Command: host test executable (path omitted)
+Directory: build
+"test_stale_packet_sequence" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_stale_packet_sequence
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_stale_packet_sequence" end time: Nov 23 21:33 +07
+"test_stale_packet_sequence" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/26 Testing: test_latch_and_rearm
+25/26 Test: test_latch_and_rearm
+Command: host test executable (path omitted)
+Directory: build
+"test_latch_and_rearm" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+PASS: test_latch_and_rearm
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"test_latch_and_rearm" end time: Nov 23 21:33 +07
+"test_latch_and_rearm" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/26 Testing: reviewer_probes
+26/26 Test: reviewer_probes
+Command: host test executable (path omitted)
+Directory: build
+"reviewer_probes" start time: Nov 23 21:33 +07
+Output:
+----------------------------------------------------------
+check,result,actual,expected
+A4_slow_frozen_angle,PASS,6,6
+A2_partial_mailbox_startup,PASS,8,8
+A10_generation_wrap_fresh,PASS,1,1
+A10_generation_wrap_healthy,PASS,1,1
+A9_u16_modular,PASS,236,236
+A9_u32_modular,PASS,4000,4000
+A12_explicit_unhealthy,PASS,5,5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"reviewer_probes" end time: Nov 23 21:33 +07
+"reviewer_probes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 23 21:33 +07

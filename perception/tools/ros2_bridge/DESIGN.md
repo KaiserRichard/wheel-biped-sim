@@ -180,7 +180,7 @@ uses a mutex. DDS scheduling and callback latency remain **UNKNOWN**.
 
 ## TF ownership and odometry exclusion
 
-**INFERRED, follows [R1 §2](<local workspace>/Desktop/Research/wbr-perception-phase1-runtime/slides_roadmap/research/R1_algorithms.md:44):**
+**INFERRED, follows R1 §2 (archived phase-1 file, not published):**
 
 | Transform | Sole owner / prerequisite |
 |---|---|

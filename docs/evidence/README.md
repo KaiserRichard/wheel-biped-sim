@@ -18,3 +18,12 @@
 | S12 · CAN, Wi-Fi and e-stop in the control loop | Three CAN buses reached 239/250 passes vs 231/250 on one bus; a 150 ms Wi-Fi timeout gave 0/250 normal nuisance stops and 25/25 durable rests. | [Read study](s12-comms-in-loop.md) |
 | S13 · Battery sag, regenerative overvoltage and motor-power stop | An 18 V jump sagged logic input to 15.73 V, an open 25.2 V link crossed 32 V in 0.81 ms at 1 mF, and a 1.5 Ω chopper held the worst peak to 27.79 V. | [Read study](s13-power-safety.md) |
 | S14 · Parameter sensitivity and radio-loss policy | Nine of 22 swept parameters crossed the 95% pass gate; radio-loss policy c gave 0/34 falls vs 34/34 for torque-off policies and is now the firmware default. | [Read study](s14-sensitivity-radio.md) |
+
+
+| Added source evidence | Verification scope | Link |
+| --- | --- | --- |
+| AUX and CTRL revisions | KiCad rules and public schematic exports | [Hardware revision](hardware-control-board-revision.md) |
+| S11 independent review | Six findings and supplied Debug/Release receipts | [Packet policy fixes](s11-packet-policy-fix.md) |
+| CAN DBC | C-vector and multi-format offline parity | [CAN evidence](can-dbc.md) |
+| Portable firmware | Host tests and supplied FIL verification | [Firmware](../../firmware/README.md) |
+| Pi link | Python/C wire and transport tests | [Pi link](../../pi/link/README.md) |

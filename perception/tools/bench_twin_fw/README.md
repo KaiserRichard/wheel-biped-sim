@@ -10,7 +10,7 @@ No robot motor control, flashing, serial device access or Pi access was performe
 
 **SOURCE-SUPPORTED** below means source configuration or wire layout, not a
 hardware measurement. DM sources are the owner-provided, read-only DM-jump
-commit `6855ef8` snapshot at `/private/tmp/AI-assistance/dmjump-ref/`.
+commit `6855ef8` snapshot at a local path set by `DMJUMP_REF` (default `/tmp/dmjump-ref`).
 File:line citations in the next two tables are relative to that snapshot.
 The four supplied files have no Git metadata; the commit identity is provided
 by the owner. Tests compile verbatim function bodies from the snapshot and

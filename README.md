@@ -6,7 +6,7 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 *Simulation only: the CAD robot at an assumed 8.5 kg clearing an 8 cm obstacle in MuJoCo.*
 
-This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI tools were used heavily in building it. See [NOTICE.md](NOTICE.md).
+This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
 ## Highlights
 
@@ -230,3 +230,16 @@ The bundled CSV and all recovery results are synthetic/simulation only. They do 
 - `docs/`: design notes and CSV summaries of delay and Simscape failures.
 
 Summary CSVs under `docs/` are labeled MEASURED, ASSUMED, or UNKNOWN. Follow the same convention when adding results.
+
+
+## Hardware, firmware and communication sources
+
+[FROM FILE / COMPUTED] Public copies and verification scope:
+
+- [AUX rev5 and CTRL rev4](docs/evidence/hardware-control-board-revision.md): KiCad sources, regenerated schematic PDFs and ERC/DRC reports.
+- [Portable firmware, slices 2–7](firmware/README.md): C sources, host tests and FIL fixtures.
+- [S11 independent packet-policy fixes](docs/evidence/s11-packet-policy-fix.md).
+- [CAN databases and offline tools](tools/can/README.md).
+- [Pi USB link](pi/link/README.md).
+
+[FROM FILE / UNKNOWN] Hardware confirmation remains separate from host and simulation results.

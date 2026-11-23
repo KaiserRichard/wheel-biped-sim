@@ -1,6 +1,6 @@
 # LOG_SPEC: WBR real-robot log format v1
 
-Author: Claude (Fable), completed and corrected with Codex assistance, 17 Nov 2026. Synthetic preparation package; see SOURCE_MANIFEST.json for lineage limits.
+Author: project owner, 17 Nov 2026. Synthetic preparation package; see SOURCE_MANIFEST.json for lineage limits.
 Target: the senior's wheel-biped (Jan to Feb 2027) on an STM32H723-class board, with DM motors over FDCAN and an onboard IMU sensor.
 Tags: **SOURCE** (read in a file), **INFERRED**, **ASSUMED**, **UNKNOWN**.
 

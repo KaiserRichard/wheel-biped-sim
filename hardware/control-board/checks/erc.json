@@ -1,7 +1,7 @@
 {
   "tool": "KiCad CLI",
   "version": "9.0.9",
-  "source": "T11_custom_h723.kicad_sch",
+  "source": "control_board.kicad_sch",
   "errors": 0,
   "warnings": 0,
   "exclusions": 0,

@@ -1,0 +1,18 @@
+{
+  "C_vectors": 810,
+  "max_C_float32_vs_DBC_double_decode_error": 3.7967033001962136e-06,
+  "implicit_physical_rounding_differs_vectors": 761,
+  "walking_bit_vectors": 384,
+  "feedback_vectors": 576,
+  "lifecycle_vectors": 24,
+  "nonfinite_extreme_reserved_checks": 4,
+  "address_conflicts_detected": 5,
+  "decoded_frames_per_format": 12024,
+  "formats_agree": 3,
+  "negative_log_checks": 3,
+  "S12_stuffing_parity_frames": 1000,
+  "seconds": 2.391051200014772,
+  "cantools_version": "45.2.0",
+  "python_can_version": "4.6.1",
+  "result": "PASS"
+}

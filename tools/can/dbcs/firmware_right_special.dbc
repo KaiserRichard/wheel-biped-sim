@@ -1,0 +1,43 @@
+VERSION "N1 offline codec; ranges are not ratings"
+NS_ :
+ CM_
+ VAL_
+BS_:
+BU_: Controller Motor
+
+BO_ 8 R_front_special: 8 Motor
+ SG_ Prefix0 : 7|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix1 : 15|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix2 : 23|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix3 : 31|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix4 : 39|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix5 : 47|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix6 : 55|8@0+ (1,0) [0|255] "" Controller
+ SG_ Opcode : 63|8@0+ (1,0) [0|255] "" Controller
+
+BO_ 6 R_rear_special: 8 Motor
+ SG_ Prefix0 : 7|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix1 : 15|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix2 : 23|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix3 : 31|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix4 : 39|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix5 : 47|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix6 : 55|8@0+ (1,0) [0|255] "" Controller
+ SG_ Opcode : 63|8@0+ (1,0) [0|255] "" Controller
+
+BO_ 0 R_wheel_special: 8 Motor
+ SG_ Prefix0 : 7|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix1 : 15|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix2 : 23|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix3 : 31|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix4 : 39|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix5 : 47|8@0+ (1,0) [0|255] "" Controller
+ SG_ Prefix6 : 55|8@0+ (1,0) [0|255] "" Controller
+ SG_ Opcode : 63|8@0+ (1,0) [0|255] "" Controller
+
+CM_ BO_ 8 "Require Prefix0..6 all 255. FROM WEB: DAMIAO V1.2 manual, Parameter Settings: https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+CM_ BO_ 6 "Require Prefix0..6 all 255. FROM WEB: DAMIAO V1.2 manual, Parameter Settings: https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+CM_ BO_ 0 "Require Prefix0..6 all 255. FROM WEB: DAMIAO V1.2 manual, Parameter Settings: https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+VAL_ 8 Opcode 251 "clear_error" 252 "enable" 253 "disable" 254 "zero";
+VAL_ 6 Opcode 251 "clear_error" 252 "enable" 253 "disable" 254 "zero";
+VAL_ 0 Opcode 251 "clear_error" 252 "enable" 253 "disable" 254 "zero";

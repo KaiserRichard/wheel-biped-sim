@@ -1,0 +1,4 @@
+bus,frames,interval_s,actual_stuffed_pct,worst_pct
+1,4000,2,23.9021,27
+2,4000,2,23.86815,27
+3,4000,2,23.666400000000003,27

@@ -2,7 +2,7 @@
 
 Status: everything below is **OPEN / diagnostic**. Power is still 5 V / 3 A, so no take qualifies a gate.
 Detail lives in the repo: `docs/D435I_CALIBRATION_PLAN.md`, `calibration/lab/README.md`, `calibration/allan/README.md`
-(branch `claude/project-thread-rhsrup`, PR #1).
+(an earlier private branch).
 
 ## What is ready (prepared 2026-10-14 on the Mac)
 

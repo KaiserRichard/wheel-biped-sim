@@ -1,0 +1,420 @@
+In file included from firmware/safety_fsm.c:3:
+firmware/safety_fsm.c: In function 'safety_fsm_bind_s11_frame':
+firmware/safety_fsm.c:136:71: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  136 |     in->s11_authority   = (s11_frame->valid != 0 && isfinite(s11_frame->authority))
+      |                                                              ~~~~~~~~~^~~~~~~~~~~
+In file included from firmware/s11_packet_policy.c:3:
+firmware/s11_packet_policy.c: In function 's11_set_bus_voltage':
+firmware/s11_packet_policy.c:144:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  144 |     if (state == NULL || !isfinite(bus_voltage_v) || bus_voltage_v <= 0.0) {
+      |                                    ^~~~~~~~~~~~~
+firmware/s11_packet_policy.c: In function 's11_age_ms_u32':
+firmware/s11_packet_policy.c:157:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  157 |     if (!isfinite(ticks_per_ms) || ticks_per_ms <= 0.0) {
+      |                   ^~~~~~~~~~~~
+firmware/s11_packet_policy.c: In function 's11_age_ms_u16':
+firmware/s11_packet_policy.c:166:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  166 |     if (!isfinite(ticks_per_ms) || ticks_per_ms <= 0.0) {
+      |                   ^~~~~~~~~~~~
+firmware/s11_packet_policy.c: In function 's11_wrap_angle':
+firmware/s11_packet_policy.c:175:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  175 |     if (!isfinite(angle) || !isfinite(half_range) || half_range <= 0.0) {
+      |                   ^~~~~
+firmware/s11_packet_policy.c:175:39: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  175 |     if (!isfinite(angle) || !isfinite(half_range) || half_range <= 0.0) {
+      |                                       ^~~~~~~~~~
+firmware/s11_packet_policy.c:187:29: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  187 |     if (w == 0.0 && signbit(w)) {
+      |                             ^
+firmware/s11_packet_policy.c: In function 's11_unwrap_delta':
+firmware/s11_packet_policy.c:195:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  195 |     if (!isfinite(prev_wrapped) || !isfinite(cur_wrapped)
+      |                   ^~~~~~~~~~~~
+firmware/s11_packet_policy.c:195:46: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  195 |     if (!isfinite(prev_wrapped) || !isfinite(cur_wrapped)
+      |                                              ^~~~~~~~~~~
+firmware/s11_packet_policy.c:196:22: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  196 |         || !isfinite(half_range) || half_range <= 0.0) {
+      |                      ^~~~~~~~~~
+firmware/s11_packet_policy.c: In function 's11_sample_valid':
+firmware/s11_packet_policy.c:312:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  312 |     if (!isfinite(angle) || !isfinite(rate) || !isfinite(age_ms)) {
+      |                   ^~~~~
+firmware/s11_packet_policy.c:312:39: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  312 |     if (!isfinite(angle) || !isfinite(rate) || !isfinite(age_ms)) {
+      |                                       ^~~~
+firmware/s11_packet_policy.c:312:58: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  312 |     if (!isfinite(angle) || !isfinite(rate) || !isfinite(age_ms)) {
+      |                                                          ^~~~~~
+firmware/s11_packet_policy.c: In function 's11_packets_internal':
+firmware/s11_packet_policy.c:464:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  464 |     if (!isfinite(dt_ms) || dt_ms <= 0.0 || dt_ms > cfg->max_dt_ms) {
+      |                   ^~~~~
+In file included from firmware/can_sched.c:7:
+firmware/can_sched.c: In function 'can_sched_snapshot_rx':
+firmware/can_sched.c:432:39: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  432 |         if (!isfinite(out_snap->age_ms[i]) || out_snap->age_ms[i] > supervisor_timeout_ms) {
+      |                       ~~~~~~~~~~~~~~~~^~~
+firmware/can_sched.c:435:39: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  435 |         if (!isfinite(out_snap->age_ms[i]) || out_snap->age_ms[i] >= drive_timeout_ms) {
+      |                       ~~~~~~~~~~~~~~~~^~~
+In file included from firmware/control/s5_predictor.h:6,
+                 from firmware/control/h5_balance.h:22,
+                 from firmware/control/balance_ctrl.h:27,
+                 from firmware/control/balance_ctrl.c:8:
+firmware/control/balance_ctrl.c: In function 'clamp_u16_ms_to_us':
+firmware/control/balance_ctrl.c:35:19: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   35 |     if (!isfinite(age_ms) || age_ms <= 0.0) {
+      |                   ^~~~~~
+firmware/control/balance_ctrl.c: In function 'balance_ctrl_tick':
+firmware/control/balance_ctrl.c:417:65: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  417 |             rec.fast.motor_pos_rad[i]   = isfinite(rx_snap.angle[i]) ? (float)rx_snap.angle[i] : 0.0f;
+      |                                                    ~~~~~~~~~~~~~^~~
+firmware/control/balance_ctrl.c:418:64: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  418 |             rec.fast.motor_vel_rad_s[i] = isfinite(rx_snap.rate[i])  ? (float)rx_snap.rate[i]  : 0.0f;
+      |                                                    ~~~~~~~~~~~~^~~
+test_crc32c_cobs: ALL PASSED
+PASS test_crc32c_cobs
+test_usb_link: ALL PASSED
+PASS test_usb_link
+test_damiao_mit: ALL PASSED
+PASS test_damiao_mit
+test_safety_fsm: ALL PASSED
+PASS test_safety_fsm
+tests/test_s11_packet_policy.c: In function 'test_arming_miss_ladder_and_latch':
+tests/test_s11_packet_policy.c:75:29: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   75 |     assert(isnan(frame.angle[0]));
+      |                  ~~~~~~~~~~~^~~
+tests/test_s11_packet_policy.c:15:15: note: in definition of macro 'S11_CHECK'
+   15 |         if (!(expr)) {                                                    \
+      |               ^~~~
+tests/test_s11_packet_policy.c:75:5: note: in expansion of macro 'assert'
+   75 |     assert(isnan(frame.angle[0]));
+      |     ^~~~~~
+tests/test_s11_packet_policy.c:96:37: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   96 |             assert(isnan(frame.angle[2]));
+      |                          ~~~~~~~~~~~^~~
+tests/test_s11_packet_policy.c:15:15: note: in definition of macro 'S11_CHECK'
+   15 |         if (!(expr)) {                                                    \
+      |               ^~~~
+tests/test_s11_packet_policy.c:96:13: note: in expansion of macro 'assert'
+   96 |             assert(isnan(frame.angle[2]));
+      |             ^~~~~~
+tests/test_s11_packet_policy.c: In function 'test_invalid_stuck_precedence_and_wrap':
+tests/test_s11_packet_policy.c:122:32: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+  122 |     assert(isfinite(frame.angle[0]));
+      |                     ~~~~~~~~~~~^~~
+tests/test_s11_packet_policy.c:15:15: note: in definition of macro 'S11_CHECK'
+   15 |         if (!(expr)) {                                                    \
+      |               ^~~~
+tests/test_s11_packet_policy.c:122:5: note: in expansion of macro 'assert'
+  122 |     assert(isfinite(frame.angle[0]));
+      |     ^~~~~~
+test_s11_packet_policy: ALL PASSED
+PASS test_s11_packet_policy
+test_log_packer: ALL PASSED
+PASS test_log_packer
+test_can_sched: ALL PASSED
+PASS test_can_sched
+test_balance_ctrl: ALL PASSED
+PASS test_balance_ctrl
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a1_latched_frame.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+s11_verified/tests/test_a1_latched_frame.c: In function 'main':
+s11_verified/tests/test_a1_latched_frame.c:34:33: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   34 |         assert(isnan(frame.angle[i]));
+      |                      ~~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_a1_latched_frame.c:34:9: note: in expansion of macro 'assert'
+   34 |         assert(isnan(frame.angle[i]));
+      |         ^~~~~~
+s11_verified/tests/test_a1_latched_frame.c:35:32: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   35 |         assert(isnan(frame.rate[i]));
+      |                      ~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_a1_latched_frame.c:35:9: note: in expansion of macro 'assert'
+   35 |         assert(isnan(frame.rate[i]));
+      |         ^~~~~~
+s11_verified/tests/test_a1_latched_frame.c:42:43: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   42 |         assert(isnan(frame.unwrapped_angle[i]));
+      |                      ~~~~~~~~~~~~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_a1_latched_frame.c:42:9: note: in expansion of macro 'assert'
+   42 |         assert(isnan(frame.unwrapped_angle[i]));
+      |         ^~~~~~
+PASS: test_a1_latched_frame
+PASS test_a1_latched_frame
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a2_arming_state_machine.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a2_arming_state_machine
+PASS test_a2_arming_state_machine
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a3_transport_age_limit_window.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a3_transport_age_limit_window
+PASS test_a3_transport_age_limit_window
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a4_stuck_detector.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a4_stuck_detector
+PASS test_a4_stuck_detector
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a5_stale_out_of_order.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a5_stale_out_of_order
+PASS test_a5_stale_out_of_order
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a6_plausibility_limits.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a6_plausibility_limits
+PASS test_a6_plausibility_limits
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a7_wheel_angle_wrap.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a7_wheel_angle_wrap
+PASS test_a7_wheel_angle_wrap
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a8_isolated_invalid.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a8_isolated_invalid
+PASS test_a8_isolated_invalid
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a9_timer_wrap.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+s11_verified/tests/test_a9_timer_wrap.c: In function 'main':
+s11_verified/tests/test_a9_timer_wrap.c:18:18: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   18 |     assert(isnan(s11_age_ms_u32(100u, 50u, 0.0)));
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+s11_verified/tests/test_common.h:26:22: note: in expansion of macro 'S11_CHECK'
+   26 | #define assert(expr) S11_CHECK(expr)
+      |                      ^~~~~~~~~
+s11_verified/tests/test_a9_timer_wrap.c:18:5: note: in expansion of macro 'assert'
+   18 |     assert(isnan(s11_age_ms_u32(100u, 50u, 0.0)));
+      |     ^~~~~~
+s11_verified/tests/test_a9_timer_wrap.c:19:18: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   19 |     assert(isnan(s11_age_ms_u32(100u, 50u, -1.0)));
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_a9_timer_wrap.c:19:5: note: in expansion of macro 'assert'
+   19 |     assert(isnan(s11_age_ms_u32(100u, 50u, -1.0)));
+      |     ^~~~~~
+s11_verified/tests/test_a9_timer_wrap.c:27:18: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   27 |     assert(isnan(s11_age_ms_u16(10u, 5u, 0.0)));
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_a9_timer_wrap.c:27:5: note: in expansion of macro 'assert'
+   27 |     assert(isnan(s11_age_ms_u16(10u, 5u, 0.0)));
+      |     ^~~~~~
+PASS: test_a9_timer_wrap
+PASS test_a9_timer_wrap
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a10_isr_snapshot.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a10_isr_snapshot
+PASS test_a10_isr_snapshot
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a10_concurrent_mailbox.c:2:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a10_concurrent_mailbox (reads=170278)
+PASS test_a10_concurrent_mailbox
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a11_variable_dt.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a11_variable_dt
+PASS test_a11_variable_dt
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_a12_predict_cap_precedence.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_a12_predict_cap_precedence
+PASS test_a12_predict_cap_precedence
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_age_budget.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_age_budget
+PASS test_age_budget
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_nan_and_inf.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+s11_verified/tests/test_nan_and_inf.c: In function 'main':
+s11_verified/tests/test_nan_and_inf.c:60:33: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   60 |         assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |                      ~~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_nan_and_inf.c:60:9: note: in expansion of macro 'assert'
+   60 |         assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |         ^~~~~~
+s11_verified/tests/test_nan_and_inf.c:60:57: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   60 |         assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |                                               ~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_nan_and_inf.c:60:9: note: in expansion of macro 'assert'
+   60 |         assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |         ^~~~~~
+PASS: test_nan_and_inf
+PASS test_nan_and_inf
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_stale_packet_sequence.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+PASS: test_stale_packet_sequence
+PASS test_stale_packet_sequence
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/tests/test_latch_and_rearm.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+s11_verified/tests/test_latch_and_rearm.c: In function 'verify_latch_and_rearm':
+s11_verified/tests/test_latch_and_rearm.c:22:37: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   22 |             assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |                          ~~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_latch_and_rearm.c:22:13: note: in expansion of macro 'assert'
+   22 |             assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |             ^~~~~~
+s11_verified/tests/test_latch_and_rearm.c:22:61: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   22 |             assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |                                                   ~~~~~~~~~~^~~
+s11_verified/tests/test_common.h:18:15: note: in definition of macro 'S11_CHECK'
+   18 |         if (!(expr)) {                                                    \
+      |               ^~~~
+s11_verified/tests/test_latch_and_rearm.c:22:13: note: in expansion of macro 'assert'
+   22 |             assert(isnan(frame.angle[i]) && isnan(frame.rate[i]));
+      |             ^~~~~~
+PASS: test_latch_and_rearm
+PASS test_latch_and_rearm
+In file included from s11_verified/tests/test_common.h:10,
+                 from s11_verified/review2/reviewer_probes.c:1:
+s11_verified/tests/test_common.h: In function 'near_eq':
+s11_verified/tests/test_common.h:38:21: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                     ^
+s11_verified/tests/test_common.h:38:36: warning: conversion from 'double' to 'float' may change value [-Wfloat-conversion]
+   38 |     return isfinite(a) && isfinite(b) && fabs(a - b) <= tol;
+      |                                    ^
+check,result,actual,expected
+A4_slow_frozen_angle,PASS,6,6
+A2_partial_mailbox_startup,PASS,8,8
+A10_generation_wrap_fresh,PASS,1,1
+A10_generation_wrap_healthy,PASS,1,1
+A9_u16_modular,PASS,236,236
+A9_u32_modular,PASS,4000,4000
+A12_explicit_unhealthy,PASS,5,5
+PASS reviewer_probes
+SUMMARY: 26/26 host tests passed (Debug).

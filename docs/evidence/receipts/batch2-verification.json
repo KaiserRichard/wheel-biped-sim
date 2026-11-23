@@ -1,0 +1,38 @@
+{
+  "pdf": [
+    {
+      "board": "AUX",
+      "pages": 7,
+      "sha256": "f2f233023494c6cfbc0c2e8ac1ed3973c8f2159fc75e2c30dbfd794e1b16831f"
+    },
+    {
+      "board": "CTRL",
+      "pages": 8,
+      "sha256": "359ec1a8877df916a4d42c2f5ea74b8665f47be6b61dbf22f55fbf04843c0d04"
+    }
+  ],
+  "pcb": [
+    {
+      "board": "AUX",
+      "pad_records_identical_after_public_label_mapping": 428
+    },
+    {
+      "board": "CTRL",
+      "pad_records_identical_after_public_label_mapping": 603
+    }
+  ],
+  "unchanged_C_token_files": 79,
+  "host_debug_pass": 26,
+  "host_release_pass": 26,
+  "s11_source_debug_pass": 18,
+  "s11_source_release_pass": 18,
+  "pi_suites_pass": 19,
+  "mesh_gate_probes": [
+    "accepted exact snapshot",
+    "rejected changed bytes",
+    "rejected unlisted file"
+  ],
+  "MATLAB_started": false,
+  "MATLAB_tempdir": "not applicable; no MATLAB session",
+  "FIL": "owner-reported 6/6; not rerun during staging"
+}

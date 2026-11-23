@@ -1,0 +1,27 @@
+[
+  {
+    "bus": 1,
+    "field": "firmware_command_id",
+    "reason": "duplicate ID on S12 bus"
+  },
+  {
+    "bus": 1,
+    "field": "firmware_feedback_id",
+    "reason": "duplicate ID on S12 bus"
+  },
+  {
+    "bus": 2,
+    "field": "firmware_command_id",
+    "reason": "duplicate ID on S12 bus"
+  },
+  {
+    "bus": 2,
+    "field": "firmware_feedback_id",
+    "reason": "duplicate ID on S12 bus"
+  },
+  {
+    "bus": 3,
+    "field": "firmware_feedback_id",
+    "reason": "duplicate ID on S12 bus"
+  }
+]

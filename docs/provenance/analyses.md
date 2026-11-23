@@ -1,6 +1,6 @@
 # P3 analysis provenance
 
-Imported on 17 November 2026 as a file snapshot, without private Git history. The source package is identified as `p3_logsysid`; it is a first-party analysis candidate prepared with Claude and Codex assistance. The owner's authorship/licence confirmation remains a release-review item; no new third-party licence grant is inferred here. Existing human/upstream notices and the repository's MIT text are retained. No copied upstream firmware implementation is included in this slice.
+Imported on 17 November 2026 as a file snapshot, without private Git history. The source package is identified as `p3_logsysid`; it is a first-party analysis candidate prepared with AI coding tools. The owner's authorship/licence confirmation remains a release-review item; no new third-party licence grant is inferred here. Existing human/upstream notices and the repository's MIT text are retained. No copied upstream firmware implementation is included in this slice.
 
 `analyses/logsysid/SOURCE_MANIFEST.json` records original package SHA-256 values, separately calculated released-file hashes, and opaque original-reference digests. The original manifest and unbundled references are withheld. Hashes establish lineage only; they do not make withheld files reproducible or clear their rights. The supplied simulation CSV is unchanged; its units, column order and unknown historical simulation seed are documented. Rehearsal random seeds remain explicit in `rehearsal.py`.
 

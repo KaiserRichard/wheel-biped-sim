@@ -1,0 +1,8 @@
+check,result,actual,expected
+A4_slow_frozen_angle,FAIL,0,6
+A2_partial_mailbox_startup,FAIL,5,8
+A10_generation_wrap_fresh,FAIL,0,1
+A10_generation_wrap_healthy,FAIL,0,1
+A9_u16_modular,PASS,236,236
+A9_u32_modular,PASS,4000,4000
+A12_explicit_unhealthy,PASS,5,5

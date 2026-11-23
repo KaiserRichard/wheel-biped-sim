@@ -1,0 +1,13 @@
+(version 1)
+(rule "Battery-side copper to logic"
+    (condition "((A.NetClass == 'VBAT' || A.NetClass == 'Battery-side sense and switch') && B.NetClass == 'Logic') || ((B.NetClass == 'VBAT' || B.NetClass == 'Battery-side sense and switch') && A.NetClass == 'Logic')")
+    (constraint clearance (min 0.5mm))
+    (constraint creepage (min 0.5mm)))
+
+(rule "Ordinary PCB via drill"
+    (condition "A.Type == 'Via'")
+    (constraint hole_size (min 0.25mm)))
+(rule "E-stop loop to board"
+    (condition "((A.NetClass == 'Isolated E-stop loop' && B.NetClass != 'Isolated E-stop loop' && B.NetName != '') || (B.NetClass == 'Isolated E-stop loop' && A.NetClass != 'Isolated E-stop loop' && A.NetName != ''))")
+    (constraint clearance (min 1.5mm))
+    (constraint creepage (min 1.5mm)))

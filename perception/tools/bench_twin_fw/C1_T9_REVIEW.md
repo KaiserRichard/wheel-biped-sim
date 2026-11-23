@@ -35,5 +35,5 @@
 - Recommendation for subsequent owner-authorized work: on an isolated fixture,
   use pi_loop.py with a fresh session, retain RX/write logs, then compare
   rx_bytes/queued/processed, text_ok, sent/rejected/fed_back and parser counters.
-- Claude handoff: review this local C1-phase-9 milestone and its hardware limitations;
+- Handoff: review this local C1-phase-9 milestone and its hardware limitations;
   no PR was opened and no hardware acceptance is claimed.

@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 import host
 sys.path.insert(0, str(REPO))
 from tools.imu_view.stream import parse_line, from_lines
-REF = pathlib.Path(os.environ.get('DMJUMP_REF', '/private/tmp/AI-assistance/dmjump-ref'))
+REF = pathlib.Path(os.environ.get('DMJUMP_REF', '/tmp/dmjump-ref'))
 U8 = C.c_uint8
 F = C.c_float
 Data = U8 * 8

@@ -17,11 +17,11 @@ line numbers differ. This is an API/source review, not a build of the binding.
 
 MEASURED source attribution: `adapter.cpp::drain` and IMU append checks adapt the
 first-party `wbr::Input` algorithm in
-[d435i_input.h](<local workspace>/Desktop/Research/wbr-perception-phase1-runtime/experiments/2026-10-13-n4b-d435i-prep/d435i_input.h:1),
+d435i_input.h (archived phase-1 file, not published),
 lines 13–80, from the project preparation experiment (2026-10-13).
 The original double seconds become integer ns with an explicit unchanging domain.
 Tests preserve
-[test_d435i_input.cpp](<local workspace>/Desktop/Research/wbr-perception-phase1-runtime/experiments/2026-10-13-n4b-d435i-prep/test_d435i_input.cpp:1),
+test_d435i_input.cpp (archived phase-1 file, not published),
 lines 16–51: bracketed interpolation, no extrapolation, prefix trimming, future
 coverage, endpoint once, ordering, development gap guard and finite input checks.
 Stereo pairing is added by exact epoch; unlike the development driver's skew

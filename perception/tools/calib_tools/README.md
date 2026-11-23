@@ -98,7 +98,7 @@ unequal offsets for an external association layer to handle.
 
 **INFERRED operating choices:** `Camera.RGB`, `Stereo.ThDepth`, keyframe-loss
 policy, ORBextractor and Viewer values reproduce the inspected development file
-[`D435i_serial-alias-6_stereo_inertial.yaml` L21–23, L35, L48–62](<local workspace>/Desktop/Research/wbr-perception-phase1-runtime/experiments/2026-10-13-n4b-d435i-prep/D435i_serial-alias-6_stereo_inertial.yaml).
+`D435i_serial-alias-6_stereo_inertial.yaml` L21–23, L35, L48–62 (archived phase-1 file, not published).
 They are separately identified in provenance and are not Kalibr measurements.
 Intrinsics/extrinsics/noise are never borrowed from that file. The candidate
 itself uses Rectified; this exporter uses the requested PinHole/Camera2 schema.

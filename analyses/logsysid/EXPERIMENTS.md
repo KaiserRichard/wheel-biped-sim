@@ -1,6 +1,6 @@
 # P3 experiments: bench first, robot second
 
-Prepared with Codex assistance, 2026-11-17. This is a proposed procedure, not a record of hardware tests. All numeric excitations below are rehearsal settings; the robot owner must set the permitted torque, speed, travel, current, voltage and temperature limits from the actual hardware before enabling a drive. Historical references were read but are not bundled; see `SOURCE_MANIFEST.json` for opaque lineage hashes. All settings require independent hardware confirmation.
+Prepared 2026-11-17. This is a proposed procedure, not a record of hardware tests. All numeric excitations below are rehearsal settings; the robot owner must set the permitted torque, speed, travel, current, voltage and temperature limits from the actual hardware before enabling a drive. Historical references were read but are not bundled; see `SOURCE_MANIFEST.json` for opaque lineage hashes. All settings require independent hardware confirmation.
 
 ## Before the visit
 

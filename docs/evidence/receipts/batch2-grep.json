@@ -1,0 +1,31 @@
+{
+  "scope": "all added/changed text files; PDF text and mesh headers also checked by publication scan",
+  "requested_case_sensitive_grep_matches": [
+    {
+      "path": "hardware/control-board/mcu.kicad_sch",
+      "line": 216,
+      "classification": "UART alternate-function identifier"
+    },
+    {
+      "path": "hardware/control-board/mcu.kicad_sch",
+      "line": 240,
+      "classification": "UART alternate-function identifier"
+    },
+    {
+      "path": "hardware/control-board/mcu.kicad_sch",
+      "line": 1011,
+      "classification": "UART alternate-function identifier"
+    },
+    {
+      "path": "hardware/control-board/mcu.kicad_sch",
+      "line": 1037,
+      "classification": "UART alternate-function identifier"
+    },
+    {
+      "path": "hardware/control-board/mcu.kicad_sch",
+      "line": 1038,
+      "classification": "UART alternate-function identifier"
+    }
+  ],
+  "semantic_private_label_or_path_matches": []
+}

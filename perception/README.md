@@ -27,4 +27,4 @@
 
 **FROM FILE.** The empty-floor run generated a false stop and the far wall failed the range criterion. The EuRoC benchmark covers one sequence and its speed figures were affected by Pi under-voltage. The STM32 owns balance, torque and safety. Perception publishes candidate advisories.
 
-The code, experiments and write-ups included AI assistance under the project owner's direction.
+AI coding tools were used for the code, experiments and write-ups; the author reviewed and is responsible for all content.

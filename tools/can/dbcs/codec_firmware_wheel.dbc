@@ -1,0 +1,37 @@
+VERSION "N1 offline codec; ranges are not ratings"
+NS_ :
+ CM_
+ VAL_
+BS_:
+BU_: Controller Motor
+
+BO_ 3 Firmware_Wheel_Command: 8 Motor
+ SG_ Position : 7|16@0+ (0.00036621652552071412,-12) [-12|12] "rad" Controller
+ SG_ Velocity : 23|12@0+ (0.02197802197802198,-45) [-45|45] "rad/s" Controller
+ SG_ Kp : 27|12@0+ (0.1221001221001221,0) [0|500] "N m/rad" Controller
+ SG_ Kd : 47|12@0+ (0.001221001221001221,0) [0|5] "N m s/rad" Controller
+ SG_ Torque : 51|12@0+ (0.0087912087912087912,-18) [-18|18] "N m" Controller
+
+BO_ 19 Firmware_Wheel_Feedback: 8 Motor
+ SG_ MotorID : 3|4@0+ (1,0) [0|15] "" Controller
+ SG_ State : 7|4@0+ (1,0) [0|15] "" Controller
+ SG_ Position : 15|16@0+ (0.00036621652552071412,-12) [-12|12] "rad" Controller
+ SG_ Velocity : 31|12@0+ (0.02197802197802198,-45) [-45|45] "rad/s" Controller
+ SG_ Torque : 35|12@0+ (0.0087912087912087912,-18) [-18|18] "N m" Controller
+ SG_ MOS_Temperature : 55|8@0+ (1,0) [0|255] "degC" Controller
+ SG_ Rotor_Temperature : 63|8@0+ (1,0) [0|255] "degC" Controller
+
+CM_ SG_ 3 Position "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 3 Velocity "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 3 Kp "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 3 Kd "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 3 Torque "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ BO_ 3 "Lifecycle override: FFFFFFFFFFFFFF + FB clear_error / FC enable / FD disable / FE zero; classify before MIT decode. Companion special DBC. https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+CM_ SG_ 19 MotorID "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 State "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 Position "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 Velocity "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 Torque "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 MOS_Temperature "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+CM_ SG_ 19 Rotor_Temperature "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.9; MotorID low nibble confirmed by SDK/DM-jump; rotor byte described as internal coil temperature.";
+

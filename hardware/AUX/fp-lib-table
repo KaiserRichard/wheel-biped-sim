@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "WBR_Footprints") (type "KiCad") (uri "${KIPRJMOD}/WBR_Footprints.pretty") (options "") (descr "KiCad standard footprint copies plus Nano2 fuse land")))

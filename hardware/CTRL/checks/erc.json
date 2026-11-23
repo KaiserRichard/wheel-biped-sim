@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-11-23T22:17:16+0700",
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "9.0.9",
+    "sheets": [
+        {
+            "path": "/Receiver, wired stop and motor-board interface/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/7c6ff6d2-3f52-5118-a32f-25cb793eb022",
+            "violations": []
+        },
+        {
+            "path": "/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01",
+            "violations": []
+        },
+        {
+            "path": "/PowerIn/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb11",
+            "violations": []
+        },
+        {
+            "path": "/IMU/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb44",
+            "violations": []
+        },
+        {
+            "path": "/MCU/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb22",
+            "violations": []
+        },
+        {
+            "path": "/MonitorSafety/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb55",
+            "violations": []
+        },
+        {
+            "path": "/CAN/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb33",
+            "violations": []
+        },
+        {
+            "path": "/IO/",
+            "uuid_path": "/83910dd9-7b31-43d3-a6a5-d0c1184dcb01/83910dd9-7b31-43d3-a6a5-d0c1184dcb66",
+            "violations": []
+        }
+    ],
+    "source": "CTRL.kicad_sch"
+}

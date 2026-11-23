@@ -1,0 +1,3743 @@
+(kicad_sch
+  (version 20250114)
+  (generator "eeschema")
+  (uuid "83910dd9-7b31-43d3-a6a5-d0c1184dcb33")
+  (paper "A3")
+  (title_block
+    (title "CTRL rev4 / can")
+    (date "2026-11-18")
+    (rev "4")
+    (company "Design-only learning exercise")
+    (comment 1 "CAN1: Right Motors (PD0 RX / PD1 TX)")
+    (comment 2 "CAN2: Left Motors (PB5 RX / PB6 TX)")
+    (comment 3 "CAN3: Spare Bus (PD12 RX / PD13 TX)")
+  )
+  (lib_symbols
+    (symbol "H723:TCAN1042V"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "U"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "TCAN1042V"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:SOIC-8_3.9x4.9mm_P1.27mm"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "TCAN1042V_0_1"
+        (rectangle
+          (start -10.16 6.35)
+          (end 10.16 -6.35)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "TCAN1042V_1_1"
+        (pin input line
+          (at -15.24 3.81 0)
+          (length 5.08)
+          (name "TXD"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin power_in line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "VCC"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin output line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "RXD"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "4"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin power_in line
+          (at -15.24 -3.81 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin power_in line
+          (at 15.24 3.81 180)
+          (length 5.08)
+          (name "VIO"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "5"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin bidirectional line
+          (at 15.24 1.27 180)
+          (length 5.08)
+          (name "CANH"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "7"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin bidirectional line
+          (at 15.24 -1.27 180)
+          (length 5.08)
+          (name "CANL"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "6"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin input line
+          (at 15.24 -3.81 180)
+          (length 5.08)
+          (name "STB"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "8"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:C_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "C"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "C"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:C_0805_2012Metric"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "C_std_0_1"
+        (rectangle
+          (start -10.16 3.81)
+          (end 10.16 -3.81)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "C_std_1_1"
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "1"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "2"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:R_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "R"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "R"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:R_0805_2012Metric"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "R_std_0_1"
+        (rectangle
+          (start -10.16 3.81)
+          (end 10.16 -3.81)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "R_std_1_1"
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "1"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "2"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:JP_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "JP"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "Term_En"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:PinHeader_1x02_P2.54mm_Vertical"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "JP_std_0_1"
+        (rectangle
+          (start -10.16 3.81)
+          (end 10.16 -3.81)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "JP_std_1_1"
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "1"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "2"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:ESD_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "D"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "PESD2CAN"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:SOT-23"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "ESD_std_0_1"
+        (rectangle
+          (start -10.16 5.08)
+          (end 10.16 -5.08)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "ESD_std_1_1"
+        (pin passive line
+          (at -15.24 2.54 0)
+          (length 5.08)
+          (name "CANH"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 0 0)
+          (length 5.08)
+          (name "CANL"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -2.54 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+    (symbol "H723:Conn_CAN_std"
+      (pin_names
+        (offset 0.8)
+      )
+      (in_bom yes)
+      (on_board yes)
+      (property "Reference" "J"
+        (at 0 7.62 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+        )
+      )
+      (property "Value" "Micro-Fit 4P"
+        (at 0 5.08 0)
+        (effects
+          (font
+            (size 1.0 1.0)
+          )
+        )
+      )
+      (property "Footprint" "H723:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          ) hide
+        )
+      )
+      (symbol "Conn_CAN_std_0_1"
+        (rectangle
+          (start -10.16 6.35)
+          (end 10.16 -6.35)
+          (stroke
+            (width 0.254)
+            (type default)
+          )
+          (fill
+            (type background)
+          )
+        )
+      )
+      (symbol "Conn_CAN_std_1_1"
+        (pin passive line
+          (at -15.24 3.81 0)
+          (length 5.08)
+          (name "CANH"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "1"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 1.27 0)
+          (length 5.08)
+          (name "CANL"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "2"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -1.27 0)
+          (length 5.08)
+          (name "GND"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "3"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+        (pin passive line
+          (at -15.24 -3.81 0)
+          (length 5.08)
+          (name "+5V"
+            (effects
+              (font
+                (size 1.0 1.0)
+              )
+            )
+          )
+          (number "4"
+            (effects
+              (font
+                (size 1 1)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (text "CAN1: RIGHT MOTOR BUS (PD0 RX / PD1 TX)"
+    (at 20 20 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-c00000000001")
+  )
+  (symbol
+    (lib_id "H723:TCAN1042V")
+    (at 59.69 39.37 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-c10000000001")
+    (property "Reference" "U5"
+      (at 59.69 29.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "TCAN1042V"
+      (at 59.69 31.91 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOIC-8_3.9x4.9mm_P1.27mm"
+      (at 59.69 39.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 59.69 59.69 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C30"
+      (at 59.69 51.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "100nF"
+      (at 59.69 54.23 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 59.69 59.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "1a70a0ea-196f-40ce-8aac-08b117a431ff")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 39.37 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R22"
+      (at 110.49 31.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 33.91 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 39.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "1795a185-526d-4126-92f4-c7f8ab108ce5")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 59.69 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R23"
+      (at 110.49 51.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 54.23 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 59.69 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "2f4704cd-064c-4609-8cdd-b1a531db41d0")
+  )
+  (symbol
+    (lib_id "H723:JP_std")
+    (at 110.49 80.01 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "JP2"
+      (at 110.49 72.01 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "Term_En"
+      (at 110.49 74.55 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x02_P2.54mm_Vertical"
+      (at 110.49 80.01 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "75ff692d-a5e8-452d-8d5e-15cae753d62e")
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 110.49 100.33 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C36"
+      (at 110.49 92.33 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "4.7nF 50V"
+      (at 110.49 94.87 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 110.49 100.33 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "7ed330d9-79d6-4bfc-abd7-65010553f06a")
+  )
+  (symbol
+    (lib_id "H723:ESD_std")
+    (at 149.86 39.37 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "D8"
+      (at 149.86 31.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "PESD2CAN"
+      (at 149.86 33.91 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOT-23"
+      (at 149.86 39.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "0d8083e0-f356-4435-bc82-aa4a93cc91d6")
+  )
+  (symbol
+    (lib_id "H723:Conn_CAN_std")
+    (at 190.5 39.37 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "J5"
+      (at 190.5 29.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "CAN1 RIGHT MOTOR"
+      (at 190.5 31.91 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal"
+      (at 190.5 39.37 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "ab215a45-1c87-442a-96ae-fa6acdf24fe3")
+  )
+  (text "CAN2: LEFT MOTOR BUS (PB5 RX / PB6 TX)"
+    (at 20 120 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-c00000000002")
+  )
+  (symbol
+    (lib_id "H723:TCAN1042V")
+    (at 59.69 139.7 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-c10000000002")
+    (property "Reference" "U6"
+      (at 59.69 129.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "TCAN1042V"
+      (at 59.69 132.24 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOIC-8_3.9x4.9mm_P1.27mm"
+      (at 59.69 139.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 59.69 160.02 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C32"
+      (at 59.69 152.02 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "100nF"
+      (at 59.69 154.56 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 59.69 160.02 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "a1082d56-4a1e-4fce-b68f-4a3ca85f2640")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 139.7 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R24"
+      (at 110.49 131.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 134.24 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 139.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "12470158-65b0-467e-b6ee-832e36228923")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 160.02 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R25"
+      (at 110.49 152.02 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 154.56 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 160.02 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "d998d9f8-767d-49d4-964d-e30cf811b32a")
+  )
+  (symbol
+    (lib_id "H723:JP_std")
+    (at 110.49 180.34 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "JP3"
+      (at 110.49 172.34 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "Term_En"
+      (at 110.49 174.88 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x02_P2.54mm_Vertical"
+      (at 110.49 180.34 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "c97031e1-4523-444f-bc86-819ecefba5fe")
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 110.49 199.39 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C37"
+      (at 110.49 191.39 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "4.7nF 50V"
+      (at 110.49 193.93 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 110.49 199.39 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "9a86b45f-1748-4905-b766-0eab2fa85f33")
+  )
+  (symbol
+    (lib_id "H723:ESD_std")
+    (at 149.86 139.7 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "D9"
+      (at 149.86 131.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "PESD2CAN"
+      (at 149.86 134.24 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOT-23"
+      (at 149.86 139.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "40e3d671-a220-4c40-bae0-dedb9ef881f9")
+  )
+  (symbol
+    (lib_id "H723:Conn_CAN_std")
+    (at 190.5 139.7 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "J6"
+      (at 190.5 129.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "CAN2 LEFT MOTOR"
+      (at 190.5 132.24 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal"
+      (at 190.5 139.7 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "8ca2872b-c088-4240-a556-0e6a6f5b4219")
+  )
+  (text "CAN3: SPARE MOTOR BUS (PD12 RX / PD13 TX)"
+    (at 20 220 0)
+    (effects
+      (font
+        (size 1.5 1.5)
+      )
+      (justify left)
+    )
+    (uuid "83910dd9-7b31-43d3-a6a5-c00000000003")
+  )
+  (symbol
+    (lib_id "H723:TCAN1042V")
+    (at 59.69 240.03 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "83910dd9-7b31-43d3-a6a5-c10000000003")
+    (property "Reference" "U7"
+      (at 59.69 230.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "TCAN1042V"
+      (at 59.69 232.57 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOIC-8_3.9x4.9mm_P1.27mm"
+      (at 59.69 240.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 59.69 260.35 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C34"
+      (at 59.69 252.35 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "100nF"
+      (at 59.69 254.89 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 59.69 260.35 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "38751a28-68ab-4d2d-a9e7-bc4f54d28395")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 240.03 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R26"
+      (at 110.49 232.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 234.57 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 240.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "7e83c091-c96d-49f7-ba09-b8c4230db7ff")
+  )
+  (symbol
+    (lib_id "H723:R_std")
+    (at 110.49 260.35 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "R27"
+      (at 110.49 252.35 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "60.4R 1%"
+      (at 110.49 254.89 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:R_0805_2012Metric"
+      (at 110.49 260.35 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "15459a6c-f8c9-4c62-87cb-e34c61fd0e23")
+  )
+  (symbol
+    (lib_id "H723:JP_std")
+    (at 110.49 279.4 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "JP4"
+      (at 110.49 271.4 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "Term_En"
+      (at 110.49 273.94 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:PinHeader_1x02_P2.54mm_Vertical"
+      (at 110.49 279.4 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "7221834a-a1af-4adc-92f5-6df0453cf724")
+  )
+  (symbol
+    (lib_id "H723:C_std")
+    (at 110.49 299.72 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "C38"
+      (at 110.49 291.72 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "4.7nF 50V"
+      (at 110.49 294.26 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:C_0805_2012Metric"
+      (at 110.49 299.72 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "806b60cd-51f8-4eca-8d5d-b38c135283f5")
+  )
+  (symbol
+    (lib_id "H723:ESD_std")
+    (at 149.86 240.03 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "D10"
+      (at 149.86 232.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "PESD2CAN"
+      (at 149.86 234.57 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:SOT-23"
+      (at 149.86 240.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "cb1ce0b0-49c1-4e4f-94b1-93e561152d10")
+  )
+  (symbol
+    (lib_id "H723:Conn_CAN_std")
+    (at 190.5 240.03 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (property "Reference" "J7"
+      (at 190.5 230.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        )
+      )
+    )
+    (property "Value" "CAN3 SPARE"
+      (at 190.5 232.57 0)
+      (effects
+        (font
+          (size 1.0 1.0)
+        )
+      )
+    )
+    (property "Footprint" "H723:Molex_Micro-Fit_3.0_43045-0400_2x02_P3.00mm_Horizontal"
+      (at 190.5 240.03 0)
+      (effects
+        (font
+          (size 1.27 1.27)
+        ) hide
+      )
+    )
+    (uuid "ad0fa7d3-12c9-48f9-95e8-dce0e95f01e1")
+  )
+  (wire
+    (pts
+      (xy 44.45 35.56)
+      (xy 41.91 35.56)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "1fd224f7-e88d-47fa-82c8-abf453b56838")
+  )
+  (global_label "CAN1_TX"
+    (shape bidirectional)
+    (at 41.91 35.56 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "d841a21f-c46b-4a57-a076-bab1a94c8c95")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 35.56 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 38.1)
+      (xy 41.91 38.1)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "f4a96b5a-5506-4f2a-b8d2-c1c1609ef284")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 38.1 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0cd7a12e-f62a-41d1-b8a0-0d5f33fcd211")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 38.1 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 40.64)
+      (xy 41.91 40.64)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6c15a310-25b8-48c2-a198-1cf5dfe3f4d4")
+  )
+  (global_label "CAN1_RX"
+    (shape bidirectional)
+    (at 41.91 40.64 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0dbaf833-5be2-4d87-8483-8b18981ab3df")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 40.64 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 43.18)
+      (xy 41.91 43.18)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "2c9c19f1-2b88-48de-9f53-e29aafcfdb0a")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 43.18 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "26c220fd-d086-4ad8-a347-10c95c72f4ab")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 43.18 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 35.56)
+      (xy 77.47 35.56)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6d836cc3-42fc-4149-b8d2-190546247ea4")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 77.47 35.56 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "018f355f-0d7f-4bad-8ac8-281615585aae")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 35.56 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 38.1)
+      (xy 77.47 38.1)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "9f5cb02b-38a3-406e-be62-ea080985d0a4")
+  )
+  (global_label "CAN1_H"
+    (shape bidirectional)
+    (at 77.47 38.1 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "df18b0a2-d465-4324-9f0a-12e93ffc2ca0")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 38.1 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 40.64)
+      (xy 77.47 40.64)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "a2aacb88-ae6f-4ed6-9b92-b7844a038cb1")
+  )
+  (global_label "CAN1_L"
+    (shape bidirectional)
+    (at 77.47 40.64 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "800d8c4c-7893-48c7-a310-59864c76384c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 40.64 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 43.18)
+      (xy 77.47 43.18)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "60e5f73d-0061-463a-b9b2-4d7cd323dde6")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 77.47 43.18 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "c0d252cb-79f7-4b24-8971-e9aefd6de0a6")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 43.18 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 58.42)
+      (xy 41.91 58.42)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "8d510bf2-f7cc-4d88-af16-8a9357325ed7")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 58.42 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "6f75eeee-b01d-4e74-80bd-129da2cf3c88")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 58.42 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 60.96)
+      (xy 41.91 60.96)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "9f5a989d-c0a4-41d1-80e6-8121b89836f0")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 60.96 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "9e74fa2d-d74e-44f8-8196-404a890d568b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 60.96 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 38.1)
+      (xy 92.71 38.1)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "b6e0ab1c-9bcd-4bc4-8e25-b37591872699")
+  )
+  (global_label "CAN1_H"
+    (shape bidirectional)
+    (at 92.71 38.1 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "6aa4b0b1-20c6-4781-8904-0ca420554e0b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 38.1 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 40.64)
+      (xy 92.71 40.64)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6598e481-7e74-4f9b-9fc4-33bccc03d6e7")
+  )
+  (global_label "CAN1_MID"
+    (shape bidirectional)
+    (at 92.71 40.64 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0bc26b7d-f6b3-4338-9d9c-034b350fb419")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 40.64 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 58.42)
+      (xy 92.71 58.42)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "4971e2fc-cccd-4d27-acad-416a6095dddf")
+  )
+  (global_label "CAN1_MID"
+    (shape bidirectional)
+    (at 92.71 58.42 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "5d4a266c-e432-4c2b-ad33-4c203c3e2b8e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 58.42 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 60.96)
+      (xy 92.71 60.96)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "cd013bdf-a083-42a0-9857-688439bd5eae")
+  )
+  (global_label "CAN1_TERM"
+    (shape bidirectional)
+    (at 92.71 60.96 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "80e5b70b-1880-4670-aea1-910b09c371a0")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 60.96 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 78.74)
+      (xy 92.71 78.74)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "383dd5bb-688e-4d15-90bc-ad93b0bed747")
+  )
+  (global_label "CAN1_TERM"
+    (shape bidirectional)
+    (at 92.71 78.74 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "b269f2da-ba8b-475d-aef3-14346e99ac5b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 78.74 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 81.28)
+      (xy 92.71 81.28)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "259ea963-d39a-4f70-9954-1feb54bf6c3e")
+  )
+  (global_label "CAN1_L"
+    (shape bidirectional)
+    (at 92.71 81.28 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "7c302111-0459-48e0-a27c-45c9890f5464")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 81.28 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 99.06)
+      (xy 92.71 99.06)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "bf7ee861-7d32-4f2b-a6f6-29c333ca5e67")
+  )
+  (global_label "CAN1_MID"
+    (shape bidirectional)
+    (at 92.71 99.06 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "70ea7325-30e3-4bf2-b2f1-c7de6a26ff0f")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 99.06 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 101.6)
+      (xy 92.71 101.6)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "2c488910-f775-4320-9153-328376a238fb")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 92.71 101.6 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "dc23acca-0bac-415b-94fb-fd7ea25343e9")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 101.6 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 36.83)
+      (xy 132.08 36.83)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "e7858ee8-38ae-4868-90b9-305debd7bec9")
+  )
+  (global_label "CAN1_H"
+    (shape bidirectional)
+    (at 132.08 36.83 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "913626fb-62b6-4ac6-a823-63159f8e360c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 36.83 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 39.37)
+      (xy 132.08 39.37)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "531a3aed-9585-4487-99cb-86bdc0ca22f7")
+  )
+  (global_label "CAN1_L"
+    (shape bidirectional)
+    (at 132.08 39.37 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "3c216d9e-6808-415b-b788-1f947b29608b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 39.37 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 41.91)
+      (xy 132.08 41.91)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "fc2bbf26-42bf-4534-8e43-14c77fdb9f44")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 132.08 41.91 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "8298af8a-852e-4a4c-ae5f-6aabdd30563c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 41.91 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 35.56)
+      (xy 172.72 35.56)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "2f1a4a5e-ab7e-4bd1-9b99-b4f0891d053c")
+  )
+  (global_label "CAN1_H"
+    (shape bidirectional)
+    (at 172.72 35.56 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "fe9340bb-092c-430e-bdc3-c963ffcc1235")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 35.56 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 38.1)
+      (xy 172.72 38.1)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "b2d7c095-9cdf-45a8-b5dd-4f7d208509a7")
+  )
+  (global_label "CAN1_L"
+    (shape bidirectional)
+    (at 172.72 38.1 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "4d5b8a46-e4c9-4e82-a5b6-b35f15a20d7a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 38.1 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 40.64)
+      (xy 172.72 40.64)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "add05169-f38a-4f98-8b07-106a9f8a96f3")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 172.72 40.64 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "50a0d908-6d1d-4cc6-9ba4-f20a7340e1de")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 40.64 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 43.18)
+      (xy 172.72 43.18)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "3b8c241e-9243-4263-8615-e1de97bbcffd")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 172.72 43.18 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0658a04b-e8ea-4573-a620-ac83d6a4288f")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 43.18 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 135.89)
+      (xy 41.91 135.89)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "bb947fd7-4fe1-42a3-af03-7a85005c9f7f")
+  )
+  (global_label "CAN2_TX"
+    (shape bidirectional)
+    (at 41.91 135.89 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "10e2a544-9612-4455-8261-dbd51c3eb7d7")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 135.89 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 138.43)
+      (xy 41.91 138.43)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "e7680170-3533-4479-9b50-010b41ae467f")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 138.43 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "33ae1ee9-4532-4425-96cb-8fafcebf82f0")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 138.43 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 140.97)
+      (xy 41.91 140.97)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "59ede62a-ffe8-4364-9593-19fce6b5eb87")
+  )
+  (global_label "CAN2_RX"
+    (shape bidirectional)
+    (at 41.91 140.97 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "c98dd2d1-343e-49d7-a7c3-84cca3f1c994")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 140.97 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 143.51)
+      (xy 41.91 143.51)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "58bb6342-fb9a-4c6d-b9ca-e24a7207ab31")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 143.51 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "83ee82e1-231f-49fb-911d-a3b911962213")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 143.51 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 135.89)
+      (xy 77.47 135.89)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "46512665-f578-4d10-ad2a-e116838c6192")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 77.47 135.89 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "22e20108-d0f8-445c-b736-12ced3b9ca8e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 135.89 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 138.43)
+      (xy 77.47 138.43)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "b41015ae-0337-4fde-843b-f2e89162f476")
+  )
+  (global_label "CAN2_H"
+    (shape bidirectional)
+    (at 77.47 138.43 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "3c9d9f59-903d-4369-81ff-684bb1851db5")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 138.43 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 140.97)
+      (xy 77.47 140.97)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "05cd8c22-cfbb-4ca6-8827-655320b67857")
+  )
+  (global_label "CAN2_L"
+    (shape bidirectional)
+    (at 77.47 140.97 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "1b7e5329-6aa0-4195-9661-238a97861d42")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 140.97 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 143.51)
+      (xy 77.47 143.51)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "43c77b86-0be5-4088-9624-9ce99aacb99c")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 77.47 143.51 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "6d3cdccb-e136-476f-88cd-e1a01d27f9d9")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 143.51 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 158.75)
+      (xy 41.91 158.75)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "4cf06aaa-e432-4925-87dd-9cbbba312152")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 158.75 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "f1fb5cbd-3f0d-4f0b-9934-476aaf313672")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 158.75 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 161.29)
+      (xy 41.91 161.29)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "f92b012a-8620-48b2-89cd-addba44c8243")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 161.29 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "44b9a10e-d4d3-4488-a03e-92e44c06782a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 161.29 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 138.43)
+      (xy 92.71 138.43)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "d6e5d479-7f45-4db7-a236-4c5d90d81d76")
+  )
+  (global_label "CAN2_H"
+    (shape bidirectional)
+    (at 92.71 138.43 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "2fe37dd1-5dc6-4bbb-a8b5-432a1ee11738")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 138.43 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 140.97)
+      (xy 92.71 140.97)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "be143fdd-1f22-4567-aa14-b3676203d3cb")
+  )
+  (global_label "CAN2_MID"
+    (shape bidirectional)
+    (at 92.71 140.97 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "339249eb-51a4-49f7-93bd-a48fab3415c6")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 140.97 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 158.75)
+      (xy 92.71 158.75)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "94663fe8-28cd-436d-98f6-e315d5ac10a2")
+  )
+  (global_label "CAN2_MID"
+    (shape bidirectional)
+    (at 92.71 158.75 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "a1f38e8c-18b8-42d5-a47a-55a7dcc05ffe")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 158.75 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 161.29)
+      (xy 92.71 161.29)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "7a64c2b9-ccfe-42e1-a915-9e7e10879f22")
+  )
+  (global_label "CAN2_TERM"
+    (shape bidirectional)
+    (at 92.71 161.29 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "b1d797af-a632-49c7-8b5c-34320d667606")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 161.29 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 179.07)
+      (xy 92.71 179.07)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "71bba77c-3701-43fe-ba28-eec2e46c2d9f")
+  )
+  (global_label "CAN2_TERM"
+    (shape bidirectional)
+    (at 92.71 179.07 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "330288d9-67df-49b5-9fe3-2bdf524b7a07")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 179.07 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 181.61)
+      (xy 92.71 181.61)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "99413223-5d71-402f-bde9-e3013f8d2951")
+  )
+  (global_label "CAN2_L"
+    (shape bidirectional)
+    (at 92.71 181.61 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "b934841a-832d-4c52-b7f6-50da79484a49")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 181.61 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 198.12)
+      (xy 92.71 198.12)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "67f924ca-e099-4678-a383-37222aaa7025")
+  )
+  (global_label "CAN2_MID"
+    (shape bidirectional)
+    (at 92.71 198.12 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "696277ac-61b2-4305-8b0c-b22a3a9dec52")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 198.12 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 200.66)
+      (xy 92.71 200.66)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "67c5a84f-edb3-47b1-8131-b2b2096e4711")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 92.71 200.66 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "b6fc4a7e-c9b4-41de-8fe2-51965d17a3c2")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 200.66 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 137.16)
+      (xy 132.08 137.16)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "433564b8-c664-4ba6-9f3b-c20f734bfaad")
+  )
+  (global_label "CAN2_H"
+    (shape bidirectional)
+    (at 132.08 137.16 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "728d78d0-87e1-4b5f-9c92-75533cfda802")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 137.16 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 139.7)
+      (xy 132.08 139.7)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "1d1a88bd-aa92-43d9-909d-05adc9efd436")
+  )
+  (global_label "CAN2_L"
+    (shape bidirectional)
+    (at 132.08 139.7 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "e882c6e3-1489-41ed-b1de-0f6540efd14d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 139.7 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 142.24)
+      (xy 132.08 142.24)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "eb9c02e7-0978-4d6f-bf3f-ce1468c4242d")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 132.08 142.24 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "75ed203f-7ffb-4e5d-90d2-3e202d893524")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 142.24 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 135.89)
+      (xy 172.72 135.89)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "0cc4b127-14eb-4fcb-9160-7ffcf08d6146")
+  )
+  (global_label "CAN2_H"
+    (shape bidirectional)
+    (at 172.72 135.89 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "f9f367c2-b088-4359-ba0e-b2220915611c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 135.89 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 138.43)
+      (xy 172.72 138.43)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "7f423abd-0b8b-47a1-a6c9-d17fd9fec01c")
+  )
+  (global_label "CAN2_L"
+    (shape bidirectional)
+    (at 172.72 138.43 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0cf0ca46-6e20-4cc8-ad73-0aec189033d1")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 138.43 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 140.97)
+      (xy 172.72 140.97)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "77a2365e-8a5f-4d32-94d6-2ecc23b6ff4b")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 172.72 140.97 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "91a270ef-9459-47ea-b0e6-6442719c2e2e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 140.97 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 143.51)
+      (xy 172.72 143.51)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "3c2ce141-fab1-44de-9b43-08cda44c1de6")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 172.72 143.51 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "1c406ecb-ae74-455d-b88b-8905f683c2f6")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 143.51 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 236.22)
+      (xy 41.91 236.22)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "dba80730-099f-4bd9-b9e8-f47ca05cf0f6")
+  )
+  (global_label "CAN3_TX"
+    (shape bidirectional)
+    (at 41.91 236.22 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "2fafc208-2370-4b76-9824-10718b9b695d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 236.22 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 238.76)
+      (xy 41.91 238.76)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "bd3218b5-036d-4140-be93-f9649e6b79cf")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 238.76 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "90546a8f-a1e4-4785-a831-ea09019788e2")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 238.76 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 241.3)
+      (xy 41.91 241.3)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "569c2bbc-01b1-494a-85dd-2f4e6487b701")
+  )
+  (global_label "CAN3_RX"
+    (shape bidirectional)
+    (at 41.91 241.3 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "89eb5b02-0cca-4ce4-b0a9-f06f410eafc3")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 241.3 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 243.84)
+      (xy 41.91 243.84)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "e504b8d4-5eeb-43aa-bc1c-74b2c1fcd342")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 243.84 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "9e6a78ea-7347-4e9e-95fa-1f6d95ac523b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 243.84 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 236.22)
+      (xy 77.47 236.22)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "9a3a3ca6-9544-4055-8f03-7bff9797ad60")
+  )
+  (global_label "+3V3"
+    (shape bidirectional)
+    (at 77.47 236.22 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "a7cb9435-cbf0-470d-922d-2ea3e04d68a5")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 236.22 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 238.76)
+      (xy 77.47 238.76)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "900c53fc-1af3-42d2-bea6-da5cadc15531")
+  )
+  (global_label "CAN3_H"
+    (shape bidirectional)
+    (at 77.47 238.76 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "5f680f7d-cf48-474d-98ab-c0d43ff9cb6a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 238.76 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 241.3)
+      (xy 77.47 241.3)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "cafcd737-78e2-4858-87fe-06f632edb6ad")
+  )
+  (global_label "CAN3_L"
+    (shape bidirectional)
+    (at 77.47 241.3 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "39b1cc0d-fe34-43dc-b228-d99e6341618b")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 241.3 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 74.93 243.84)
+      (xy 77.47 243.84)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "c8a68aa9-aecc-49ad-b3d9-fb996ae0cac1")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 77.47 243.84 0)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify left)
+    )
+    (uuid "58a89a77-3dc2-464e-a69f-c4d3e47adb9a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 77.47 243.84 0)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 259.08)
+      (xy 41.91 259.08)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "9f98484a-191a-45be-99f6-0e448d73f3bd")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 41.91 259.08 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "b6228538-5b09-4619-8a8f-65c24add2cd3")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 259.08 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 44.45 261.62)
+      (xy 41.91 261.62)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "d07997a1-0719-4e33-81e6-4a2f5a943542")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 41.91 261.62 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "49de225f-2610-4b81-aada-a3da0aa44eb2")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 41.91 261.62 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 238.76)
+      (xy 92.71 238.76)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "8920479e-60d3-4761-9baa-2d0e3a4de6c9")
+  )
+  (global_label "CAN3_H"
+    (shape bidirectional)
+    (at 92.71 238.76 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "89b512ee-0ad3-4a48-a394-389f304d0515")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 238.76 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 241.3)
+      (xy 92.71 241.3)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "63cd4376-0d69-4cfe-a915-0584bf387669")
+  )
+  (global_label "CAN3_MID"
+    (shape bidirectional)
+    (at 92.71 241.3 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "748be9bc-df4a-4f7a-8d26-6827a2f9d149")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 241.3 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 259.08)
+      (xy 92.71 259.08)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "eeebde00-6bda-44d9-812e-44c82666cdef")
+  )
+  (global_label "CAN3_MID"
+    (shape bidirectional)
+    (at 92.71 259.08 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "9308dea4-e4d4-4acc-99ae-52f9f6a83fb9")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 259.08 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 261.62)
+      (xy 92.71 261.62)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "4098560d-85ff-48a9-ad97-4f2279d3c8e6")
+  )
+  (global_label "CAN3_TERM"
+    (shape bidirectional)
+    (at 92.71 261.62 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0c6fdae9-983e-4898-97c2-35cf10888680")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 261.62 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 278.13)
+      (xy 92.71 278.13)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "95281429-a669-43b7-a6ee-425e499fc55d")
+  )
+  (global_label "CAN3_TERM"
+    (shape bidirectional)
+    (at 92.71 278.13 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "298f255e-3388-4331-88e3-9d1be5c3484c")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 278.13 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 280.67)
+      (xy 92.71 280.67)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "60fa04fc-2345-4e3e-8e7f-88b4c029b852")
+  )
+  (global_label "CAN3_L"
+    (shape bidirectional)
+    (at 92.71 280.67 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "0ffada29-15d9-42ae-9dc1-7c0635963e77")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 280.67 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 298.45)
+      (xy 92.71 298.45)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "2c0aaa5a-ade1-4379-a315-80f8685f9cdc")
+  )
+  (global_label "CAN3_MID"
+    (shape bidirectional)
+    (at 92.71 298.45 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "e5bfc9d9-58b2-41a2-8cdd-5e58112f5220")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 298.45 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 95.25 300.99)
+      (xy 92.71 300.99)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "139234ff-6b0b-4c62-b505-280a25282331")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 92.71 300.99 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "5d97a1fd-9590-4110-a057-9e0eb899519a")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 92.71 300.99 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 237.49)
+      (xy 132.08 237.49)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "4ea660bd-d17a-4926-a3f6-780f6c7be257")
+  )
+  (global_label "CAN3_H"
+    (shape bidirectional)
+    (at 132.08 237.49 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "ee21399e-2bfd-4aa0-a237-8730e1fd26d5")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 237.49 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 240.03)
+      (xy 132.08 240.03)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "02f876c6-9e22-4a68-a9d6-93ce417eb9f0")
+  )
+  (global_label "CAN3_L"
+    (shape bidirectional)
+    (at 132.08 240.03 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "641c5ce4-41c8-4e3e-99fc-76f276bdb160")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 240.03 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 134.62 242.57)
+      (xy 132.08 242.57)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "1d44cda2-09da-4504-b095-3cbaa657b97f")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 132.08 242.57 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "9bf4b4ca-bfd0-4b5e-afcd-f3765374025e")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 132.08 242.57 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 236.22)
+      (xy 172.72 236.22)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "5127007f-3804-447d-994b-32a183a3f405")
+  )
+  (global_label "CAN3_H"
+    (shape bidirectional)
+    (at 172.72 236.22 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "5e70fe9f-5caa-4833-83c6-d3b907b94afe")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 236.22 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 238.76)
+      (xy 172.72 238.76)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "0e6b3d17-ee9c-487a-bd07-48c07a2d88b6")
+  )
+  (global_label "CAN3_L"
+    (shape bidirectional)
+    (at 172.72 238.76 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "e25d2a1a-fb1e-4b89-babe-1538b7987370")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 238.76 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 241.3)
+      (xy 172.72 241.3)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "6dd75038-c07b-45bb-ba69-95d8e55605b9")
+  )
+  (global_label "GND"
+    (shape bidirectional)
+    (at 172.72 241.3 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "964c29e0-be7a-4d4c-927c-13ab28d11c1d")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 241.3 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+  (wire
+    (pts
+      (xy 175.26 243.84)
+      (xy 172.72 243.84)
+    )
+    (stroke
+      (width 0)
+      (type default)
+    )
+    (uuid "54c50a2c-ede7-459f-9f1b-af94d92149a8")
+  )
+  (global_label "+5V"
+    (shape bidirectional)
+    (at 172.72 243.84 180)
+    (effects
+      (font
+        (size 0.85 0.85)
+      )
+      (justify right)
+    )
+    (uuid "8478b88c-00f8-4d1a-a3b5-36ad85260e48")
+    (property "Intersheetrefs" "${INTERSHEET_REFS}"
+      (at 172.72 243.84 180)
+      (effects
+        (font
+          (size 1 1)
+        ) hide
+      )
+    )
+  )
+)

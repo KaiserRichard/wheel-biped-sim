@@ -1,0 +1,12 @@
+{
+  "source": "../S11_packet_tolerance/out/traces/001_s11_s9.csv",
+  "sha256": "f995f8b44bc96770bde561351e96e7dcb971b0aa718e30b3f7503929b5215170",
+  "mapping": "Aggregate MuJoCo channels -> synthetic six-axis fixture, not original joint telemetry",
+  "command_torque": "hips: signed hip_max_Nm; wheels: wheel_drive_mean_Nm",
+  "feedback_torque": "command delayed by 2 ms (assumed actuator replay)",
+  "position": "hips: pitch_deg converted to rad with role sign; wheels: integrated wheel_rate_mean_rad_s",
+  "velocity": "hips: pitch_rate_deg_s to rad/s; wheels: wheel_rate_mean_rad_s",
+  "temperatures": "constant synthetic 30/31 degC; State=1 enabled",
+  "transport": "500 Hz; deterministic +/-40 us release fixture; 50 us turnaround; actual stuffing",
+  "interval": "source t=1..3 s; output relative t=0..2 s"
+}

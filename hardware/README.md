@@ -1,9 +1,22 @@
+**Tóm tắt [FROM FILE / COMPUTED].** Bản mới nhất là AUX rev5 và CTRL rev4; hình bên dưới thuộc các bản lưu trước đó.
+
+# Current public revisions
+
+[FROM FILE / COMPUTED] [Revision evidence](../docs/evidence/hardware-control-board-revision.md).
+
+| Revision | Editable source | Schematic | Checks |
+| --- | --- | --- | --- |
+| AUX rev5 | [Project](AUX/wbr_power.kicad_pro) | [PDF](AUX/schematic.pdf) | [ERC](AUX/checks/erc.json), [DRC](AUX/checks/drc.json) |
+| CTRL rev4 | [Project](CTRL/CTRL.kicad_pro) | [PDF](CTRL/schematic.pdf) | [ERC](CTRL/checks/erc.json), [DRC](CTRL/checks/drc.json) |
+
+[UNKNOWN] Both boards are design-only and require bench confirmation. The renders below show the earlier archived revisions.
+
 # Wheel-biped electronics in KiCad 9
 
 | 6S auxiliary power board | STM32H723 control board |
 | --- | --- |
 | ![Perspective render of the 6S power board](../media/hardware/power-board-perspective.png) | ![Perspective render of the STM32H723 control board](../media/hardware/control-board-perspective.png) |
-| [Top](../media/hardware/power-board-top.png) · [Bottom](../media/hardware/power-board-bottom.png) · [KiCad project](power-board/wbr_power.kicad_pro) · [Schematic PDF](power-board/schematic.pdf) | [Top](../media/hardware/control-board-top.png) · [Bottom](../media/hardware/control-board-bottom.png) · [KiCad project](control-board/T11_custom_h723.kicad_pro) · [Schematic PDF](control-board/schematic.pdf) |
+| [Top](../media/hardware/power-board-top.png) · [Bottom](../media/hardware/power-board-bottom.png) · [KiCad project](power-board/wbr_power.kicad_pro) · [Schematic PDF](power-board/schematic.pdf) | [Top](../media/hardware/control-board-top.png) · [Bottom](../media/hardware/control-board-bottom.png) · [KiCad project](control-board/control_board.kicad_pro) · [Schematic PDF](control-board/schematic.pdf) |
 
 ## Power board v3
 

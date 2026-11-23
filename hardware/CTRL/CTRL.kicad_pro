@@ -265,7 +265,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "T11_custom_h723.kicad_pro",
+    "filename": "CTRL.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -396,6 +396,6 @@
   },
   "sheets": [],
   "text_variables": {
-    "DESIGN_STATUS": "Control Board Custom STM32H723 Robot Controller Learning Design"
+    "DESIGN_STATUS": "CTRL Custom STM32H723 Robot Controller Learning Design"
   }
 }

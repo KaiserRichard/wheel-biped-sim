@@ -1,0 +1,47 @@
+VERSION "N1 offline codec; ranges are not ratings"
+NS_ :
+ CM_
+ VAL_
+BS_:
+BU_: Controller Motor
+
+BO_ 8 L_front_command: 8 Motor
+ SG_ Position : 7|16@0+ (0.00038147554741741054,-12.5) [-12.5|12.5] "rad" Controller
+ SG_ Velocity : 23|12@0+ (0.014652014652014652,-30) [-30|30] "rad/s" Controller
+ SG_ Kp : 27|12@0+ (0.1221001221001221,0) [0|500] "N m/rad" Controller
+ SG_ Kd : 47|12@0+ (0.001221001221001221,0) [0|5] "N m s/rad" Controller
+ SG_ Torque : 51|12@0+ (0.004884004884004884,-10) [-10|10] "N m" Controller
+
+BO_ 6 L_rear_command: 8 Motor
+ SG_ Position : 7|16@0+ (0.00038147554741741054,-12.5) [-12.5|12.5] "rad" Controller
+ SG_ Velocity : 23|12@0+ (0.014652014652014652,-30) [-30|30] "rad/s" Controller
+ SG_ Kp : 27|12@0+ (0.1221001221001221,0) [0|500] "N m/rad" Controller
+ SG_ Kd : 47|12@0+ (0.001221001221001221,0) [0|5] "N m s/rad" Controller
+ SG_ Torque : 51|12@0+ (0.004884004884004884,-10) [-10|10] "N m" Controller
+
+BO_ 1 L_wheel_command: 8 Motor
+ SG_ Position : 7|16@0+ (0.00038147554741741054,-12.5) [-12.5|12.5] "rad" Controller
+ SG_ Velocity : 23|12@0+ (0.02197802197802198,-45) [-45|45] "rad/s" Controller
+ SG_ Kp : 27|12@0+ (0.1221001221001221,0) [0|500] "N m/rad" Controller
+ SG_ Kd : 47|12@0+ (0.001221001221001221,0) [0|5] "N m s/rad" Controller
+ SG_ Torque : 51|12@0+ (0.004884004884004884,-10) [-10|10] "N m" Controller
+
+CM_ SG_ 8 Position "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 8 Velocity "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 8 Kp "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 8 Kd "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 8 Torque "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ BO_ 8 "Lifecycle override: FFFFFFFFFFFFFF + FB clear_error / FC enable / FD disable / FE zero; classify before MIT decode. Companion special DBC. https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+CM_ SG_ 6 Position "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 6 Velocity "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 6 Kp "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 6 Kd "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 6 Torque "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ BO_ 6 "Lifecycle override: FFFFFFFFFFFFFF + FB clear_error / FC enable / FD disable / FE zero; classify before MIT decode. Companion special DBC. https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+CM_ SG_ 1 Position "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 1 Velocity "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 1 Kp "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 1 Kd "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ SG_ 1 Torque "FROM WEB: https://files.seeedstudio.com/products/Damiao/DM-J4310-en.pdf p.10; SDK codec ranges, not ratings.";
+CM_ BO_ 1 "Lifecycle override: FFFFFFFFFFFFFF + FB clear_error / FC enable / FD disable / FE zero; classify before MIT decode. Companion special DBC. https://aifitlab-wiki.super.site/damiao-docs/dm-j4310-2ec-v12-motor-instruction-manual";
+
