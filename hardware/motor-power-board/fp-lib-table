@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "MotorPower") (type "KiCad") (uri "${KIPRJMOD}/MotorPower.pretty") (options "") (descr "HW2 shunt mounting pattern")))

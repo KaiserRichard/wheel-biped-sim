@@ -1,5 +1,13 @@
 # Changelog
 
+## 23 November 2026
+
+- Add simulation evidence pages, figures and summary CSVs for [S11](docs/evidence/s11-packet-tolerance.md), [S12](docs/evidence/s12-comms-in-loop.md), [S13](docs/evidence/s13-power-safety.md) and [S14](docs/evidence/s14-sensitivity-radio.md), plus a six-case S11/S12 replay video ([s11-s12-comms.mp4](media/s11-s12-comms.mp4)).
+- S11/S12: document the graded encoder packet-loss policy and revised gyro-bias estimator (200/200 shared and 50/50 extended passes), one- versus three-bus CAN timing and closed-loop comparison (239/250 vs 231/250), 150 ms Wi-Fi watchdog (0/250 normal nuisance stops), and wired software e-stop latency (0.451–0.534 ms on three buses).
+- S13: document 6S battery sag, isolated regenerative overvoltage and a 1.5 Ω / 26.5 V brake chopper screen (27.79 V worst corner peak).
+- S14: rank 22 one-factor sensitivity parameters (9 crossed the 95% pass gate) and adopt policy c as the firmware default on radio loss (firmware not yet published here) (brake, then keep balancing in place: 0/34 falls vs 34/34 for torque-off policies; over-tilt, the wired e-stop and drive faults still cut torque at once).
+- Hardware: add the design-only, not fabricated KiCad 9 motor power board (series contactors, 3.0 Ω precharge, 1.5 Ω brake chopper, dual-channel stop latch; 0 ERC errors/warnings and 0 DRC violations) to [hardware/README.md](hardware/README.md).
+
 ## 22 November 2026
 
 - README rewritten as a showcase: MuJoCo, Simscape and KiCad 9 sections with evidence links; the full results table moved to docs/RESULTS.md; renders of the two learning boards added.

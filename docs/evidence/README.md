@@ -14,3 +14,7 @@
 | R5 · Corrected wheel–ground contact reruns | D1 passes rose from four to eight, both V1 trials passed, and both G1 arms still missed. | [Read study](r5-contact-rerun.md) |
 | G3 · Full-stack Monte Carlo | Combining the revised controller, estimator and rolling model exposed a packet-age failure mode. | [Read study](g3-full-stack.md) |
 | K1d · PPO policy against LQR | A PPO policy recovers from ±40° tilts with 13–33% less motor work than LQR, but drifts 10–37 cm. | [Read study](k1d-ppo.md) |
+| S11 · Encoder packet tolerance and gyro-drift rejection | Bridging up to two missed encoder packets and revising the bias loop raised matched passes from 104/200 to 200/200 and 23/50 to 50/50. | [Read study](s11-packet-tolerance.md) |
+| S12 · CAN, Wi-Fi and e-stop in the control loop | Three CAN buses reached 239/250 passes vs 231/250 on one bus; a 150 ms Wi-Fi timeout gave 0/250 normal nuisance stops and 25/25 durable rests. | [Read study](s12-comms-in-loop.md) |
+| S13 · Battery sag, regenerative overvoltage and motor-power stop | An 18 V jump sagged logic input to 15.73 V, an open 25.2 V link crossed 32 V in 0.81 ms at 1 mF, and a 1.5 Ω chopper held the worst peak to 27.79 V. | [Read study](s13-power-safety.md) |
+| S14 · Parameter sensitivity and radio-loss policy | Nine of 22 swept parameters crossed the 95% pass gate; radio-loss policy c gave 0/34 falls vs 34/34 for torque-off policies and is now the firmware default. | [Read study](s14-sensitivity-radio.md) |

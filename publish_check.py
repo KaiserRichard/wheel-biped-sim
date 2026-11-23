@@ -105,6 +105,22 @@ PNG_ALLOWLIST = {
     'media/hardware/power-board-bottom.png': '615ee0259cbb8695e535508c463dd2b3724121e48e0b6a336b1e5556b3bad7ba',
     'media/hardware/power-board-perspective.png': '44b8e9cde071194ad4e84abf1ee1ccf3ded6565fe3664729db29661fde4be757',
     'media/hardware/power-board-top.png': 'b4f74ad1d98e8085cd3b627cd789f7df3aae6801df73b2c6b3c352ac65d6d372',
+    'media/figures/evidence/s11-packet-tolerance-fault-timing.png': '5666795aaa15623be6fcbaea7c5c9d64b863f57e67f6f06a78961c13905c0239',
+    'media/figures/evidence/s11-packet-tolerance-gyro-drift.png': '07cfb0da58d08028ad2f68fd17ffc5d82b68c620fc4482ed349257a90acd6e93',
+    'media/figures/evidence/s11-packet-tolerance-linear-margin.png': 'c7c1d27783f19b7d0b0dbd3b3facb9f7bdcd443c8fca2542a0b6899c9b4b9554',
+    'media/figures/evidence/s11-packet-tolerance-paired-missions.png': '0e14392b391cbf115eddcd1a02dd62e6719f5b6a10ac4a9eb8b7ebad876346f0',
+    'media/figures/evidence/s12-comms-in-loop-can-closed-loop.png': 'ae796375ab21d785f963313d7da66f1ee46558e32a07c51fa92b203dbfbf3c8b',
+    'media/figures/evidence/s12-comms-in-loop-can-timing.png': '8f20b33f5678546151deed6e772eb8d4c2732c249e075bcc82a0066d34462042',
+    'media/figures/evidence/s12-comms-in-loop-radio-stop.png': '65c21b011e7b8ceb71a03285e43deb987a7f7604c0f40267000671feb388988c',
+    'media/figures/evidence/s12-comms-in-loop-watchdogs.png': '31f9997a52f45409abe0af7c32c125bf126783ddcb5820df1b9305ac25d880f0',
+    'media/figures/evidence/s13-power-safety-motor-power.png': '159084a638336fb397f50b9ebcf93500337c2933d05609ca5b62ff0c5faf4c5d',
+    'media/figures/evidence/s13-power-safety-regen-isolation.png': 'df3b24dca76da2713899c56eeb2ab0349d99afa55c72ace342e1903fdc0cd6af',
+    'media/figures/evidence/s13-power-safety-sag.png': '39592175b524ec8cd20d0d039f37e5c49cb648a5a7f1eff9e8b7043c77096ea0',
+    'media/figures/evidence/s14-sensitivity-radio-radio-policies.png': 'e29a40e5b1126065a30e84f5f4620d7c61e702e1a8463f609d0ec74586c16e16',
+    'media/figures/evidence/s14-sensitivity-radio-radio-trace.png': '3495a1df85a79bb9671644fa7d689de3a952488a85430e98a70eecf4a50d699a',
+    'media/figures/evidence/s14-sensitivity-radio-sensitivity-tornado.png': '0a556e6b818dd38d3aafcb01a762b0bbae2a40901b5bd733dd3e001bad857573',
+    'media/hardware/motor-power-board-perspective.png': '78ca05c1a80f05e9429b6497bca2bc988a6cb45aff40ecc27c79ec1ca2a4aa5b',
+    'media/hardware/motor-power-board-top.png': '703d5a0b8c8466b09cb09c9dd2a5899db1ef6d752c989a0bc2d96f2cf9113bc4',
 }
 # No compressed additions are approved in this P3-only batch.
 GZIP_ALLOWLIST = frozenset()
