@@ -1,7 +1,7 @@
 /*
- * 3-Bus x 2-Motor CAN TX Scheduler, RX Dispatcher, Bus-Off & Timeout Monitor
+ * Rev4 Right/Left/Spare CAN TX Scheduler, RX Dispatcher, Bus-Off & Timeout Monitor
  *
- * Implements FIRMWARE_DESIGN_v2.md Section 4.2 (3-bus x 2-motor map, globally
+ * Uses can_map/REV4_CAN_MAPPING.md (3 right + 3 left, spare bus empty, globally
  * unique IDs 0x001-0x006 / 0x011-0x016) and Section 4.3 (priority TX queue,
  * strict per-bus RX filter, AutoRetransmission=DISABLE periodic replacement,
  * emergency TX abort + 0 ms / +1 ms repeat 0xFF..FD disable, ErrorPassive jump
@@ -23,7 +23,8 @@
 #include <stdint.h>
 
 #define CAN_SCHED_NUM_BUSES              3u
-#define CAN_SCHED_MOTORS_PER_BUS         2u
+#define CAN_SCHED_MOTORS_PER_BUS         3u /* Capacity; use axis_count_for_bus(). */
+#define CAN_SCHED_UNUSED_AXIS           DAMIAO_NUM_AXES
 #define CAN_SCHED_NUM_AXES               DAMIAO_NUM_AXES
 #define CAN_SCHED_TX_QUEUE_CAP           8u   /* 8 priority TX elements per bus (Sec 4.3) */
 #define CAN_SCHED_DISABLE_REPEAT_US      1000u /* Repeat 0xFF..FD at t = +1 ms (Sec 4.3) */
@@ -142,7 +143,9 @@ typedef struct {
 CanSchedConfig can_sched_default_config(void);
 void can_sched_init(CanSched *sched, const CanSchedConfig *cfg);
 
-/* Topology helpers matching FIRMWARE_DESIGN_v2.md Section 4.2 (0-based bus_idx 0..2). */
+/* Rev4 topology (0-based bus_idx 0..2). Invalid/spare bus has count zero.
+ * axes_for_bus fills unused slots with CAN_SCHED_UNUSED_AXIS. */
+uint8_t can_sched_axis_count_for_bus(uint8_t bus_idx);
 CanSchedStatus can_sched_bus_for_axis(uint8_t axis, uint8_t *out_bus_idx);
 CanSchedStatus can_sched_axes_for_bus(uint8_t bus_idx, uint8_t out_axes[CAN_SCHED_MOTORS_PER_BUS]);
 

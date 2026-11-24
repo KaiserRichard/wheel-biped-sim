@@ -8,6 +8,11 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
+## New in batch 5
+
+- [Firmware hardware layer for the STM32H723 control board](firmware/README.md#stm32h723-hardware-layer): wired-stop gate, CAN bus mapping for CTRL rev4, watchdog, radio and USB adapters, with host tests. Checked in host tests and simulation only; it has not run on a board ([known issues](docs/known_issues.md)).
+- [Log tools](#log-tools): pack firmware-in-the-loop telemetry with the firmware's own C packer, convert framed logs to CSV, and compare two logs.
+
 ## New in batch 4
 
 - [Step crossing versus friction and speed](docs/studies/step-crossing-friction-speed.md), [five-bar branch check](docs/studies/five-bar-branch-check.md), and [simulation timestep sensitivity](docs/studies/simulation-timestep-sensitivity.md).
@@ -231,6 +236,21 @@ export PYTHONDONTWRITEBYTECODE=1
 
 The bundled CSV and all recovery results are synthetic/simulation only. They do not show real-robot data import, measured sensor performance, physical motor calibration or hardware acceptance. Hardware applicability is UNKNOWN; contact friction and battery resistance are UNASSESSED. P2 reduced-model screening and its CAD-derived inputs are deferred pending clearance.
 
+## Log tools
+
+[FROM FILE] `tools/log/` reads and writes the firmware's USB telemetry format, so simulation and hardware logs share one schema. Frames are header, payload and CRC-32C, then COBS encoding and a zero delimiter (`firmware/firmware/log_packer.h`, `usb_link.h`); decoding uses the Pi decoder in `pi/link/pi_link/`.
+
+- `sim_writer.py IN.jsonl OUT.bin TRUTH.csv` builds a local shared library from `firmware/firmware/{log_packer,usb_link,cobs,crc32c}.c` and packs per-tick JSONL records into 500 Hz TELEM_FAST and 20 Hz TELEM_HEALTH frames. Simulation truth goes only to the separate CSV, never into the hardware payload. Fields such as `euler_rad` must already be in SI units.
+- `convert.py LOG.bin OUT.csv` validates frames, counts CRC rejections and per-message sequence gaps, and writes a CSV.
+- `compare_logs.py A.bin B.bin` aligns two logs at their first timestamp, prints per-channel RMSE and peak difference, and writes `demo/overlay.png` (needs NumPy and `ffmpeg`).
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+PYTHONPATH=pi/link:tools/log python -m pytest -q -p no:cacheprovider tools/log/tests
+```
+
+`.bin`, generated CSV, `liblogpack.so` and figure outputs are run products; do not commit them. [UNKNOWN] The log rate, loss and throughput on the real USB link have not been measured.
+
 ## Project layout
 
 - `wbr/dynamics/`: five-bar kinematics, equations, and model support.
@@ -244,6 +264,7 @@ The bundled CSV and all recovery results are synthetic/simulation only. They do 
 - `slam/`: live RGB-D SLAM launch kit and setup notes; hardware execution is unverified.
 - `scripts/`: one entry point for each behavior, using a shared result writer.
 - `tests/`: CPU parity test and text CSV reference traces.
+- `tools/log/`: shared simulation/hardware telemetry log writer, converter and comparator.
 - `docs/evidence/`: one page per simulation study, with figures and CSVs.
 - `hardware/`: KiCad 9 sources, schematic PDFs and ERC/DRC reports for both boards.
 - `media/`: simulation clips (listed under Videos), figures and board renders.
@@ -257,7 +278,7 @@ Summary CSVs under `docs/` are labeled MEASURED, ASSUMED, or UNKNOWN. Follow the
 [FROM FILE / COMPUTED] Public copies and verification scope:
 
 - [AUX rev5 and CTRL rev4](docs/evidence/hardware-control-board-revision.md): KiCad sources, regenerated schematic PDFs and ERC/DRC reports.
-- [Portable firmware, slices 2–7](firmware/README.md): C sources, host tests and FIL fixtures.
+- [Portable firmware, slices 2–7, and the STM32H723 hardware layer](firmware/README.md): C sources, host tests and FIL fixtures.
 - [S11 independent packet-policy fixes](docs/evidence/s11-packet-policy-fix.md).
 - [CAN databases and offline tools](tools/can/README.md).
 - [Pi USB link](pi/link/README.md).

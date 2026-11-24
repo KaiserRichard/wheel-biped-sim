@@ -23,6 +23,7 @@ closed-loop against MuJoCo and verifies:
 
 import ctypes
 import math
+import os
 from pathlib import Path
 import sys
 from typing import Callable
@@ -32,7 +33,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL_XML = ROOT / "sim_model" / "draw_001.xml"
-LIB_PATH = ROOT / "build" / "libwbr_balance_ctrl.so"
+LIB_PATH = Path(os.environ.get("WBR_FIL_LIBRARY", str(ROOT / "build" / "libwbr_balance_ctrl.so")))
 
 DT = 0.001
 WHEEL_RADIUS = 0.0603

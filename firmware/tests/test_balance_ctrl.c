@@ -313,9 +313,9 @@ static void test_balance_ctrl_pipeline_and_policies(void)
     balance_ctrl_tick(&ctrl, &in, &out);
     assert(out.safety_out.state == SAFETY_STATE_BALANCING);
     assert(out.safety_out.torque_enable == 1u);
-    assert(can_sched_tx_pending(&ctrl.can_sched, 0u) == 2u);
-    assert(can_sched_tx_pending(&ctrl.can_sched, 1u) == 2u);
-    assert(can_sched_tx_pending(&ctrl.can_sched, 2u) == 2u);
+    assert(can_sched_tx_pending(&ctrl.can_sched, 0u) == 3u);
+    assert(can_sched_tx_pending(&ctrl.can_sched, 1u) == 3u);
+    assert(can_sched_tx_pending(&ctrl.can_sched, 2u) == 0u);
 
     /* 3. Verify standing position-error bound uses S8_STOP_POSITION_LIMIT_M (0.60 m)
      *    with anti-windup (no 0.30 m saturation deadlock, no unbounded x_est_m drift). */

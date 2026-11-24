@@ -199,7 +199,7 @@ static void test_enable_disable_and_axis_table(void)
     assert(dis[7] == 0xFDu);
 
     /* Verify unified 6-axis bus & ID mapping from FIRMWARE_DESIGN_v2.md Section 4.2 */
-    const uint8_t exp_bus[6] = { 1u, 2u, 3u, 1u, 2u, 3u };
+    const uint8_t exp_bus[6] = { 2u, 2u, 2u, 1u, 1u, 1u };
     const uint16_t exp_cmd[6] = { 0x001u, 0x002u, 0x003u, 0x004u, 0x005u, 0x006u };
     const uint16_t exp_rep[6] = { 0x011u, 0x012u, 0x013u, 0x014u, 0x015u, 0x016u };
     for (uint8_t a = 0u; a < DAMIAO_NUM_AXES; ++a) {

@@ -391,7 +391,10 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
         } else {
             /* Pre-checks green + local reset ack + separate local arm -> PRECHARGE. */
             const uint8_t prechecks_ok =
-                (in->dump_continuity_ok != 0u
+                (in->wdg_fault == 0u
+                 && in->mirror_mismatch == 0u
+                 && in->drive_enable_fail == 0u
+                 && in->dump_continuity_ok != 0u
                  && in->k1_closed == 0u
                  && in->k2_closed == 0u
                  && in->kpre_closed == 0u

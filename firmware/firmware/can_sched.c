@@ -1,5 +1,5 @@
 /*
- * 3-Bus x 2-Motor CAN TX Scheduler, RX Dispatcher, Bus-Off & Timeout Monitor
+ * Rev4 Right/Left/Spare CAN TX Scheduler, RX Dispatcher, Bus-Off & Timeout Monitor
  */
 
 #include "can_sched.h"
@@ -8,15 +8,18 @@
 #include <stddef.h>
 #include <string.h>
 
-/* Section 4.2 topology:
- *   Bus 0 (FDCAN1): axis 0 (L-front, 0x001/0x011), axis 3 (R-front, 0x004/0x014)
- *   Bus 1 (FDCAN2): axis 1 (L-rear,  0x002/0x012), axis 4 (R-rear,  0x005/0x015)
- *   Bus 2 (FDCAN3): axis 2 (L-wheel, 0x003/0x013), axis 5 (R-wheel, 0x006/0x016) */
+/* FROM FILE: ctrl_rev4.net J5 RIGHT, J6 LEFT, J7 SPARE.
+ * See can_map/REV4_CAN_MAPPING.md. Axis order and motor IDs stay unchanged. */
 static const uint8_t s_bus_axes[CAN_SCHED_NUM_BUSES][CAN_SCHED_MOTORS_PER_BUS] = {
-    { 0u, 3u },
-    { 1u, 4u },
-    { 2u, 5u }
+    { 3u, 4u, 5u },
+    { 0u, 1u, 2u },
+    { CAN_SCHED_UNUSED_AXIS, CAN_SCHED_UNUSED_AXIS, CAN_SCHED_UNUSED_AXIS }
 };
+
+uint8_t can_sched_axis_count_for_bus(uint8_t bus_idx)
+{
+    return (bus_idx < 2u) ? 3u : 0u;
+}
 
 static uint8_t clamp_u8_u16(uint16_t v)
 {
@@ -81,7 +84,7 @@ static void enqueue_disable_burst(CanSched *sched, uint32_t now_us)
         if (b->bus_off_latched != 0u || b->bus_off_hw != 0u) {
             continue;
         }
-        for (uint8_t slot = 0u; slot < CAN_SCHED_MOTORS_PER_BUS; ++slot) {
+        for (uint8_t slot = 0u; slot < can_sched_axis_count_for_bus(bus_idx); ++slot) {
             const uint8_t axis = s_bus_axes[bus_idx][slot];
             DamiaoAxisConfig cfg;
             if (damiao_get_axis_config(axis, &cfg) != DAMIAO_OK) {
@@ -140,8 +143,7 @@ CanSchedStatus can_sched_axes_for_bus(uint8_t bus_idx,
     if (bus_idx >= CAN_SCHED_NUM_BUSES) {
         return CAN_SCHED_ERR_INVALID_BUS;
     }
-    out_axes[0] = s_bus_axes[bus_idx][0];
-    out_axes[1] = s_bus_axes[bus_idx][1];
+    memcpy(out_axes, s_bus_axes[bus_idx], sizeof(s_bus_axes[bus_idx]));
     return CAN_SCHED_OK;
 }
 
@@ -158,10 +160,10 @@ CanSchedStatus can_sched_enqueue_mit_cmds(CanSched *sched,
 
     sched->disable_repeat_armed = 0u;
 
-    /* Enqueue 2 frames per bus across FDCAN1, FDCAN2, FDCAN3 back-to-back. */
+    /* Enqueue three frames per active leg bus; spare gets no motor traffic. */
     CanSchedStatus result = CAN_SCHED_OK;
     for (uint8_t bus_idx = 0u; bus_idx < CAN_SCHED_NUM_BUSES; ++bus_idx) {
-        for (uint8_t slot = 0u; slot < CAN_SCHED_MOTORS_PER_BUS; ++slot) {
+        for (uint8_t slot = 0u; slot < can_sched_axis_count_for_bus(bus_idx); ++slot) {
             const uint8_t axis = s_bus_axes[bus_idx][slot];
             DamiaoAxisConfig cfg;
             if (damiao_get_axis_config(axis, &cfg) != DAMIAO_OK) {
@@ -214,7 +216,7 @@ CanSchedStatus can_sched_enqueue_enable_all(CanSched *sched, uint32_t now_us)
 
     CanSchedStatus result = CAN_SCHED_OK;
     for (uint8_t bus_idx = 0u; bus_idx < CAN_SCHED_NUM_BUSES; ++bus_idx) {
-        for (uint8_t slot = 0u; slot < CAN_SCHED_MOTORS_PER_BUS; ++slot) {
+        for (uint8_t slot = 0u; slot < can_sched_axis_count_for_bus(bus_idx); ++slot) {
             const uint8_t axis = s_bus_axes[bus_idx][slot];
             DamiaoAxisConfig cfg;
             if (damiao_get_axis_config(axis, &cfg) != DAMIAO_OK) {
@@ -342,11 +344,11 @@ CanSchedStatus can_sched_rx_frame(CanSched *sched, uint8_t bus_idx,
         return CAN_SCHED_ERR_REJECTED_FRAME;
     }
 
-    /* Strict per-bus RX filter: only accept the 2 expected reply IDs for this bus. */
+    /* Strict per-bus RX filter: accept only this leg's three reply IDs. */
     uint8_t matched_axis = CAN_SCHED_NUM_AXES;
     DamiaoAxisConfig matched_cfg;
     memset(&matched_cfg, 0, sizeof(matched_cfg));
-    for (uint8_t slot = 0u; slot < CAN_SCHED_MOTORS_PER_BUS; ++slot) {
+    for (uint8_t slot = 0u; slot < can_sched_axis_count_for_bus(bus_idx); ++slot) {
         const uint8_t axis = s_bus_axes[bus_idx][slot];
         DamiaoAxisConfig cfg;
         if (damiao_get_axis_config(axis, &cfg) == DAMIAO_OK

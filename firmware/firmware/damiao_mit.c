@@ -93,7 +93,8 @@ DamiaoStatus damiao_get_axis_config(uint8_t axis, DamiaoAxisConfig *out_cfg)
         return DAMIAO_ERR_INVALID_AXIS;
     }
 
-    static const uint8_t AXIS_BUS[DAMIAO_NUM_AXES] = { 1u, 2u, 3u, 1u, 2u, 3u };
+    /* Rev4 J5 = right, J6 = left, J7 = spare (one-based can_bus). */
+    static const uint8_t AXIS_BUS[DAMIAO_NUM_AXES] = { 2u, 2u, 2u, 1u, 1u, 1u };
     static const uint16_t AXIS_CMD_ID[DAMIAO_NUM_AXES] = {
         0x001u, 0x002u, 0x003u, 0x004u, 0x005u, 0x006u
     };
