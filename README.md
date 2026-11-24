@@ -8,6 +8,11 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
+## New in batch 4
+
+- [Step crossing versus friction and speed](docs/studies/step-crossing-friction-speed.md), [five-bar branch check](docs/studies/five-bar-branch-check.md), and [simulation timestep sensitivity](docs/studies/simulation-timestep-sensitivity.md).
+- [30 N push angle definition check](docs/studies/push-angle-definition-check.md) and [traction current sensing design](docs/studies/traction-current-sensing-design.md).
+
 ## New in batch 3
 
 - [Sensor noise and Allan variance](docs/studies/imu-noise-and-allan-variance.md) and the [actuator model and identification plan](docs/studies/actuator-model-and-identification.md).

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="900" height="520" fill="white"/><text x="450" y="38" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Pitch peak converges at the recommended timestep</text>
+<line x1="100" y1="75" x2="100" y2="320" stroke="#222"/><line x1="100" y1="320" x2="850" y2="320" stroke="#222"/>
+<g font-family="Arial" font-size="14" fill="#222"><text x="90" y="325" text-anchor="end">0</text><text x="90" y="245" text-anchor="end">1</text><text x="90" y="165" text-anchor="end">2</text><text x="90" y="85" text-anchor="end">3</text><text x="220" y="350" text-anchor="middle">1</text><text x="400" y="350" text-anchor="middle">0.5</text><text x="580" y="350" text-anchor="middle">0.25</text><text x="760" y="350" text-anchor="middle">0.125</text>
+<polyline points="220,214 400,211 580,92 760,92" fill="none" stroke="#1769aa" stroke-width="4"/><circle cx="220" cy="214" r="6" fill="#1769aa"/><circle cx="400" cy="211" r="6" fill="#1769aa"/><circle cx="580" cy="92" r="6" fill="#1769aa"/><circle cx="760" cy="92" r="6" fill="#1769aa"/><text x="590" y="125">Nominal peak pitch</text></g>
+<text x="475" y="490" text-anchor="middle" font-family="Arial" font-size="17">Physics timestep (ms)</text><text x="25" y="210" transform="rotate(-90 25 210)" text-anchor="middle" font-family="Arial" font-size="17">Peak absolute pitch (deg)</text>
+</svg>
