@@ -6,7 +6,7 @@ jobs:
     env:
       PYTHONDONTWRITEBYTECODE: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -16,7 +16,7 @@ jobs:
   firmware-host:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Configure Release build
         run: cmake -S firmware -B firmware/build -DCMAKE_BUILD_TYPE=Release
       - name: Build firmware and host tests
@@ -27,7 +27,7 @@ jobs:
   firmware-arm-compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install ARM bare-metal compiler
         run: |
           sudo apt-get update
@@ -64,7 +64,7 @@ jobs:
   cppcheck-report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install cppcheck
         run: |
           sudo apt-get update
