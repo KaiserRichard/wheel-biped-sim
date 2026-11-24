@@ -8,6 +8,11 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
+## New in batch 6
+
+- [Study pages](docs/studies/): corrected log units, push-gap controller comparisons, step-climbing and contact sensitivity, plus [published-firmware Monte Carlo results](docs/studies/monte-carlo-published-firmware.md). Results are simulation evidence with their tested assumptions and limits.
+- [Firmware-in-the-loop log demo](demo/fil/nominal.jsonl): sample telemetry fixtures store pitch in radians; the [comparison overlay](demo/overlay.png) displays pitch in degrees. The runner and fixture checks are in `demo/fil/` and `tools/log/tests/`.
+
 ## New in batch 5
 
 - [Firmware hardware layer for the STM32H723 control board](firmware/README.md#stm32h723-hardware-layer): wired-stop gate, CAN bus mapping for CTRL rev4, watchdog, radio and USB adapters, with host tests. Checked in host tests and simulation only; it has not run on a board ([known issues](docs/known_issues.md)).

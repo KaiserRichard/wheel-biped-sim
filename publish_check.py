@@ -119,6 +119,12 @@ PNG_ALLOWLIST = {
     'media/figures/evidence/s14-sensitivity-radio-radio-policies.png': 'e29a40e5b1126065a30e84f5f4620d7c61e702e1a8463f609d0ec74586c16e16',
     'media/figures/evidence/s14-sensitivity-radio-radio-trace.png': '3495a1df85a79bb9671644fa7d689de3a952488a85430e98a70eecf4a50d699a',
     'media/figures/evidence/s14-sensitivity-radio-sensitivity-tornado.png': '0a556e6b818dd38d3aafcb01a762b0bbae2a40901b5bd733dd3e001bad857573',
+    'docs/studies/figures/log-overlay.png': '4bde18346fe6b80c0eb482b1087720c8b1a78142e79d3d863fc6efedd50670cb',
+    'docs/studies/figures/push3-comparison.png': '60f2dbfd255a11576c380168c2ec42c5c7f155d4162ac4b7c583fcb5a6c55564',
+    'docs/studies/figures/push3b-pareto.png': 'b5db8990f07e802bf5cc8c9829d81878845c24649daa21fde4a1ec4fee7721b4',
+    'docs/studies/figures/contact-sensitivity.png': '28e3fb7d63e1d9eda67b780ff02a9196bc458af127f16d785e6293778dda7c2c',
+    'docs/studies/figures/monte-carlo-published-firmware.png': 'f98bec9e8dada1910ece2d29a64ca39dd9c8aa006f74186fac216f4224791ab8',
+    'demo/overlay.png': '4bde18346fe6b80c0eb482b1087720c8b1a78142e79d3d863fc6efedd50670cb',
     'media/hardware/motor-power-board-perspective.png': '78ca05c1a80f05e9429b6497bca2bc988a6cb45aff40ecc27c79ec1ca2a4aa5b',
     'media/hardware/motor-power-board-top.png': '703d5a0b8c8466b09cb09c9dd2a5899db1ef6d752c989a0bc2d96f2cf9113bc4',
 }
