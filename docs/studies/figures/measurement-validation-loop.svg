@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="220" viewBox="0 0 960 220">
+<rect width="960" height="220" fill="white"/><text x="24" y="34" font-family="sans-serif" font-size="24" font-weight="bold">Sim-to-real evidence loop</text>
+<g font-family="sans-serif" text-anchor="middle"><g fill="#eef7ee" stroke="#345"><rect x="25" y="82" width="190" height="82" rx="8"/><rect x="265" y="82" width="190" height="82" rx="8"/><rect x="505" y="82" width="190" height="82" rx="8"/><rect x="745" y="82" width="190" height="82" rx="8"/></g>
+<text x="120" y="113" font-size="18">Assumption</text><text x="120" y="140" font-size="16">name + uncertainty</text><text x="360" y="113" font-size="18">Measurement</text><text x="360" y="140" font-size="16">instrument + raw log</text><text x="600" y="113" font-size="18">Acceptance test</text><text x="600" y="140" font-size="16">predeclared criterion</text><text x="840" y="113" font-size="18">Model update</text><text x="840" y="140" font-size="16">hold-out validation</text></g>
+<g stroke="#333" stroke-width="3" fill="none"><path d="M215 123h42m-10-8 10 8-10 8M455 123h42m-10-8 10 8-10 8M695 123h42m-10-8 10 8-10 8"/></g>
+</svg>

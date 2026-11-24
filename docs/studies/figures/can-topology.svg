@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280">
+<rect width="960" height="280" fill="white"/><text x="24" y="34" font-family="sans-serif" font-size="24" font-weight="bold">Proposed three-bus motor topology</text>
+<g font-family="sans-serif" text-anchor="middle" stroke="#345"><rect x="360" y="68" width="240" height="56" rx="8" fill="#eee"/><text x="480" y="103" stroke="none" font-size="20">Controller</text>
+<rect x="55" y="180" width="240" height="70" rx="8" fill="#eaf2ff"/><rect x="360" y="180" width="240" height="70" rx="8" fill="#eaf2ff"/><rect x="665" y="180" width="240" height="70" rx="8" fill="#eaf2ff"/>
+<text x="175" y="207" stroke="none" font-size="17">FDCAN1</text><text x="175" y="233" stroke="none" font-size="15">L/R front hips</text><text x="480" y="207" stroke="none" font-size="17">FDCAN2</text><text x="480" y="233" stroke="none" font-size="15">L/R rear hips</text><text x="785" y="207" stroke="none" font-size="17">FDCAN3</text><text x="785" y="233" stroke="none" font-size="15">L/R wheels</text></g>
+<g stroke="#333" stroke-width="3"><path d="M420 124L205 178M480 124v54M540 124l215 54"/></g>
+</svg>

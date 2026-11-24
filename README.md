@@ -8,6 +8,14 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
+## New in batch 3
+
+- [Sensor noise and Allan variance](docs/studies/imu-noise-and-allan-variance.md) and the [actuator model and identification plan](docs/studies/actuator-model-and-identification.md).
+- [AUX buck averaged stability](docs/studies/aux-buck-averaged-stability.md) and [current sensing, ADC settling, and decimation](docs/studies/current-sense-and-decimation.md).
+- [Radio link budget](docs/studies/elrs-link-budget.md) and the [sim-to-real checklist](docs/studies/sim-to-real-checklist.md).
+- [Motor IDs and commissioning](tools/can/MOTOR_ID_AND_COMMISSIONING.md), [firmware-in-the-loop Monte Carlo](docs/studies/firmware-in-loop-monte-carlo.md), and [published scenario benchmark](docs/studies/published-scenario-benchmark.md).
+- [Known issues](docs/known_issues.md).
+
 ## Highlights
 
 - **Balances, drives, turns, jumps and clears an 8 cm step** in MuJoCo with the CAD robot, at its CAD mass and at a heavier assumed 8.5 kg ([videos](#videos)).
