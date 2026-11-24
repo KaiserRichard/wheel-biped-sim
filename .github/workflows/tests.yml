@@ -12,3 +12,68 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install -e ".[publication]" pytest
       - run: pytest -q -p no:cacheprovider
+
+  firmware-host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Release build
+        run: cmake -S firmware -B firmware/build -DCMAKE_BUILD_TYPE=Release
+      - name: Build firmware and host tests
+        run: cmake --build firmware/build --parallel
+      - name: Run host tests
+        run: ctest --test-dir firmware/build --output-on-failure
+
+  firmware-arm-compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ARM bare-metal compiler
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes gcc-arm-none-eabi
+      - name: Compile portable firmware sources for Cortex-M7
+        working-directory: firmware
+        run: |
+          mkdir -p "${RUNNER_TEMP}/firmware-arm-objects"
+          sources=(
+            firmware/crc32c.c
+            firmware/cobs.c
+            firmware/usb_link.c
+            firmware/damiao_mit.c
+            firmware/safety_fsm.c
+            firmware/s11_packet_policy.c
+            firmware/log_packer.c
+            firmware/can_sched.c
+            firmware/control/pid.c
+            firmware/control/VMC_calc.c
+            firmware/control/s10_estimator.c
+            firmware/control/h5_balance.c
+            firmware/control/balance_ctrl.c
+          )
+          for source in "${sources[@]}"; do
+            object="${RUNNER_TEMP}/firmware-arm-objects/$(echo "${source}" | tr '/.' '__').o"
+            arm-none-eabi-gcc \
+              -std=c11 \
+              -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard \
+              -Os -Wall -Wextra -Werror -c \
+              -Ifirmware \
+              "${source}" -o "${object}"
+          done
+
+  cppcheck-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cppcheck
+      - name: Run cppcheck
+        run: cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=0 --template=gcc firmware/firmware 2> cppcheck-report.txt
+      - name: Upload cppcheck report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck-report
+          path: cppcheck-report.txt
+          if-no-files-found: error
