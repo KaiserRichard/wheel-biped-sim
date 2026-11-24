@@ -116,13 +116,19 @@ Two learning boards for the robot, designed in KiCad 9 for a 6S battery (18.0–
 
 ```mermaid
 flowchart LR
-  BAT[6S battery<br>18-25.2 V] --> PWR[Power and monitor board]
-  BAT --> CTRL[STM32H723 control board]
+  BAT[6S battery<br>18-25.2 V] --> FUSE[Main fuse]
+  FUSE ==>|motor branch| MPB[Motor power board<br>contactors, precharge,<br>brake chopper]
+  MPB ==>|6S motor bus| MOT[DAMIAO joint and wheel motors<br>each with its own driver]
+  FUSE -->|protected logic branch| PWR[Power and monitor board<br>eFuse, 5 V buck]
   PWR -->|5 V| PI[Raspberry Pi 5<br>+ depth camera]
-  PI <-->|USB| CTRL
-  CTRL <-->|CAN x3| MOT[DAMIAO joint<br>and wheel motors]
-  IMU[IMU sensor] -->|SPI| CTRL
+  PWR -->|6S logic feed, low current| CTRL[STM32H723 control board<br>own 3.3 V regulator]
+  PI <-.->|USB| CTRL
+  IMU[IMU sensor] -.->|SPI| CTRL
+  CTRL <-.->|CAN x3, commands only| MOT
+  CTRL -.->|contactor enable, stop loop| MPB
 ```
+
+*Thick arrows: motor power. Thin arrows: logic power. Dotted arrows: signals. The control board never carries motor current.*
 
 ## Results and limits
 
