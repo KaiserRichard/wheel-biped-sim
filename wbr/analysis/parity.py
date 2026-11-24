@@ -35,7 +35,7 @@ def compare():
             "columns": len(keys),
             "samples": len(actual),
         }
-        if not np.allclose(actual, baseline, rtol=1e-8, atol=1e-7)  # cross-platform BLAS/numpy rounding is ~1e-9; any modelling change is far larger:
+        if not np.allclose(actual, baseline, rtol=1e-8, atol=1e-7):  # cross-platform BLAS/numpy rounding is ~1e-9; any modelling change is far larger
             raise AssertionError(f"{name}: trace mismatch, max abs error {results[name]['max_abs_error']:.6g}")
         with (TRACES / f"{name}_cad_reference.csv").open(newline="") as f:
             reader = csv.reader(line for line in f if not line.startswith("#"))
