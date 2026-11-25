@@ -9,6 +9,23 @@ import pytest
 from publish_check import PERCEPTION_IMAGE_ALLOWLIST, PNG_ALLOWLIST, ROOT, scan
 
 
+def test_frozen_encoder_corpus_is_pinned(tmp_path):
+    from publish_check import FIRMWARE_CORPUS
+
+    target = tmp_path / FIRMWARE_CORPUS
+    target.parent.mkdir(parents=True)
+    shutil.copyfile(ROOT / FIRMWARE_CORPUS, target)
+    assert scan(tmp_path) == []
+    with target.open("r+b") as stream:
+        stream.seek(-1, 2)
+        last = stream.read(1)
+        stream.seek(-1, 2)
+        stream.write(bytes([last[0] ^ 1]))
+    assert any("changed firmware corpus" in item for item in scan(tmp_path))
+    target.rename(target.with_name("other.bin"))
+    assert any("oversize text or opaque data" in item for item in scan(tmp_path))
+
+
 def check_case(tmp_path, name, rejected, accepted, safe_name="doc.md"):
     path = tmp_path / name
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -82,7 +99,7 @@ def test_reviewed_figure_directory(tmp_path):
     assert scan(tmp_path) == []
 
 
-@pytest.mark.parametrize('suffix', ['.STEP', '.stp', '.STL', '.OBJ', '.dae', '.SLX', '.PDF', '.lic', '.npz'])
+@pytest.mark.parametrize('suffix', ['.STEP', '.stp', '.STL', '.wrl', '.OBJ', '.dae', '.SLX', '.PDF', '.lic', '.npz'])
 def test_forbidden_extensions(tmp_path, suffix):
     check_case(tmp_path, 'input' + suffix, 'invented fixture', 'relative input.csv')
 

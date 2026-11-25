@@ -1,0 +1,223 @@
+ref,pin,kicad_name,reviewed_function,comparison,reference_section,manufacturer_source
+U1,1,ADJ,ADJ,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U1,2,OUT,OUT,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U1,3,IN,IN,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U12,1,ADJ,ADJ,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U12,2,OUT,OUT,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U12,3,IN,IN,MATCH,TO-220 NDE front view,https://www.ti.com/lit/ds/symlink/lm317hv-mil.pdf
+U3,1,2OUT,2OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,2,1OUT,1OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,3,V+,V+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,4,1IN−,1IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,5,1IN+,1IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,6,2IN−,2IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,7,2IN+,2IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,8,3IN−,3IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,9,3IN+,3IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,10,4IN−,4IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,11,4IN+,4IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,12,V−,V−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,13,4OUT,4OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U3,14,3OUT,3OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,1,2OUT,2OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,2,1OUT,1OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,3,V+,V+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,4,1IN−,1IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,5,1IN+,1IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,6,2IN−,2IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,7,2IN+,2IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,8,3IN−,3IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,9,3IN+,3IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,10,4IN−,4IN−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,11,4IN+,4IN+,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,12,V−,V−,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,13,4OUT,4OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U13,14,3OUT,3OUT,MATCH,Section 5 PW pin table,https://www.ti.com/lit/ds/symlink/tlv1704.pdf
+U5,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,2,1B,1B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,3,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,4,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,5,2B,2B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,6,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,8,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,9,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,10,3B,3B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,11,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,12,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,13,4B,4B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U5,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,2,1B,1B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,3,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,4,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,5,2B,2B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,6,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,8,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,9,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,10,3B,3B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,11,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,12,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,13,4B,4B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U6,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,2,1B,1B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,3,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,4,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,5,2B,2B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,6,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,8,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,9,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,10,3B,3B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,11,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,12,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,13,4B,4B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U7,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs08.pdf
+U8,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,2,1B,1B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,3,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,4,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,5,2B,2B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,6,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,8,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,9,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,10,3B,3B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,11,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,12,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,13,4B,4B,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U8,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hcs32.pdf
+U9,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,2,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,3,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,4,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,5,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,6,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,8,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,9,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,10,5Y,5Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,11,5A,5A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,12,6Y,6Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,13,6A,6A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U9,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,1,1A,1A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,2,1Y,1Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,3,2A,2A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,4,2Y,2Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,5,3A,3A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,6,3Y,3Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,7,GND,GND,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,8,4Y,4Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,9,4A,4A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,10,5Y,5Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,11,5A,5A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,12,6Y,6Y,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,13,6A,6A,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U11,14,VCC,VCC,MATCH,D package top view,https://www.ti.com/lit/ds/symlink/sn74hct14.pdf
+U10,1,1CLR#,1CLR#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,2,1D,1D,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,3,1CLK,1CLK,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,4,1PRE#,1PRE#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,5,1Q,1Q,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,6,1Q#,1Q#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,7,GND,GND,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,8,2Q#,2Q#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,9,2Q,2Q,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,10,2PRE#,2PRE#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,11,2CLK,2CLK,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,12,2D,2D,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,13,2CLR#,2CLR#,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U10,14,VCC,VCC,MATCH,D package top view; # denotes active low,https://www.ti.com/lit/ds/symlink/sn74hc74.pdf
+U14,1,VDD,VDD,MATCH,Section 7 DBV top view,https://www.ti.com/lit/ds/symlink/ucc27517.pdf
+U14,2,GND,GND,MATCH,Section 7 DBV top view,https://www.ti.com/lit/ds/symlink/ucc27517.pdf
+U14,3,IN+,IN+,MATCH,Section 7 DBV top view,https://www.ti.com/lit/ds/symlink/ucc27517.pdf
+U14,4,IN−,IN−,MATCH,Section 7 DBV top view,https://www.ti.com/lit/ds/symlink/ucc27517.pdf
+U14,5,OUT,OUT,MATCH,Section 7 DBV top view,https://www.ti.com/lit/ds/symlink/ucc27517.pdf
+Q1,1,G,G,MATCH,Page 1; tab is D,https://www.infineon.com/assets/row/public/documents/24/49/infineon-ipp023n10n5-ds-en.pdf
+Q1,2,D,D,MATCH,Page 1; tab is D,https://www.infineon.com/assets/row/public/documents/24/49/infineon-ipp023n10n5-ds-en.pdf
+Q1,3,S,S,MATCH,Page 1; tab is D,https://www.infineon.com/assets/row/public/documents/24/49/infineon-ipp023n10n5-ds-en.pdf
+Q6,1,G,G,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q6,2,D,D,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q6,3,S,S,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q7,1,G,G,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q7,2,D,D,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q7,3,S,S,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q8,1,G,G,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q8,2,D,D,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+Q8,3,S,S,MATCH,TO-220 datasheet pin diagram; tab is D,https://www.infineon.com/part/IRL540N
+K1,1,Main_in,Main in,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,2,Main_out,Main out,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,A1,Coil_+,Coil +,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,A2,Coil_-,Coil -,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,11,EDM_COM,EDM COM,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,12,EDM_NC,EDM NC,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,14,EDM_NO,EDM NO,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,21,Status_COM,Status COM,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,22,Status_NC,Status NC,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K1,24,Status_NO,Status NO,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,1,Main_in,Main in,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,2,Main_out,Main out,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,A1,Coil_+,Coil +,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,A2,Coil_-,Coil -,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,11,EDM_COM,EDM COM,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,12,EDM_NC,EDM NC,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,14,EDM_NO,EDM NO,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,21,Status_COM,Status COM,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,22,Status_NC,Status NC,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K2,24,Status_NO,Status NO,MATCH,Page 8 C310S 24I-V2; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,1,Main_in,Main in,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,2,Main_out,Main out,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,A1,Coil_+,Coil +,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,A2,Coil_-,Coil -,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,11,EDM_COM,EDM COM,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,12,EDM_NC,EDM NC,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+K3,14,EDM_NO,EDM NO,MATCH,Page 8 C310S 24I-V1; circuit roles named on symbol,https://2024.schaltbau.com/media/c310_de.pdf
+SR1,A1,24_V,24 V,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,A2,0_V,0 V,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,S11,Test_1,Test 1,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,S12,Input_A,Input A,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,S21,Test_2,Test 2,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,S22,Input_B,Input B,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,S34,Reset,Reset,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,13,NO_1_in,NO 1 in,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,14,NO_1_out,NO 1 out,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,23,NO_2_in,NO 2 in,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,24,NO_2_out,NO 2 out,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,33,NO_3_in,NO 3 in,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,34,NO_3_out,NO 3 out,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,41,NC_in,NC in,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,42,NC_out,NC out,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+SR1,Y32,Status,Status,MATCH,Pages 9 and 16; terminal functions named on symbol,https://www.pilz.com/download/open/PNOZ_s4_Operat_Man_21396-EN-17.pdf
+U4,1,TRIG,TRIG,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U4,2,GND,GND,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U4,3,SET,SET,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U4,4,DIV,DIV,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U4,5,V+,V+,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U4,6,OUT,OUT,MATCH,Pin configuration and pin functions,https://www.analog.com/media/en/technical-documentation/data-sheets/ltc6993-6993-1-6993-2-6993-3-6993-4.pdf
+U17,1,A1,A1,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,2,A0,A0,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,3,~{Alert},Alert,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,4,SDA,SDA,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,5,SCL,SCL,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,6,VS,VS,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,7,GND,GND,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,8,Vbus,Vbus,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,9,Vin-,Vin-,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+U17,10,Vin+,Vin+,MATCH,Section 5 DGS pin table; VBUs and IN labels normalized,https://www.ti.com/lit/ds/symlink/ina228.pdf
+RS1,1,I+_stud,I+ stud,MAPPED,Page 2; schematic numbering; 60 mm studs and 17.65 mm nominal sense pitch. Assembly fit pending,https://www.vishay.com/docs/30355/wsbs8518-35.pdf
+RS1,2,I−_stud,I− stud,MAPPED,Page 2; schematic numbering; 60 mm studs and 17.65 mm nominal sense pitch. Assembly fit pending,https://www.vishay.com/docs/30355/wsbs8518-35.pdf
+RS1,3,S+,S+,MAPPED,Page 2; schematic numbering; 60 mm studs and 17.65 mm nominal sense pitch. Assembly fit pending,https://www.vishay.com/docs/30355/wsbs8518-35.pdf
+RS1,4,S−,S−,MAPPED,Page 2; schematic numbering; 60 mm studs and 17.65 mm nominal sense pitch. Assembly fit pending,https://www.vishay.com/docs/30355/wsbs8518-35.pdf
+BT1,all,,,UNVERIFIED,Pack terminals logical,
+X1,all,,,UNVERIFIED,AUX harness endpoint,
+X2,all,,,UNVERIFIED,Hip supply endpoint,
+X3,all,,,UNVERIFIED,Hip supply endpoint,
+X4,all,,,UNVERIFIED,Hip supply endpoint,
+X5,all,,,UNVERIFIED,Hip supply endpoint,
+X6,all,,,UNVERIFIED,Wheel supply endpoint,
+X7,all,,,UNVERIFIED,Wheel supply endpoint,
+RX1,all,,,UNVERIFIED,Two supervised dry contacts; receiver model and connector TBD,
+PS1,1–4,"Carrier VIN+, VIN−, OUT+, OUT−",Carrier terminals; module uses vendor application pin map,FUNCTIONAL,"PYH200 carrier application circuit and mechanical pinout, p. 4",https://product.tdk.com/system/files/dam/doc/product/power/switching-power/dc-dc-converter/catalog/pyh200_e.pdf

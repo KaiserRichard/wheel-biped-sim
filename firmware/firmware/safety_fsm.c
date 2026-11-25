@@ -7,6 +7,7 @@
 static uint8_t is_active_state(SafetyState s)
 {
     return (s == SAFETY_STATE_ARMED
+         || s == SAFETY_STATE_STEP_ASSIST
          || s == SAFETY_STATE_BALANCING
          || s == SAFETY_STATE_CONTROLLED_STOP
          || s == SAFETY_STATE_REST) ? 1u : 0u;
@@ -15,6 +16,7 @@ static uint8_t is_active_state(SafetyState s)
 static uint8_t is_torque_state(SafetyState s)
 {
     return (s == SAFETY_STATE_BALANCING
+         || s == SAFETY_STATE_STEP_ASSIST
          || s == SAFETY_STATE_CONTROLLED_STOP
          || s == SAFETY_STATE_REST) ? 1u : 0u;
 }
@@ -35,9 +37,14 @@ static uint8_t s11_mode_is_unarmed(enum S11Mode m)
     return (m == S11_ARMING || m == S11_DISARMED) ? 1u : 0u;
 }
 
+static uint8_t s11_is_degraded(const SafetyInputs *in)
+{
+    return (in->s11_degraded != 0u || in->s11_mode == S11_DEGRADED) ? 1u : 0u;
+}
+
 static uint8_t effective_s11_limited(const SafetyInputs *in)
 {
-    if (in->s11_limited != 0u || in->s11_mode == S11_LIMIT) {
+    if (in->s11_limited != 0u || in->s11_mode == S11_LIMIT || s11_is_degraded(in) != 0u) {
         return 1u;
     }
     if (in->s11_frame_bound != 0u && in->s11_authority < 1.0f) {
@@ -90,6 +97,7 @@ static void reset_timers(SafetyFsm *fsm)
     fsm->brake_start_v_m_s = 0.0f;
     fsm->brake_start_yaw_rad_s = 0.0f;
     fsm->host_lost_latched = 0u;
+    fsm->stop_timeout_latched = 0u;
 }
 
 static void enter_fault(SafetyFsm *fsm, SafetyReason reason)
@@ -137,7 +145,9 @@ void safety_fsm_bind_s11_frame(SafetyInputs *in, const S11PacketFrame *s11_frame
                         ? (float)s11_frame->authority : 0.0f;
     in->s11_fault       = s11_mode_is_any_fault(s11_frame->mode);
     in->s11_limited     = (s11_frame->mode == S11_LIMIT
+                           || s11_frame->mode == S11_DEGRADED
                            || (s11_frame->valid != 0 && s11_frame->authority < 1.0)) ? 1u : 0u;
+    in->s11_degraded    = (s11_frame->mode == S11_DEGRADED) ? 1u : 0u;
     if (s11_frame->mode == S11_DRIVE_FAULT) {
         in->drives_healthy_6 = 0u;
     }
@@ -264,7 +274,10 @@ static void populate_output(const SafetyFsm *fsm, const SafetyInputs *in,
     out->host_lost = fsm->host_lost_latched;
     out->host_revoke = (fsm->state == SAFETY_STATE_CONTROLLED_STOP
                      || fsm->state == SAFETY_STATE_REST) ? 1u : 0u;
-    out->rest_confirmed = (fsm->state == SAFETY_STATE_REST) ? 1u : 0u;
+    /* FW6FIX D2: a timed-out stop sits in REST but is not a confirmed rest. */
+    out->stop_timeout_alarm = fsm->stop_timeout_latched;
+    out->rest_confirmed = (fsm->state == SAFETY_STATE_REST
+                           && fsm->stop_timeout_latched == 0u) ? 1u : 0u;
     out->v_ref_m_s = (out->torque_enable != 0u) ? fsm->v_ref_m_s : 0.0f;
     out->yaw_ref_rad_s = (out->torque_enable != 0u) ? fsm->yaw_ref_rad_s : 0.0f;
     out->regen_scale = compute_regen_scale(&fsm->config, in->v_bus_v);
@@ -284,6 +297,7 @@ static void populate_output(const SafetyFsm *fsm, const SafetyInputs *in,
          && fsm->brake_elapsed_ms < fsm->config.brake_duration_ms) ? 1u : 0u;
 
     out->inhibit_trim = (fsm->state == SAFETY_STATE_ARMED
+                      || fsm->state == SAFETY_STATE_STEP_ASSIST
                       || active_brake_ramp != 0u
                       || s11_lim != 0u
                       || s11_unarmed != 0u
@@ -315,6 +329,8 @@ SafetyConfig safety_default_config(void)
     c.rest_pitch_max_deg        = 5.0f;
     c.rest_vel_max_m_s          = 0.02f;
     c.rest_pitch_rate_max_deg_s = 2.0f;
+    c.degraded_pitch_fault_deg  = 15.0f;
+    c.stop_timeout_ms           = 20000u;
     return c;
 }
 
@@ -434,6 +450,8 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
             enter_fault(fsm, SAFETY_REASON_HARD_UV);
         } else if (in->radio_estop_sw != 0u) {
             enter_fault(fsm, SAFETY_REASON_RADIO_ESTOP_SW);
+        } else if (s11_is_degraded(in) != 0u) {
+            enter_fault(fsm, SAFETY_REASON_S11_FAULT);
         } else {
             const uint8_t contactors_ready =
                 (in->k2_closed != 0u
@@ -459,7 +477,9 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
         break;
 
     case SAFETY_STATE_ARMED:
-        if (in->radio_arm_sw == 0u) {
+        if (s11_is_degraded(in) != 0u) {
+            enter_fault(fsm, SAFETY_REASON_S11_FAULT);
+        } else if (in->radio_arm_sw == 0u) {
             reset_timers(fsm);
             fsm->state = SAFETY_STATE_DISARMED;
             fsm->reason = SAFETY_REASON_CLEAN_DISARM;
@@ -479,6 +499,7 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
         break;
 
     case SAFETY_STATE_BALANCING:
+    case SAFETY_STATE_STEP_ASSIST:
         if (radio_lost == 0u && in->radio_arm_sw == 0u) {
             /* Qualified arm switch LOW while actively balancing -> latched FAULT (immediate disable). */
             enter_fault(fsm, SAFETY_REASON_ARM_SW_DROPPED);
@@ -489,16 +510,30 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
                 (radio_lost != 0u
                  && cfg->radio_loss_policy == RADIO_LOSS_BRAKE_BALANCE) ? 1u : 0u;
 
-            if (radio_brake_now != 0u) {
+            if (s11_is_degraded(in) != 0u) {
+                /* FW6: frozen encoder is a degraded-sensor stop, not a torque cut. */
+                enter_controlled_stop(fsm, SAFETY_REASON_S11_DEGRADED);
+            } else if (radio_brake_now != 0u) {
                 enter_controlled_stop(fsm, SAFETY_REASON_RADIO_LOSS_BRAKE);
             } else if (host_lost_now != 0u) {
                 enter_controlled_stop(fsm, SAFETY_REASON_HOST_LOSS);
             } else if (in->voluntary_stop_req != 0u) {
                 enter_controlled_stop(fsm, SAFETY_REASON_VOLUNTARY_STOP);
+            } else if (fsm->state == SAFETY_STATE_STEP_ASSIST
+                       && in->step_assist_failed != 0u) {
+                /* FW6FIX D3: own reason, not the operator stop. */
+                enter_controlled_stop(fsm, SAFETY_REASON_STEP_ASSIST_ABORT);
             } else {
                 const float auth = effective_s11_authority(in);
                 fsm->v_ref_m_s = auth * in->v_target_m_s;
                 fsm->yaw_ref_rad_s = auth * in->yaw_target_rad_s;
+                if (fsm->state == SAFETY_STATE_STEP_ASSIST) {
+                    if (in->step_assist_done != 0u) {
+                        fsm->state = SAFETY_STATE_BALANCING;
+                    }
+                } else if (in->step_assist_req != 0u) {
+                    fsm->state = SAFETY_STATE_STEP_ASSIST;
+                }
             }
         }
         break;
@@ -506,6 +541,26 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
     case SAFETY_STATE_CONTROLLED_STOP:
         if (radio_lost == 0u && in->radio_arm_sw == 0u) {
             enter_fault(fsm, SAFETY_REASON_ARM_SW_DROPPED);
+        } else if (s11_is_degraded(in) != 0u
+                   && fabsf(in->pitch_deg) > cfg->degraded_pitch_fault_deg) {
+            /* Degraded stop is not holding the robot: escalate to torque-off. */
+            enter_fault(fsm, SAFETY_REASON_S11_FAULT);
+        } else if (cfg->stop_timeout_ms > 0u
+                   && fsm->brake_elapsed_ms + in->dt_ms >= cfg->stop_timeout_ms) {
+            /* FW6FIX D2: bounded stop. After the brake ramp, CONTROLLED_STOP and REST
+             * command the same thing (torque on, v_ref 0, S9 position hold, host
+             * revoked), so moving to REST changes no torque. FAULT would cut torque
+             * on a robot that is upright but not settled (e.g. pitch 7.5 deg with a
+             * wheel caught in a gap), and a torque cut on a balancing robot falls
+             * (FW6: 96/96). REST keeps every torque-off escalation (tilt, e-stop,
+             * drive/power faults, degraded pitch > 15 deg) and allows only a clean
+             * disarm or a local operator re-grant. The alarm is latched and REST is
+             * reported as not confirmed. */
+            fsm->v_ref_m_s = 0.0f;
+            fsm->yaw_ref_rad_s = 0.0f;
+            fsm->state = SAFETY_STATE_REST;
+            fsm->reason = SAFETY_REASON_STOP_TIMEOUT;
+            fsm->stop_timeout_latched = 1u;
         } else {
             fsm->brake_elapsed_ms += in->dt_ms;
             if (fsm->brake_elapsed_ms < cfg->brake_duration_ms && cfg->brake_duration_ms > 0u) {
@@ -538,7 +593,10 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
     case SAFETY_STATE_REST:
         fsm->v_ref_m_s = 0.0f;
         fsm->yaw_ref_rad_s = 0.0f;
-        if (radio_lost == 0u && in->radio_arm_sw == 0u) {
+        if (s11_is_degraded(in) != 0u
+            && fabsf(in->pitch_deg) > cfg->degraded_pitch_fault_deg) {
+            enter_fault(fsm, SAFETY_REASON_S11_FAULT);
+        } else if (radio_lost == 0u && in->radio_arm_sw == 0u) {
             /* Clean disarm when radio is fresh and arm switch is LOW at REST. */
             reset_timers(fsm);
             fsm->state = SAFETY_STATE_DISARMED;
@@ -546,12 +604,14 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
             clean_disarm_pulse = 1u;
         } else if (in->local_regrant_req != 0u
                    && s11_mode_is_unarmed(in->s11_mode) == 0u
+                   && s11_is_degraded(in) == 0u  /* frozen axis: disarm + reset only */
                    && radio_lost == 0u
                    && in->host_valid != 0u
                    && in->host_age_ms <= cfg->host_timeout_ms) {
             fsm->state = SAFETY_STATE_BALANCING;
             fsm->reason = SAFETY_REASON_LOCAL_REGRANT;
             fsm->host_lost_latched = 0u;
+            fsm->stop_timeout_latched = 0u;
             fsm->brake_elapsed_ms = 0u;
             fsm->rest_dwell_ms = 0u;
         }

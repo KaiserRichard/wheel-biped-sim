@@ -4,7 +4,7 @@
  * Adapted from DM-jump (User/Algorithm/VMC/VMC_calc.c) with S11 continuous
  * circle-intersection branch fix (S11_packet_tolerance/firmware_copy/src/VMC_calc.c):
  *   Copyright (c) 2024-2026 Trần Nguyên Bình
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   Reference: dmBots/wheel-legged (https://github.com/dmBots/wheel-legged)
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  */

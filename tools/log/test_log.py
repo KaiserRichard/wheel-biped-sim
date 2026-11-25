@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'pi/link'))
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from pi_link.messages import TelemFast
 from pi_link.protocol import encode_frame,StreamingDecoder,UsbLinkStatus
 from convert import convert
@@ -30,7 +30,7 @@ def test_demo_fixtures_use_si_units():
     import json
     import math
 
-    demo = Path(__file__).resolve().parents[4] / 'demo' / 'fil'
+    demo = ROOT / 'demo' / 'fil'
     expected = {
         'time_s', 'fsm_state', 'euler_rad', 'gyro_rad_s', 'v_est_m_s',
         'x_est_m', 'motor_vel_rad_s', 'motor_tor_cmd_nm',

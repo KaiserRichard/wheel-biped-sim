@@ -163,7 +163,10 @@ static void test_invalid_stuck_precedence_and_wrap(void)
         }
         s11_packets_ex(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, a, r, 2.0, seq, &frame);
     }
-    assert(frame.mode == S11_STUCK && frame.valid == 0u);
+    /* FW6: single frozen hip is CONFIRMED by NET evidence -> DEGRADED, frame
+     * valid, hip geometry held with zero rate. */
+    assert(frame.mode == S11_DEGRADED && frame.valid == 1u);
+    assert(frame.degraded_mask == 0x01u && frame.rate[0] == 0.0);
 
     /* 4. Wheel angle wrap and continuous unwrap across +/-12.5 rad (A7) */
     assert(fabs(s11_wrap_angle(12.6, 12.5) - (-12.4)) < 1e-9);

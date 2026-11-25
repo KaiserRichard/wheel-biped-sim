@@ -26,7 +26,9 @@ int main(void)
         for (unsigned i = 0; i < 6u; ++i) ++seq[i];
         s11_packets_ex(&st, ALL_AXES, ALL_AXES, ALL_AXES, age,a,r,2.,seq,&f);
     }
-    check("A4_slow_frozen_angle", f.mode == S11_STUCK, f.mode, S11_STUCK);
+    /* FW6: single frozen hip -> DEGRADED (controlled stop), not a torque cut. */
+    check("A4_slow_frozen_angle", f.mode == S11_DEGRADED && f.valid == 1u
+          && f.degraded_mask == 1u, f.mode, S11_DEGRADED);
 
     S11IsrMailbox mb;
     S11InputSnapshot snap;

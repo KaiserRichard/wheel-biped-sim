@@ -1,5 +1,12 @@
 # Changelog
 
+## 25 November 2026 — batch 7
+
+- [FROM FILE] Integrate FW6FIX curb-only run-up and single frozen-encoder controlled-stop handling, the 20 s stop alarm, dedicated assist-abort reason and vendored contract fixtures. Supplied FIL results remain simulation evidence.
+- [COMPUTED] Correct repository-relative imports and demo fixture lookup in the log regression entry point.
+- [FROM FILE] Add the V3 sim-to-real checklist and CSV with explicit unresolved source provenance.
+- [FROM FILE] Update the motor power board schematic/library design study to rev 2 fix 4, with current ERC and open pre-fabrication gates; retain inherited PCB, BOM, PDF, DRC and renders with their limits documented.
+
 ## 23 November 2026
 
 - Add simulation evidence pages, figures and summary CSVs for [S11](docs/evidence/s11-packet-tolerance.md), [S12](docs/evidence/s12-comms-in-loop.md), [S13](docs/evidence/s13-power-safety.md) and [S14](docs/evidence/s14-sensitivity-radio.md), plus a six-case S11/S12 replay video ([s11-s12-comms.mp4](media/s11-s12-comms.mp4)).

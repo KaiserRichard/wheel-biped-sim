@@ -38,7 +38,8 @@ typedef enum {
     SAFETY_STATE_CONTROLLED_STOP = 4,
     SAFETY_STATE_REST = 5,
     SAFETY_STATE_FAULT = 6,
-    SAFETY_STATE_ESTOP = 7
+    SAFETY_STATE_ESTOP = 7,
+    SAFETY_STATE_STEP_ASSIST = 8
 } SafetyState;
 
 typedef enum {
@@ -72,7 +73,12 @@ typedef enum {
     SAFETY_REASON_RADIO_LOSS_FAULT,
     SAFETY_REASON_RADIO_ESTOP_SW,
     SAFETY_REASON_ARM_SW_DROPPED,
-    SAFETY_REASON_ESTOP_HW
+    SAFETY_REASON_ESTOP_HW,
+    SAFETY_REASON_S11_DEGRADED, /* FW6: single frozen encoder -> controlled stop */
+    SAFETY_REASON_STEP_ASSIST_ABORT, /* FW6FIX D3: run-up abort (no room, stall, timeout,
+                                      * pitch, saturation, legs lost) -> controlled stop */
+    SAFETY_REASON_STOP_TIMEOUT  /* FW6FIX D2: CONTROLLED_STOP did not reach REST within
+                                 * stop_timeout_ms -> REST (torque kept) + host alarm */
 } SafetyReason;
 
 typedef struct {
@@ -97,6 +103,9 @@ typedef struct {
     float    rest_pitch_max_deg;      /* Default 5.0 deg */
     float    rest_vel_max_m_s;        /* Default 0.02 m/s */
     float    rest_pitch_rate_max_deg_s; /* Default 2.0 deg/s */
+    float    degraded_pitch_fault_deg;  /* Default 15.0 deg: S11_DEGRADED stop escalates to FAULT */
+    uint32_t stop_timeout_ms;         /* Default 20000 ms (FW6FIX D2): ~2x the slowest healthy
+                                       * stop-to-REST seen in FIL (draw_001, 0.3 m/s: 10.1 s) */
 } SafetyConfig;
 
 typedef struct {
@@ -124,6 +133,7 @@ typedef struct {
     uint8_t      drive_enable_fail;  /* 1 = drive rejected/failed 0xFC enable */
     uint8_t      s11_fault;          /* 1 = S11 packet guard latched fault */
     uint8_t      s11_limited;        /* 1 = S11 authority < 1.0 (inhibit trim/jump) */
+    uint8_t      s11_degraded;       /* 1 = S11_DEGRADED: one axis frozen, data substituted */
     enum S11Mode s11_mode;           /* Verified S11 mode (default 0 = S11_FRESH) */
     uint8_t      s11_frame_bound;    /* 1 = populated via safety_fsm_bind_s11_frame() */
     float        s11_authority;      /* S11 authority scale when s11_frame_bound == 1 */
@@ -145,6 +155,9 @@ typedef struct {
     float    yaw_target_rad_s;   /* Requested yaw rate target */
     uint8_t  stand_handoff_req;  /* 1 = explicit stand handoff request */
     uint8_t  voluntary_stop_req; /* 1 = non-safety voluntary stop request */
+    uint8_t  step_assist_req;    /* Qualified blocked drive with available legs */
+    uint8_t  step_assist_done;   /* Onboard passage confirmation */
+    uint8_t  step_assist_failed; /* Pitch, saturation, unavailable legs or timeout */
     uint8_t  local_arm_req;      /* 1 = separate local hardware/operator arm */
     uint8_t  local_reset_req;    /* 1 = local manual reset / latch acknowledge */
     uint8_t  hw_reset_ack;       /* 1 = local hardware stop-latch reset confirmed */
@@ -166,6 +179,8 @@ typedef struct {
     uint8_t      mild_sag_setdown; /* 1 = mild loaded sag: keep balance ON, set down */
     uint8_t      rest_confirmed;   /* 1 = REST state confirmed after brake + dwell */
     uint8_t      radio_lost;       /* 1 = ExpressLRS RF timeout active (> radio_timeout_ms) */
+    uint8_t      stop_timeout_alarm; /* 1 = FW6FIX D2: stop timed out, REST not confirmed;
+                                      * host must inspect (cleared by disarm/regrant/fault) */
     float        v_ref_m_s;
     float        yaw_ref_rad_s;
     float        regen_scale;      /* 1.0 normal, tapered to 0.0 above 25.8 V */
@@ -185,6 +200,7 @@ typedef struct {
     float        brake_start_v_m_s;
     float        brake_start_yaw_rad_s;
     uint8_t      host_lost_latched;
+    uint8_t      stop_timeout_latched; /* FW6FIX D2 alarm latch */
 } SafetyFsm;
 
 SafetyConfig safety_default_config(void);

@@ -70,6 +70,19 @@ BalanceCtrlConfig balance_ctrl_default_config(void)
     c.imu_lever_m[2]    = 0.0344707443228917;
     c.use_s10_estimator = 1u;
     c.s10_robust        = 1u;
+    c.enable_step_assist = 1u;
+    c.step_height_m = 0.010f;
+    c.step_backoff_m = 0.12f;
+    c.step_back_m_s = 0.15f;
+    /* FW6: 0.50 m/s (STEP3RC 0.45). At 0.45 the 6.2 kg model stalled at a later
+     * box of the 20-box F3 field; 0.475-0.55 cross all slow cells (FW6 report). */
+    c.step_charge_m_s = 0.50f;
+    c.step_acc_m_s2 = 1.5f;
+    c.step_pass_m = 0.06f;
+    c.step_timeout_ms = 3000u;
+    c.step_refractory_ms = 1000u;
+    c.step_handback_scale = 0.5f;
+    c.step_carry_m = 0.0f;
     return c;
 }
 
@@ -97,6 +110,17 @@ void balance_ctrl_attach_flight_ring(BalanceCtrl *ctrl, LogFlightRing *ring)
     ctrl->flight_ring = ring;
 }
 
+/* FW6: the frozen-encoder IMU transient gate runs on the 1 kHz IMU path; the
+ * 500 Hz S11 tick uses its latest value (STEP3RC B6 item 1). */
+static void balance_ctrl_frozen_gate(BalanceCtrl *ctrl, const double gyro_rad_s[3],
+                                     const double accel_m_s2[3])
+{
+    const double acc_norm = sqrt(accel_m_s2[0] * accel_m_s2[0]
+                                 + accel_m_s2[1] * accel_m_s2[1]
+                                 + accel_m_s2[2] * accel_m_s2[2]);
+    s11_frozen_imu_update(&ctrl->s11, gyro_rad_s[0], gyro_rad_s[1], acc_norm, 1.0);
+}
+
 void balance_ctrl_feed_imu_1khz(BalanceCtrl *ctrl, int32_t tick_ms,
                                 const double gyro_rad_s[3],
                                 const double accel_m_s2[3])
@@ -105,6 +129,7 @@ void balance_ctrl_feed_imu_1khz(BalanceCtrl *ctrl, int32_t tick_ms,
         return;
     }
     s10_imu(&ctrl->s10, tick_ms, gyro_rad_s, accel_m_s2);
+    balance_ctrl_frozen_gate(ctrl, gyro_rad_s, accel_m_s2);
 }
 
 void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTickOutput *out)
@@ -123,6 +148,8 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         s10_imu(&ctrl->s10, in->imu_samples[i].tick_ms,
                 in->imu_samples[i].gyro_rad_s,
                 in->imu_samples[i].accel_m_s2);
+        balance_ctrl_frozen_gate(ctrl, in->imu_samples[i].gyro_rad_s,
+                                 in->imu_samples[i].accel_m_s2);
     }
 
     CanSchedRxSnapshot rx_snap;
@@ -143,6 +170,7 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     } else if (ctrl->safety.state == SAFETY_STATE_PRECHARGE
                || ctrl->safety.state == SAFETY_STATE_ARMED
                || ctrl->safety.state == SAFETY_STATE_BALANCING
+               || ctrl->safety.state == SAFETY_STATE_STEP_ASSIST
                || ctrl->safety.state == SAFETY_STATE_CONTROLLED_STOP
                || ctrl->safety.state == SAFETY_STATE_REST) {
         if (ctrl->s11.arm_state == S11_STATE_DISARMED && ctrl->s11.latched == S11_FRESH) {
@@ -176,8 +204,23 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
 
     const uint8_t s11_fault = s11_mode_is_fault(out->s11_frame.mode);
     const uint8_t s11_limited = (out->s11_frame.mode == S11_LIMIT
+                                 || out->s11_frame.mode == S11_DEGRADED
                                  || (out->s11_frame.valid != 0u && out->s11_frame.authority < 1.0))
                               ? 1u : 0u;
+
+    /* FW6 degraded mode: every consumer (S10 estimator, H5 balance) sees the same
+     * substituted data. A frozen wheel uses its partner's increment and rate. A
+     * frozen hip, by default (frozen_hip_mirror = 1), copies the same-role hip of
+     * the other leg; only if that hip is also frozen does it hold the geometry
+     * captured at confirmation with zero rate. */
+    if (out->s11_frame.valid != 0u && out->s11_frame.degraded_mask != 0u) {
+        for (uint32_t i = 0u; i < 6u; ++i) {
+            if ((out->s11_frame.degraded_mask & (1u << i)) != 0u) {
+                rx_snap.angle[i] = out->s11_frame.angle[i];
+                rx_snap.rate[i] = out->s11_frame.rate[i];
+            }
+        }
+    }
 
     /* =========================================================================
      * STEP 3: Estimator Update (ONLY genuine fresh encoder packets into S10)
@@ -280,14 +323,201 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     s_in.v_target_m_s       = in->v_target_m_s;
     s_in.yaw_target_rad_s   = in->yaw_target_rad_s;
     s_in.stand_handoff_req  = in->stand_handoff_req;
-    s_in.voluntary_stop_req = in->voluntary_stop_req;
+    /* Stop a blocked drive before reference integration causes breakaway slip.
+     * Qualify previous progress to exclude startup/trim capture, then require
+     * 100 ms below 25% of reference speed with > 30 mm signed position deficit.
+     * Restrict to low reference speed so the 0.3/0.5 m/s grid retains crossings.
+     * Reuse the latched S9 brake-to-REST path; no change to radio-loss policy.
+     * Thresholds are development choices, not measured hardware constants. */
+    const float v_ref = ctrl->safety.v_ref_m_s;
+    if (ctrl->cfg.use_s10_estimator != 0u
+        && ctrl->safety.state == SAFETY_STATE_BALANCING
+        && fabsf(v_ref) > 0.05f && fabsf(v_ref) <= 0.15f
+        && est_air == 0u) {
+        if (ctrl->progress_ref_m_s * v_ref <= 0.0f) {
+            ctrl->progress_ref_m_s = 0.0f;
+            ctrl->blocked_drive_ms = 0u;
+        }
+        if (est_v * v_ref >= 0.5f * v_ref * v_ref) {
+            ctrl->progress_ref_m_s = v_ref;
+        }
+        const float signed_error = (v_ref > 0.0f ? 1.0f : -1.0f)
+                                   * (ctrl->h5.x_est_m - ctrl->h5.x_set_m);
+        /* Steady drive lag: the wheel loop has no integrator, so an offset COM is
+         * held by a standing position error. Remember it so rebases keep it. */
+        if (ctrl->blocked_drive_ms == 0u && fabsf(est_v - v_ref) < 0.03f) {
+            ctrl->drive_lag_m += (ctrl->h5.x_set_m - ctrl->h5.x_est_m - ctrl->drive_lag_m)
+                                 * (BALANCE_CTRL_DT_S / 1.0f);
+            ctrl->drive_lag_m = clamp_f32(ctrl->drive_lag_m, -0.03f, 0.03f);
+        }
+        if (ctrl->step_refractory_ms >= BALANCE_CTRL_DT_MS) {
+            ctrl->step_refractory_ms -= BALANCE_CTRL_DT_MS;
+        }
+        if (ctrl->progress_ref_m_s != 0.0f
+            && ctrl->step_refractory_ms == 0u
+            && est_v * v_ref < 0.25f * v_ref * v_ref
+            && signed_error < -0.03f) {
+            if (ctrl->blocked_drive_ms < 100u) {
+                ctrl->blocked_drive_ms += BALANCE_CTRL_DT_MS;
+            }
+        } else {
+            ctrl->blocked_drive_ms = 0u;
+        }
+    } else {
+        ctrl->progress_ref_m_s = 0.0f;
+        ctrl->blocked_drive_ms = 0u;
+    }
+    /* FW6 host declaration (STEP3RC A6 item 3): the run-up is allowed only for a
+     * declared curb whose declared edge height is within the validated band (a
+     * charge into a taller obstacle falls, STEP3RC A5).
+     * FW6FIX D1 (interim): a FIELD declaration is refused. It counts as no
+     * declaration, so a blocked drive at a field makes the F3b controlled stop
+     * before the field. The refusal is reported every tick it is asserted. */
+    const float decl_h = (isfinite(in->step_decl_height_m) && in->step_decl_height_m > 0.0f)
+                       ? in->step_decl_height_m : ctrl->cfg.step_height_m;
+    if (in->step_declaration == (uint8_t)BALANCE_STEP_DECL_FIELD) {
+        out->step_decl_refused = 1u;
+        if (ctrl->step_decl_refused_n < UINT32_MAX) {
+            ctrl->step_decl_refused_n++;
+        }
+    }
+    const uint8_t runup_declared = (in->step_declaration == (uint8_t)BALANCE_STEP_DECL_CURB
+        && decl_h <= BALANCE_STEP_MAX_HEIGHT_M) ? 1u : 0u;
+    /* STEP_ASSIST is a torque-enabled supervisor state. The detector above is
+     * unchanged; only its response differs. No simulated terrain truth is used. */
+    const uint8_t legs_available = (ctrl->cfg.enable_step_assist != 0u
+        && est_valid != 0u && s11_limited == 0u
+        && ctrl->h5.jump_flag == 0u && in->jump_req == 0u
+        && ctrl->h5.left.L0 >= 0.12f && ctrl->h5.right.L0 >= 0.12f
+        && ctrl->h5.left.L0 <= 0.28f && ctrl->h5.right.L0 <= 0.28f
+        && in->v_bus_v >= ctrl->safety.config.mild_sag_v
+        && fabsf(v_ref) > 0.05f && fabsf(v_ref) <= 0.15f
+        && fabsf(in->v_target_m_s) <= 0.15f
+        && runup_declared != 0u) ? 1u : 0u;
+    const SafetyState previous_state = ctrl->safety.state;
+    const uint8_t blocked = ctrl->blocked_drive_ms >= 100u ? 1u : 0u;
+    if (ctrl->step_damping_ms >= BALANCE_CTRL_DT_MS) {
+        ctrl->step_damping_ms -= BALANCE_CTRL_DT_MS;
+    }
+    if (previous_state == SAFETY_STATE_STEP_ASSIST) {
+        /* Back-off-and-charge: wheel-only manoeuvre, legs keep normal height PD.
+         * Phase 4 reverse, 5 settle, 6 charge. Uses only odometry/estimator. */
+        const float dir = ctrl->step_direction;
+        const float rel = dir * (ctrl->h5.x_est_m - ctrl->step_start_x_m);
+        ctrl->step_elapsed_ms += BALANCE_CTRL_DT_MS;
+        ctrl->step_phase_ms += BALANCE_CTRL_DT_MS;
+        ctrl->step_limit_ms = ctrl->step_clipped != 0u
+                           ? ctrl->step_limit_ms + BALANCE_CTRL_DT_MS : 0u;
+        float v_goal = 0.0f;
+        if (ctrl->step_phase == 4u) {
+            v_goal = -ctrl->cfg.step_back_m_s;
+            /* Stop reversing at the configured distance, or if reverse motion
+             * itself stalls (e.g. backing into the previous edge). */
+            if (rel <= -ctrl->cfg.step_backoff_m
+                || (ctrl->step_phase_ms >= 300u && dir * est_v > -0.02f)) {
+                ctrl->step_backed_m = -rel;
+                ctrl->step_phase = 5u;
+                ctrl->step_phase_ms = 0u;
+                /* Too little room to build speed: refuse to charge. */
+                if (ctrl->step_backed_m < 0.6f * ctrl->cfg.step_backoff_m) {
+                    ctrl->step_abort = 1u;
+                }
+            }
+        }
+        if (ctrl->step_phase == 5u) {
+            v_goal = 0.0f;
+            if (ctrl->step_phase_ms >= 200u && fabsf(ctrl->step_v_m_s) < 1e-4f) {
+                ctrl->step_phase = 6u;
+                ctrl->step_phase_ms = 0u;
+            }
+        }
+        if (ctrl->step_phase == 6u && rel > ctrl->cfg.step_pass_m + ctrl->step_carry_eff_m
+            && dir * est_v > 0.05f) {
+            /* Passage: ramp the reference back to the commanded speed in-state so
+             * x_set stays continuous (no rebase, no speed step at hand-back). */
+            ctrl->step_phase = 7u;
+            ctrl->step_phase_ms = 0u;
+        }
+        if (ctrl->step_phase == 7u) {
+            v_goal = dir * v_ref;
+        }
+        if (ctrl->step_phase == 6u) {
+            v_goal = ctrl->cfg.step_charge_m_s;
+            if (dir * est_v >= 0.6f * ctrl->cfg.step_charge_m_s) {
+                ctrl->step_charged = 1u;
+            }
+            /* Charge stalled at an edge (first, or a later one while carrying):
+             * stop before the reference winds up. */
+            /* A single sample below 20% aborts. FW6 tested 60-150 ms persistence:
+             * it let the 6.2 kg model fall on the F3 field (incipient stall). */
+            if (ctrl->step_charged != 0u
+                && dir * est_v < 0.2f * ctrl->cfg.step_charge_m_s) {
+                ctrl->step_abort = 2u;
+            }
+            if (ctrl->step_phase_ms >= 1500u && ctrl->step_charged == 0u) {
+                ctrl->step_abort = 3u;
+            }
+        }
+        /* Hand-back decelerates at half the run-up slew: a hard stop on the
+         * plateau pitches an offset-COM robot back (-12.6 deg on draw_001). */
+        const float dv_max = (ctrl->step_phase == 7u ? ctrl->cfg.step_handback_scale : 1.0f)
+                             * ctrl->cfg.step_acc_m_s2 * BALANCE_CTRL_DT_S;
+        const float v_rel = dir * ctrl->step_v_m_s;
+        const float dv = clamp_f32(v_goal - v_rel, -dv_max, dv_max);
+        ctrl->step_v_m_s = dir * (v_rel + dv);
+        ctrl->step_a_m_s2 = dir * dv / BALANCE_CTRL_DT_S;
+        s_in.step_assist_done = (ctrl->step_phase == 7u
+            && fabsf(ctrl->step_v_m_s - v_ref) < 0.005f) ? 1u : 0u;
+        s_in.step_assist_failed = (fabsf(s_in.pitch_deg) > 15.0f
+            || ctrl->step_abort != 0u
+            || ctrl->step_limit_ms > 100u
+            || ctrl->step_elapsed_ms >= ctrl->step_timeout_eff_ms
+            || legs_available == 0u || v_ref * dir <= 0.0f) ? 1u : 0u;
+    }
+    s_in.step_assist_req = (blocked != 0u && legs_available != 0u
+                           && fabsf(s_in.pitch_deg) <= 15.0f) ? 1u : 0u;
+    s_in.voluntary_stop_req = (in->voluntary_stop_req != 0u
+        || (blocked != 0u && s_in.step_assist_req == 0u)) ? 1u : 0u;
     s_in.local_arm_req      = in->local_arm_req;
     s_in.local_reset_req    = in->local_reset_req;
     s_in.hw_reset_ack       = in->hw_reset_ack;
     s_in.local_regrant_req  = in->local_regrant_req;
 
     safety_fsm_step(&ctrl->safety, &s_in, &out->safety_out);
+    if (ctrl->safety.state == SAFETY_STATE_STEP_ASSIST
+        && previous_state != SAFETY_STATE_STEP_ASSIST) {
+        ctrl->step_elapsed_ms = 0u;
+        ctrl->step_limit_ms = 0u;
+        ctrl->step_clipped = 0u;
+        ctrl->step_phase = 4u;
+        ctrl->step_phase_ms = 0u;
+        ctrl->step_v_m_s = 0.0f;
+        ctrl->step_a_m_s2 = 0.0f;
+        ctrl->step_backed_m = 0.0f;
+        ctrl->step_charged = 0u;
+        ctrl->step_abort = 0u;
+        ctrl->step_start_x_m = ctrl->h5.x_est_m;
+        ctrl->step_direction = v_ref > 0.0f ? 1.0f : -1.0f;
+        /* Curb only (FW6FIX D1): no field carry, nominal manoeuvre timeout. */
+        ctrl->step_carry_eff_m = 0.0f;
+        ctrl->step_timeout_eff_ms = ctrl->cfg.step_timeout_ms;
+        /* Drop the stall deficit but keep the steady drive lag. */
+        ctrl->h5.x_set_m = ctrl->h5.x_est_m + ctrl->drive_lag_m;
+    } else if (previous_state == SAFETY_STATE_STEP_ASSIST
+               && ctrl->safety.state != SAFETY_STATE_STEP_ASSIST) {
+        ctrl->step_phase = 0u;
+        ctrl->blocked_drive_ms = 0u;
+        ctrl->progress_ref_m_s = 0.0f;
+        if (ctrl->safety.state == SAFETY_STATE_BALANCING) {
+            ctrl->step_damping_ms = 150u;
+            ctrl->step_refractory_ms = ctrl->cfg.step_refractory_ms; /* plateau */
+        }
+    }
 
+    /* Frozen-encoder ADVISORY: flag only, inhibit jumps (STEP3RC B5). */
+    if (out->s11_frame.advisory_mask != 0u || out->s11_frame.degraded_mask != 0u) {
+        out->safety_out.inhibit_jump = 1u;
+    }
     /* Ensure CAN ErrorPassive always inhibits jumps per Section 4.3. */
     if (out->can_health.inhibit_jump != 0u) {
         out->safety_out.inhibit_jump = 1u;
@@ -302,7 +532,13 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         active_control = 1u;
 
         ctrl->h5.x_est_m += est_v * BALANCE_CTRL_DT_S;
-        ctrl->h5.x_set_m += out->safety_out.v_ref_m_s * BALANCE_CTRL_DT_S;
+        const uint8_t runup = (ctrl->safety.state == SAFETY_STATE_STEP_ASSIST
+                               && ctrl->step_phase >= 4u) ? 1u : 0u;
+        if (runup != 0u) {
+            ctrl->h5.x_set_m += ctrl->step_v_m_s * BALANCE_CTRL_DT_S;
+        } else if (ctrl->safety.state != SAFETY_STATE_STEP_ASSIST) {
+            ctrl->h5.x_set_m += out->safety_out.v_ref_m_s * BALANCE_CTRL_DT_S;
+        }
         const float pos_lim = ctrl->h5.cfg.stop_position_limit_m;
         const float x_err_clamped = clamp_f32(ctrl->h5.x_est_m - ctrl->h5.x_set_m,
                                               -pos_lim, pos_lim);
@@ -320,9 +556,10 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         h5_in.x_m              = x_clamped;
         h5_in.v_m_s            = est_v;
         h5_in.x_set_m          = ctrl->h5.x_set_m;
-        h5_in.v_set_m_s        = out->safety_out.v_ref_m_s;
+        h5_in.v_set_m_s        = runup != 0u ? ctrl->step_v_m_s : out->safety_out.v_ref_m_s;
         h5_in.yaw_ref_rad_s    = out->safety_out.yaw_ref_rad_s;
-        h5_in.accel_ref_m_s2   = (out->safety_out.host_lost != 0u) ? 0.0f : in->accel_ref_m_s2;
+        h5_in.accel_ref_m_s2   = (out->safety_out.host_lost != 0u) ? 0.0f
+                               : (runup != 0u ? ctrl->step_a_m_s2 : in->accel_ref_m_s2);
         h5_in.jerk_ref_m_s3    = (out->safety_out.host_lost != 0u) ? 0.0f : in->jerk_ref_m_s3;
         for (uint32_t i = 0u; i < 6u; ++i) {
             h5_in.angle[i] = (float)out->s11_frame.angle[i];
@@ -334,6 +571,8 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
                                   || in->external_inhibit_trim != 0u) ? 1u : 0u;
         h5_in.inhibit_jump     = out->safety_out.inhibit_jump;
         h5_in.jump_req         = in->jump_req;
+        /* Post-hand-back height damping (150 ms); the mode-0 leg pulse is removed. */
+        h5_in.step_extra_damping = (ctrl->step_damping_ms != 0u) ? 1u : 0u;
         h5_in.mild_sag_setdown = out->safety_out.mild_sag_setdown;
         h5_in.regen_scale      = out->safety_out.regen_scale;
 
@@ -347,6 +586,7 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
 
         /* Step 6: VMC + S7/S5 + PIDs + Jump FSM + Clamps & Regen Taper */
         h5_balance_step_compute(&ctrl->h5, &h5_in, &out->h5_out);
+        ctrl->step_clipped = out->h5_out.clipped_axes != 0u ? 1u : 0u;
 
         for (uint32_t i = 0u; i < 6u; ++i) {
             out->torque_cmd[i] = out->h5_out.torque_cmd[i];
@@ -399,7 +639,9 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         rec.fast.flags = (uint8_t)((out->safety_out.torque_enable != 0u ? 0x01u : 0u)
                                  | (out->safety_out.host_lost != 0u     ? 0x02u : 0u)
                                  | (out->safety_out.radio_lost != 0u    ? 0x04u : 0u)
-                                 | (out->s10_fed_fresh_enc != 0u        ? 0x08u : 0u));
+                                 | (out->s10_fed_fresh_enc != 0u        ? 0x08u : 0u)
+                                 | (out->step_decl_refused != 0u        ? 0x10u : 0u)
+                                 | (out->safety_out.stop_timeout_alarm != 0u ? 0x20u : 0u));
         rec.fast.fault_mask = (uint32_t)out->safety_out.reason;
         rec.fast.euler_rad[0] = est_pitch;
         rec.fast.euler_rad[1] = est_roll;
@@ -464,7 +706,7 @@ static void fil_inject_can_feedback(BalanceCtrl *ctrl, uint32_t tick_us,
         fb.status_nibble = ctrl->can_sched.cfg.expected_enabled_status;
         fb.pos = (float)pos;
         fb.vel = (float)raw_rates[axis];
-        fb.torque = 0.0f;
+        fb.torque = ctrl->fil_torque_fb[axis];
         fb.t_mos_c = 35.0f;
         fb.t_coil_c = 40.0f;
 
@@ -510,6 +752,107 @@ static void fil_drain_can_tx_torques(BalanceCtrl *ctrl, float out_torques[6])
 size_t balance_ctrl_state_size(void)
 {
     return sizeof(BalanceCtrl);
+}
+
+void balance_ctrl_fil_torque_feedback(void *state_buf, const float torque_nm[6])
+{
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL && torque_nm != NULL) {
+        memcpy(ctrl->fil_torque_fb, torque_nm, sizeof(ctrl->fil_torque_fb));
+    }
+}
+
+void balance_ctrl_fil_step_config(void *state_buf, const float p[11])
+{
+    /* FIL-only: [mode, wheel_bias, backoff, back_v, charge_v, acc, pass, timeout_ms,
+     *            refractory_ms, handback_scale, carry_m]
+     * FW6FIX D6: p[0] (mode) and p[1] (mode-0 wheel bias) are ignored; the run-up
+     * is the only step assist. The layout is kept for the existing FIL runners. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL && p != NULL) {
+        ctrl->cfg.step_backoff_m = p[2];
+        ctrl->cfg.step_back_m_s = p[3];
+        ctrl->cfg.step_charge_m_s = p[4];
+        ctrl->cfg.step_acc_m_s2 = p[5];
+        ctrl->cfg.step_pass_m = p[6];
+        ctrl->cfg.step_timeout_ms = (uint32_t)p[7];
+        ctrl->cfg.step_refractory_ms = (uint32_t)p[8];
+        ctrl->cfg.step_handback_scale = p[9];
+        ctrl->cfg.step_carry_m = p[10];
+    }
+}
+
+void balance_ctrl_fil_disable_stuck(void *state_buf)
+{
+    /* FIL-only (STEP3RC part B): disable the S11 frozen-encoder detector to
+     * measure the unprotected time-to-hazard after an injected freeze. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        ctrl->s11.config.frozen_detect_enable = 0u;
+    }
+}
+
+void balance_ctrl_fil_step_declare(void *state_buf, uint8_t declaration,
+                                   float height_m, float field_length_m)
+{
+    /* FIL-only: host terrain declaration fed to every subsequent FIL tick. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        ctrl->fil_step_decl = declaration;
+        ctrl->fil_step_decl_h_m = height_m;
+        ctrl->fil_step_field_m = field_length_m;
+    }
+}
+
+void balance_ctrl_fil_s11_hip_mirror(void *state_buf, uint8_t enable)
+{
+    /* FIL-only: select the hip degraded-mode substitution (0 hold, 1 mirror). */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        ctrl->s11.config.frozen_hip_mirror = enable;
+    }
+}
+
+void balance_ctrl_fil_s11_diag(void *state_buf, float diag[10])
+{
+    /* FIL-only: [0] CONFIRMED mask, [1] ADVISORY mask, [2] IMU gate, [3..8]
+     * per-axis detector reason (S11FzReason), [9] latched S11 mode. */
+    const BalanceCtrl *ctrl = (const BalanceCtrl *)state_buf;
+    if (ctrl != NULL && diag != NULL) {
+        diag[0] = (float)ctrl->s11.frozen_mask;
+        diag[1] = (float)ctrl->s11.advisory_mask;
+        diag[2] = (float)ctrl->s11.frozen_is_gated;
+        for (uint32_t i = 0u; i < 6u; ++i) {
+            diag[3u + i] = (float)ctrl->s11.axis[i].frozen.reason;
+        }
+        diag[9] = (float)ctrl->s11.latched;
+    }
+}
+
+void balance_ctrl_fil_step_diag(void *state_buf, float diag[8])
+{
+    const BalanceCtrl *ctrl = (const BalanceCtrl *)state_buf;
+    if (ctrl != NULL && diag != NULL) {
+        diag[0] = (float)ctrl->step_phase;
+        diag[1] = (float)ctrl->step_elapsed_ms;
+        diag[2] = 0.0f;  /* was mode-0 landing flag (FW6FIX D6) */
+        diag[3] = (float)ctrl->step_limit_ms;
+        diag[4] = (float)ctrl->step_damping_ms;
+        diag[5] = ctrl->drive_lag_m;
+        diag[6] = (float)ctrl->step_abort;
+        diag[7] = 0.0f;  /* was mode-0 hip torque (FW6FIX D6) */
+    }
+}
+
+void balance_ctrl_fil_alarm_diag(void *state_buf, float diag[4])
+{
+    const BalanceCtrl *ctrl = (const BalanceCtrl *)state_buf;
+    if (ctrl != NULL && diag != NULL) {
+        diag[0] = (float)ctrl->step_decl_refused_n;
+        diag[1] = (float)ctrl->safety.stop_timeout_latched;
+        diag[2] = (float)ctrl->safety.reason;
+        diag[3] = (float)ctrl->step_abort;
+    }
 }
 
 void balance_ctrl_fil_init(void *state_buf, float mass_kg, float length_ref_m,
@@ -637,6 +980,9 @@ int32_t balance_ctrl_fil_step_500hz_ex(void *state_buf, uint32_t tick_us, int32_
     in.accel_ref_m_s2        = accel_ref_m_s2;
     in.jerk_ref_m_s3         = jerk_ref_m_s3;
     in.external_inhibit_trim = external_inhibit_trim;
+    in.step_declaration      = ctrl->fil_step_decl;
+    in.step_decl_height_m    = ctrl->fil_step_decl_h_m;
+    in.step_field_length_m   = ctrl->fil_step_field_m;
 
     BalanceTickOutput out;
     balance_ctrl_tick(ctrl, &in, &out);

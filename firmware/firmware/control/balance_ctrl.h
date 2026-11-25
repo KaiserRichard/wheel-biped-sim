@@ -44,6 +44,19 @@ typedef struct {
     double          imu_lever_m[3];    /* Body-frame IMU offset from chassis origin */
     uint8_t         use_s10_estimator; /* 1 = S10 estimator (default), 0 = external attitude/vel */
     uint8_t         s10_robust;        /* 1 = S10 robust moving bias & bounded speed recapture */
+    uint8_t         enable_step_assist;
+    float           step_height_m;       /* Conservative configured edge height, no truth input */
+    /* FW6FIX D6: the STEP3 mode-0 bilateral leg pulse is removed (STEP3RC showed it
+     * cannot climb). The run-up below (the former mode 1) is the only step assist. */
+    float           step_backoff_m;      /* mode 1 reverse distance from stall point */
+    float           step_back_m_s;       /* mode 1 reverse speed */
+    float           step_charge_m_s;     /* mode 1 charge speed at the edge */
+    float           step_acc_m_s2;       /* mode 1 reference slew limit */
+    float           step_pass_m;         /* mode 1 forward progress past stall point = passage */
+    uint32_t        step_timeout_ms;     /* mode 1 whole-manoeuvre timeout */
+    uint32_t        step_refractory_ms;  /* mode 1 blocked-detector hold-off after passage */
+    float           step_handback_scale; /* mode 1 hand-back slew as fraction of step_acc */
+    float           step_carry_m;        /* legacy FIL knob, unused since FW6 (see step_declaration) */
 } BalanceCtrlConfig;
 
 typedef struct {
@@ -63,6 +76,18 @@ typedef struct {
     uint8_t air;
     uint8_t valid;
 } BalanceExtState;
+
+enum {
+    BALANCE_STEP_DECL_NONE = 0,   /* blocked drive -> CONTROLLED_STOP (F3b) */
+    BALANCE_STEP_DECL_CURB = 1,   /* isolated curb, h <= 12 mm: carry 0 */
+    /* FW6FIX D1 (interim): REFUSED. A link/host/frozen-encoder stop during a field
+     * carry can leave a wheel in the gap between boxes and fall (FW6REVIEW: 52/119).
+     * A field declaration is treated as no declaration (F3b controlled stop before
+     * the field) and is flagged in step_decl_refused. Re-enabling it needs an owner
+     * safety decision on the field-safe stop. */
+    BALANCE_STEP_DECL_FIELD = 2
+};
+#define BALANCE_STEP_MAX_HEIGHT_M   0.0121f
 
 typedef struct {
     uint32_t         tick_us;          /* Monotonic 500 Hz tick timestamp (us) */
@@ -113,6 +138,13 @@ typedef struct {
     uint8_t  hw_reset_ack;
     uint8_t  local_regrant_req;
     uint8_t  external_inhibit_trim;
+
+    /* FW6 (STEP3RC A6 item 3): host terrain declaration for the mode-1 run-up.
+     * The firmware cannot sense terrain; without a declaration a blocked drive
+     * makes the existing F3b controlled stop. */
+    uint8_t  step_declaration;     /* BALANCE_STEP_DECL_NONE / _CURB / _FIELD */
+    float    step_decl_height_m;   /* declared edge height; <= 0 uses cfg.step_height_m */
+    float    step_field_length_m;  /* FIELD length; unused while FIELD is refused (FW6FIX D1) */
 } BalanceTickInput;
 
 typedef struct {
@@ -124,6 +156,8 @@ typedef struct {
     float            torque_cmd[6];     /* Final 6-axis motor commands sent to CAN TX */
     uint8_t          s10_fed_fresh_enc; /* 1 iff genuine fresh encoders were fed to S10 */
     uint8_t          flight_rec_pushed;
+    uint8_t          step_decl_refused; /* FW6FIX D1: host declared FIELD this tick (refused);
+                                         * also flight-record flag 0x10 */
     uint32_t         balance_heartbeat;
 } BalanceTickOutput;
 
@@ -137,6 +171,30 @@ typedef struct {
     LogFlightRing    *flight_ring; /* Optional caller-owned static ring buffer */
     uint32_t          balance_heartbeat;
     uint32_t          tick_count;
+    float             progress_ref_m_s;
+    uint32_t          blocked_drive_ms;
+    uint32_t          step_elapsed_ms;
+    uint32_t          step_limit_ms;
+    uint32_t          step_damping_ms;
+    uint8_t           step_phase; /* 0 idle, 4 reverse, 5 settle, 6 charge, 7 hand-back */
+    uint8_t           step_clipped;
+    float             step_start_x_m;
+    float             step_direction;
+    float             fil_torque_fb[6];
+    float             step_v_m_s;    /* mode 1 assist speed reference (slewed) */
+    float             step_a_m_s2;   /* mode 1 assist accel feed-forward */
+    uint32_t          step_phase_ms; /* time in current mode-1 phase */
+    float             drive_lag_m;   /* filtered steady x_set - x_est while driving */
+    float             step_backed_m; /* achieved reverse distance (mode 1) */
+    uint8_t           step_charged;  /* charge speed reached (mode 1) */
+    uint8_t           step_abort;    /* 0 none, 1 no run-up room, 2 charge stall, 3 timeout */
+    uint32_t          step_refractory_ms; /* blocked detector hold-off after passage */
+    float             step_carry_eff_m;   /* carry for this manoeuvre: 0 (curb only, FW6FIX D1) */
+    uint32_t          step_timeout_eff_ms; /* timeout for this manoeuvre */
+    uint32_t          step_decl_refused_n; /* FW6FIX D1: ticks with a refused FIELD declaration */
+    uint8_t           fil_step_decl;      /* FIL-only declaration passed to the tick */
+    float             fil_step_decl_h_m;
+    float             fil_step_field_m;
 } BalanceCtrl;
 
 BalanceCtrlConfig balance_ctrl_default_config(void);
@@ -153,6 +211,17 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
 
 /* Flat zero-malloc C ABI helpers exported for Python/ctypes MuJoCo FIL testing. */
 size_t  balance_ctrl_state_size(void);
+void balance_ctrl_fil_torque_feedback(void *state_buf, const float torque_nm[6]);
+void balance_ctrl_fil_step_diag(void *state_buf, float diag[8]);
+void balance_ctrl_fil_step_config(void *state_buf, const float p[11]);
+void balance_ctrl_fil_disable_stuck(void *state_buf);
+void balance_ctrl_fil_step_declare(void *state_buf, uint8_t declaration,
+                                   float height_m, float field_length_m);
+void balance_ctrl_fil_s11_diag(void *state_buf, float diag[10]);
+void balance_ctrl_fil_s11_hip_mirror(void *state_buf, uint8_t enable);
+/* FW6FIX FIL diag: [0] refused FIELD-declaration ticks, [1] stop-timeout alarm latch,
+ * [2] safety reason, [3] last run-up abort code. */
+void balance_ctrl_fil_alarm_diag(void *state_buf, float diag[4]);
 void    balance_ctrl_fil_init(void *state_buf, float mass_kg, float length_ref_m,
                               uint8_t radio_loss_policy);
 void    balance_ctrl_fil_imu_1khz(void *state_buf, int32_t tick_ms,

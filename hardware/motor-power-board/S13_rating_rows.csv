@@ -1,0 +1,13 @@
+file,metric,filter,value,source_csv_line,case,phase,scenario
+connected_sweep.csv,peak_motor_draw_A,base,16.867358113966876,2355,jump_built_V12_mu8_speed100,push,base
+connected_sweep.csv,peak_motor_draw_A,winding,79.96659180162608,2365,jump_built_V12_mu8_speed100,push,winding
+connected_sweep.csv,peak_motor_return_A,base,12.280488832985323,2519,jump_built_V12_mu8_speed100,flight,base
+connected_sweep.csv,peak_motor_return_A,winding,5.737302452676008,4669,jump_lump_V12_mu8_speed100,push,winding
+connected_sweep.csv,motor_dc_RMS_A,base,12.007604738936047,4661,jump_lump_V12_mu8_speed100,push,base
+connected_sweep.csv,motor_dc_RMS_A,winding,38.36634928528484,4669,jump_lump_V12_mu8_speed100,push,winding
+connected_sweep.csv,peak_pack_discharge_A,base,19.043014449346018,2355,jump_built_V12_mu8_speed100,push,base
+connected_sweep.csv,peak_pack_discharge_A,winding,74.7127114900088,4669,jump_lump_V12_mu8_speed100,push,winding
+disconnected_sweep.csv,max_link_V,chopper_corner,27.79014894074836,3316,jump_built_V12_mu8_speed100,flight,chopper_corner
+disconnected_sweep.csv,dump_J,chopper_corner,11.599690859223934,5032,jump_lump_V11_mu8_speed100,landing,chopper_corner
+disconnected_sweep.csv,peak_source_W,chopper_corner,240.35587341167454,3361,jump_built_V12_mu8_speed100,flight,chopper_corner
+disconnected_sweep.csv,peak_dump_W,chopper_corner,461.25948076549236,3316,jump_built_V12_mu8_speed100,flight,chopper_corner

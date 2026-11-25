@@ -21,9 +21,9 @@ closed-loop against MuJoCo and verifies:
      on draw_001.xml: radio lost at t = 4.0 s -> brake -> REST -> keep balancing.
 """
 
+import os
 import ctypes
 import math
-import os
 from pathlib import Path
 import sys
 from typing import Callable
@@ -122,6 +122,10 @@ def load_library(path: Path) -> ctypes.CDLL:
 
     lib.balance_ctrl_state_size.argtypes = []
     lib.balance_ctrl_state_size.restype = ctypes.c_size_t
+    if hasattr(lib, "balance_ctrl_fil_torque_feedback"):  # absent before STEP3 (HALFIX3 baseline)
+        lib.balance_ctrl_fil_torque_feedback.argtypes = [
+            ctypes.c_void_p, ctypes.POINTER(ctypes.c_float)]
+        lib.balance_ctrl_fil_torque_feedback.restype = None
 
     lib.balance_ctrl_fil_init.argtypes = [
         ctypes.c_void_p,
@@ -309,9 +313,11 @@ class RobotRig:
         body_contact = False
         for i in range(self.d.ncon):
             c = self.d.contact[i]
-            if c.geom1 == self.floor_id:
+            b1 = int(self.m.geom_bodyid[c.geom1])
+            b2 = int(self.m.geom_bodyid[c.geom2])
+            if b1 == 0 and b2 != 0:
                 other = c.geom2
-            elif c.geom2 == self.floor_id:
+            elif b2 == 0 and b1 != 0:
                 other = c.geom1
             else:
                 continue

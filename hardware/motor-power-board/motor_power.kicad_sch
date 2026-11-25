@@ -23,6 +23,6 @@
 (text "Controller PCB, bolted feeder and stop-loop harness" (at 19.05 25 0) (effects (font (size 1.45 1.45)) (justify left)) (uuid "e750fbe4-bb65-5be7-92b9-0a22d4c84342"))
 (text "18.0–25.2 V nominal pack / 30 A hot feeder design screen" (at 152 46 0) (effects (font (size 1.45 1.45)) (justify left)) (uuid "75be7137-c243-5e88-9d1e-9b687a055913"))
 (text "Independent hardwired disconnect and downstream dump" (at 152 54 0) (effects (font (size 1.45 1.45)) (justify left)) (uuid "2733e64a-77cc-5958-8c7a-5db720f3e520"))
-(text "Design-only / consult HW2_REPORT before any build" (at 152 62 0) (effects (font (size 1.45 1.45)) (justify left)) (uuid "450ed7f3-6e57-5e1f-8b0e-16a8aca8dc74"))
+(text "Design-only / consult README.md before any build" (at 152 62 0) (effects (font (size 1.45 1.45)) (justify left)) (uuid "450ed7f3-6e57-5e1f-8b0e-16a8aca8dc74"))
 (sheet_instances (path "/" (page "1")))
 )

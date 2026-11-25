@@ -1,26 +1,24 @@
-"""Host regression checks for the CTRL rev4 CAN roles and the clock/watchdog audit."""
+"""Host regression checks for HFX2-02 netlist roles and HFX2-04 audit output."""
 from pathlib import Path
 import re
 import sys
 import unittest
 
-ROOT = Path(__file__).resolve().parents[2]  # repository root
-FW = ROOT / "firmware"
-sys.path.insert(0, str(FW / "tools"))
-import clock_check  # noqa: E402
+# FW6FIX (FW6REVIEW D4): the netlist and clock audit are vendored under
+# fw/tests/contract so CTest passes from a fresh copy of fw/ alone.
+FW = Path(__file__).resolve().parents[1]
+CONTRACT = FW / "tests" / "contract"
+sys.path.insert(0, str(CONTRACT))
+import clock_check
 
 
 class ReviewContract(unittest.TestCase):
-    def test_board_connector_roles(self):
-        board = (ROOT / "hardware/CTRL/CTRL.kicad_pcb").read_text(encoding="utf-8")
+    def test_netlist_connector_roles(self):
+        text = (CONTRACT / "ctrl_rev4.net").read_text()
         expected = {"J5": "CAN1 RIGHT MOTOR", "J6": "CAN2 LEFT MOTOR", "J7": "CAN3 SPARE"}
         for ref, role in expected.items():
-            start = board.find(f'(property "Reference" "{ref}"')
-            self.assertGreaterEqual(start, 0, ref)
-            value = re.search(r'\(property "Value" "([^"]*)"', board[start:])
-            self.assertIsNotNone(value, ref)
-            self.assertEqual(value.group(1), role)
-        doc = (FW / "can_map/REV4_CAN_MAPPING.md").read_text(encoding="utf-8")
+            self.assertRegex(text, rf'\(comp \(ref "{ref}"\)\s+\(value "{role}"\)')
+        doc = (FW / "can_map/REV4_CAN_MAPPING.md").read_text()
         for connector in expected:
             self.assertIn(f"| {connector} |", doc)
 
@@ -54,15 +52,15 @@ class ReviewContract(unittest.TestCase):
 
     def test_safety_comments_and_conversion_flags(self):
         target = FW / "firmware/target"
-        self.assertNotIn("Falling edge", (target / "target_estop.c").read_text(encoding="utf-8"))
-        header = (target / "target_estop.h").read_text(encoding="utf-8")
+        self.assertNotIn("Falling edge", (target / "target_estop.c").read_text())
+        header = (target / "target_estop.h").read_text()
         self.assertIn("both PB12 and PD7 LOW", header)
         for name in ("target_iwdg.c", "target_iwdg.h", "target_hw.h"):
-            text = (target / name).read_text(encoding="utf-8")
+            text = (target / name).read_text()
             self.assertIn("50.476", text)
             self.assertNotIn("reload = 50", text)
-        self.assertIn("260000000u", (target / "target_timer.c").read_text(encoding="utf-8"))
-        cmake = (FW / "CMakeLists.txt").read_text(encoding="utf-8")
+        self.assertIn("260000000u", (target / "target_timer.c").read_text())
+        cmake = (FW / "CMakeLists.txt").read_text()
         arm = re.search(r"set\(WBR_STM32H723_FW_CFLAGS(.*?)\n\)", cmake, re.S).group(1)
         host = re.search(r"target_compile_options\(test_target_hal PRIVATE ([^)]+)\)", cmake).group(1)
         for flags in (arm, host):

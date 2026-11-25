@@ -294,10 +294,10 @@ def run_checks(target_dir: Path) -> Tuple[List[CheckResult], Dict[str, object]]:
         domain="1. PLL / SYSCLK / VOS",
         item="HSE crystal frequency",
         status="PASS" if HSE_MIN_HZ <= hse_hz <= HSE_MAX_HZ else "FAIL",
-        computed=f"{hse_hz / 1e6:.3f} MHz (ASSUMED pending board check)",
+        computed=f"{hse_hz / 1e6:.3f} MHz (ASSUMED pending HW1)",
         limit_or_target="4.000 - 50.000 MHz (DS13313)",
         source="target/stm32h7xx_hal_conf.h",
-        note="Verify physical crystal on CTRL board against the CTRL rev4 schematic.",
+        note="Verify physical crystal on CTRL board against HW1 schematic.",
     ))
 
     supply_cfg = parse_call_arg(main_c, "HAL_PWREx_ConfigSupply", 0)
@@ -892,8 +892,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument(
         "--target-dir",
         type=Path,
+        # Public tools entry point: firmware root is one level up.
         default=Path(__file__).resolve().parents[1] / "firmware/target",
-        help="Path to target firmware folder (default: ./fw/firmware/target)",
+        help="Path to target firmware folder (default: <fw>/firmware/target)",
     )
     parser.add_argument(
         "--strict",

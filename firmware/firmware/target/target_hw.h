@@ -7,7 +7,7 @@
  * Adapted from DM-jump (Core/Src/fdcan.c, usart.c, main.c, User/Bsp/bsp_dwt.c)
  * and FIRMWARE_DESIGN_v3.md / can_map/CAN_ID_MAP.md:
  *   Copyright (c) 2024-2026 Tran Nguyen Binh
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   Reference: dmBots/wheel-legged (https://github.com/dmBots/wheel-legged)
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  */

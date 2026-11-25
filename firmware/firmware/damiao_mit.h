@@ -3,7 +3,7 @@
  *
  * Adapted from DM-jump (User/Devices/DM_Motor/dm4310_drv.h/.c):
  *   Copyright (c) 2024-2026 Trần Nguyên Bình
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   Reference: dmBots/wheel-legged (https://github.com/dmBots/wheel-legged)
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  *

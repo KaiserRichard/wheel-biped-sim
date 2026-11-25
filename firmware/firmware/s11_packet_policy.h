@@ -3,6 +3,7 @@
 
 #include <stdatomic.h>
 #include <stdint.h>
+#include "s11_frozen.h"
 
 /* Axis order is left front, rear, wheel, then right front, rear, wheel.
  *
@@ -81,8 +82,17 @@ enum S11Mode {
     S11_DRIVE_FAULT,
     S11_STUCK,
     S11_DISARMED,
-    S11_ARMING
+    S11_ARMING,
+    /* FW6 (STEP3RC B6): one axis CONFIRMED frozen by s11_frozen.c, no double
+     * fault. Frame stays valid (a faulted wheel is replaced by its partner, a
+     * faulted hip holds its last geometry with zero rate); the supervisor makes
+     * a controlled stop to REST. Latched until s11_reset(). */
+    S11_DEGRADED
 };
+/* Degraded-mode data (FW6): wheel -> partner wheel's increment and rate; hip ->
+ * the other leg's same-role hip increment and rate (frozen_hip_mirror = 1), or the
+ * geometry at confirmation with zero rate (frozen_hip_mirror = 0, or when that
+ * mirror hip is itself frozen). */
 
 enum S11ArmState {
     S11_STATE_DISARMED = 0,
@@ -103,12 +113,20 @@ typedef struct {
     double   hip_rate_limit_rad_s;   /* Hip rate limit (~1.2 * 20.9 rad/s at 24 V = 25.08) */
     double   wheel_rate_limit_rad_s; /* Wheel rate limit (~1.2 * 33.5 rad/s at 24 V = 40.20) */
     double   bus_voltage_v;          /* Reference bus voltage for rate scaling (default 24.0 V) */
-    double   stuck_ms;               /* Max unchanged duration while moving (default 10.0 ms) */
-    double   stuck_rate_thresh;      /* Motion rate threshold for stuck timer (default 0.12 rad/s) */
-    double   angle_lsb_rad;          /* Quantization LSB for displacement stuck check (INFERRED 25/65536 rad) */
+    /* Legacy slice-8 stuck-check fields: retained for ABI/config compatibility,
+     * no longer used since FW6 (replaced by the s11_frozen.c detector). */
+    double   stuck_ms;
+    double   stuck_rate_thresh;
+    double   angle_lsb_rad;          /* Hip position LSB 25/65536 rad (informational) */
     uint32_t arm_groups;             /* Consecutive valid 6-axis groups to arm (default 3) */
     uint32_t invalid_latch_count;    /* Consecutive invalid packets to latch INVALID (default 3) */
-    uint32_t stuck_min_ticks;        /* Consecutive unchanged ticks with expected > 2 LSB (default 2) */
+    uint32_t stuck_min_ticks;        /* Legacy, unused since FW6 */
+    uint8_t  frozen_detect_enable;   /* 1 = run s11_frozen.c detector per axis (default 1) */
+    uint8_t  frozen_hip_mirror;      /* 1 (default) = faulted hip follows the other leg's
+                                      * same-role hip (symmetric legs, zero roll; FW6 FIL: REST
+                                      * 24/24 while driving vs 0/24 with hold); 0 = hold geometry */
+    S11FzConfig frozen_hip;          /* Measured thresholds, hip LSB 25/65536 rad */
+    S11FzConfig frozen_wheel;        /* Measured thresholds, wheel LSB 24/65535 rad */
 } S11Config;
 
 typedef struct {
@@ -126,6 +144,7 @@ typedef struct {
     uint32_t last_seq;
     uint8_t  has_seq;
     uint8_t  seen;
+    S11FzAxis frozen;
 } S11Axis;
 
 typedef struct {
@@ -136,6 +155,14 @@ typedef struct {
     uint32_t         arm_count;
     uint8_t          config_initialized;
     S11Config        config;
+    S11FzGate        frozen_gate;       /* shared IMU transient gate (fed at 1 kHz) */
+    uint8_t          frozen_is_gated;   /* latest gate output, used at the 500 Hz tick */
+    uint32_t         frozen_mask;       /* axes latched CONFIRMED (bit i = axis i) */
+    uint32_t         advisory_mask;     /* axes currently ADVISORY (flag only) */
+    double           sub_self_unwrapped[2];    /* faulted wheel unwrapped angle at confirm */
+    double           sub_partner_unwrapped[2]; /* partner wheel unwrapped angle at confirm */
+    double           hip_hold_angle[S11_AXES]; /* faulted hip angle held at confirm */
+    double           hip_mirror_ref[S11_AXES]; /* other-leg hip angle at confirm (mirror mode) */
 } S11PacketPolicy;
 
 typedef struct {
@@ -146,6 +173,8 @@ typedef struct {
     uint32_t     max_misses;
     enum S11Mode mode;
     uint8_t      valid;
+    uint32_t     degraded_mask;  /* axes CONFIRMED frozen; data substituted/held */
+    uint32_t     advisory_mask;  /* axes with ADVISORY evidence (no control action) */
 } S11PacketFrame;
 
 /* Ownership-safe triple-buffered single-writer (CAN RX ISR) / single-reader
@@ -196,6 +225,12 @@ void s11_init_with_config(S11PacketPolicy *state, const S11Config *cfg);
 void s11_reset(S11PacketPolicy *state);
 int32_t s11_arm(S11PacketPolicy *state);
 void s11_disarm(S11PacketPolicy *state);
+/* Feed the frozen-encoder IMU transient gate (|gyro_x|,|gyro_y| > 0.7 rad/s or
+ * ||a| - g| > 8 m/s^2, held 60 ms). Call from the 1 kHz IMU path. */
+void s11_frozen_imu_update(S11PacketPolicy *state, double gyro_x, double gyro_y,
+                           double acc_norm, double dt_ms);
+/* Partner of a wheel axis (2 <-> 5); returns 0xFF for hips. */
+uint32_t s11_partner_wheel(uint32_t axis);
 int32_t s11_set_bus_voltage(S11PacketPolicy *state, double bus_voltage_v);
 
 /* Wrap-safe timestamp age helpers (A9). */

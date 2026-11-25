@@ -8,6 +8,12 @@ A wheel-legged biped robot built three ways before any motor turns: **MuJoCo** p
 
 This project builds on Trần Nguyên Bình's [DM-jump](https://github.com/nguyenbinh-shark/DM-jump) (MIT) and [dmBots/wheel-legged](https://github.com/dmBots/wheel-legged) (MIT). It is a personal refactor and extension: the concept and scenarios come from that work, and the code here was rewritten and reorganized. CAD meshes are not included. AI coding tools were used heavily in building it; the author reviewed and is responsible for all content. See [NOTICE.md](NOTICE.md).
 
+## New in batch 7
+
+- [Run-up and frozen-encoder firmware](firmware/README.md#run-up-and-frozen-encoder-handling): curb-only declarations, substituted feedback during controlled stops, a 20 s stop alarm and standalone contract tests. Supplied results are simulation only. [FROM FILE]
+- [Sim-to-real measurement checklist V3](docs/sim-to-real/sim-to-real-checklist.md) and [CSV](docs/sim-to-real/sim_to_real_checklist.csv), including explicit gaps in numeric traceability. [FROM FILE]
+- [Motor power board rev 2 design study](hardware/motor-power-board/README.md): KiCad sources, current fix 4 ERC and inherited layout illustrations. Not fabricated; relay drilling and Q1/D11 qualification gates remain open. [FROM FILE]
+
 ## New in batch 6
 
 - [Study pages](docs/studies/): corrected log units, push-gap controller comparisons, step-climbing and contact sensitivity, plus [published-firmware Monte Carlo results](docs/studies/monte-carlo-published-firmware.md). Results are simulation evidence with their tested assumptions and limits.

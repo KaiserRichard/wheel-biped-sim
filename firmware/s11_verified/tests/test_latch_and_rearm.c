@@ -81,8 +81,20 @@ int main(void)
     assert(frame.mode == S11_DRIVE_FAULT);
     verify_latch_and_rearm(&st, S11_DRIVE_FAULT);
 
-    /* 4. STUCK latch -> re-arm */
-    double mov_rate[S11_AXES] = {2.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    /* 4. FW6: a single frozen axis is DEGRADED (valid frame, latched until
+     *    s11_reset); a double fault (both hips of one leg) latches STUCK. */
+    double one_rate[S11_AXES] = {2.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    arm_policy(&st, 1.0, angle, one_rate, &frame);
+    for (unsigned k = 0; k < 3u; ++k)
+        s11_packets(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, angle, one_rate, &frame);
+    assert(frame.mode == S11_DEGRADED && frame.valid == 1 && frame.degraded_mask == 0x01u);
+    for (unsigned k = 0; k < 5u; ++k)
+        s11_packets(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, angle, rate, &frame);
+    assert(frame.mode == S11_DEGRADED);           /* latched across good traffic */
+    s11_reset(&st);
+
+    /* 5. STUCK latch (double fault) -> re-arm */
+    double mov_rate[S11_AXES] = {2.0, 2.0, 0.0, 0.0, 0.0, 0.0};
     arm_policy(&st, 1.0, angle, mov_rate, &frame);
     for (unsigned k = 0; k < 3u; ++k)
         s11_packets(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, angle, mov_rate, &frame);

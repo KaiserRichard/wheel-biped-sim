@@ -22,14 +22,15 @@ static uint32_t s11_mode_severity(enum S11Mode m)
     case S11_FRESH:       return 0u;
     case S11_PREDICT:     return 1u;
     case S11_LIMIT:       return 2u;
-    case S11_TIMEOUT:     return 3u;
-    case S11_STUCK:       return 4u;
-    case S11_INVALID:     return 5u;
-    case S11_DRIVE_FAULT: return 6u;
-    case S11_DISARMED:    return 7u;
-    case S11_ARMING:      return 8u;
+    case S11_DEGRADED:    return 3u;
+    case S11_TIMEOUT:     return 4u;
+    case S11_STUCK:       return 5u;
+    case S11_INVALID:     return 6u;
+    case S11_DRIVE_FAULT: return 7u;
+    case S11_DISARMED:    return 8u;
+    case S11_ARMING:      return 9u;
     }
-    return 9u;
+    return 10u;
 }
 
 static void s11_fill_invalid_frame(S11PacketFrame *frame, enum S11Mode mode,
@@ -38,6 +39,8 @@ static void s11_fill_invalid_frame(S11PacketFrame *frame, enum S11Mode mode,
     frame->mode = mode;
     frame->authority = 0.0;
     frame->valid = 0u;
+    frame->degraded_mask = 0u;
+    frame->advisory_mask = 0u;
     frame->max_misses = max_misses;
     for (uint32_t i = 0u; i < (uint32_t)S11_AXES; ++i) {
         frame->angle[i] = NAN;
@@ -67,6 +70,10 @@ S11Config s11_default_config(void)
     c.arm_groups = (uint32_t)S11_ARM_GROUPS;
     c.invalid_latch_count = (uint32_t)S11_INVALID_LATCH_COUNT;
     c.stuck_min_ticks = (uint32_t)S11_STUCK_MIN_TICKS;
+    c.frozen_detect_enable = 1u;
+    c.frozen_hip_mirror = 1u;
+    c.frozen_hip = s11fz_default_config(0);
+    c.frozen_wheel = s11fz_default_config(1);
     return c;
 }
 
@@ -87,6 +94,7 @@ void s11_init(S11PacketPolicy *state)
     state->config = s11_default_config();
     state->config_initialized = 1u;
     state->arm_state = S11_STATE_DISARMED;
+    s11fz_gate_init(&state->frozen_gate);
 }
 
 void s11_init_with_config(S11PacketPolicy *state, const S11Config *cfg)
@@ -98,6 +106,65 @@ void s11_init_with_config(S11PacketPolicy *state, const S11Config *cfg)
     state->config = (cfg != NULL) ? *cfg : s11_default_config();
     state->config_initialized = 1u;
     state->arm_state = S11_STATE_DISARMED;
+    s11fz_gate_init(&state->frozen_gate);
+}
+
+void s11_frozen_imu_update(S11PacketPolicy *state, double gyro_x, double gyro_y,
+                           double acc_norm, double dt_ms)
+{
+    if (state != NULL && isfinite(gyro_x) && isfinite(gyro_y)
+        && isfinite(acc_norm) && isfinite(dt_ms) && dt_ms > 0.0) {
+        state->frozen_is_gated = (uint8_t)s11fz_gate_update(
+            &state->frozen_gate, gyro_x, gyro_y, acc_norm, dt_ms);
+    }
+}
+
+uint32_t s11_partner_wheel(uint32_t axis)
+{
+    return (axis == 2u) ? 5u : ((axis == 5u) ? 2u : 0xFFu);
+}
+
+/* Double faults that cannot be handled by substitution or holding geometry:
+ * both wheels, both hips of one leg, or three or more axes. */
+static uint8_t s11_frozen_is_double(uint32_t mask)
+{
+    uint32_t n = 0u;
+    for (uint32_t i = 0u; i < (uint32_t)S11_AXES; ++i) {
+        n += (mask >> i) & 1u;
+    }
+    return ((mask & 0x24u) == 0x24u || (mask & 0x03u) == 0x03u
+            || (mask & 0x18u) == 0x18u || n >= 3u) ? 1u : 0u;
+}
+
+/* Run the STEP3RC frozen-encoder detector on one fresh, valid sample.
+ * Returns 1 on the tick the axis becomes CONFIRMED; *gross = 1 if by GROSS. */
+static uint8_t s11_frozen_step_axis(S11PacketPolicy *state, uint32_t i, uint8_t wheel,
+                                    double angle, double rate, double dt_ms,
+                                    uint8_t *gross)
+{
+    S11Axis *axis = &state->axis[i];
+    const uint32_t bit = 1u << i;
+    *gross = 0u;
+    if (state->config.frozen_detect_enable == 0u) {
+        state->advisory_mask &= ~bit;
+        return 0u;
+    }
+    const S11FzConfig *fc = (wheel != 0u) ? &state->config.frozen_wheel
+                                          : &state->config.frozen_hip;
+    /* Time since this axis' previous accepted sample (missed ticks included). */
+    const double sample_dt = dt_ms + ((axis->seen != 0u) ? axis->hold_ms : 0.0);
+    const S11FzState fz = s11fz_step(fc, &axis->frozen, angle, rate, sample_dt,
+                                     (state->frozen_is_gated != 0u) ? 1 : 0);
+    if (fz == S11FZ_ADVISORY) {
+        state->advisory_mask |= bit;
+    } else {
+        state->advisory_mask &= ~bit;
+    }
+    if (fz == S11FZ_CONFIRMED && (state->frozen_mask & bit) == 0u) {
+        *gross = (axis->frozen.reason == S11FZ_R_GROSS) ? 1u : 0u;
+        return 1u;
+    }
+    return 0u;
 }
 
 void s11_reset(S11PacketPolicy *state)
@@ -111,6 +178,7 @@ void s11_reset(S11PacketPolicy *state)
     state->config = saved;
     state->config_initialized = 1u;
     state->arm_state = S11_STATE_DISARMED;
+    s11fz_gate_init(&state->frozen_gate);
 }
 
 int32_t s11_arm(S11PacketPolicy *state)
@@ -356,52 +424,6 @@ static enum S11Mode s11_classify_hold(const S11Config *cfg, const S11Axis *axis)
     return S11_LIMIT;
 }
 
-static uint8_t s11_update_stuck(const S11Config *cfg, S11Axis *axis,
-                                double angle, double rate, double dt_ms)
-{
-    /* Accumulate net implied displacement whenever angle is unchanged,
-     * including small nonzero rates below stuck_rate_thresh (e.g. 0.1 rad/s),
-     * while keeping truly stationary (rate == 0), 12-bit DAMIAO zero-velocity
-     * quantization bias (code 2048/4095 -> +0.00733 rad/s on DM4310, +0.01099
-     * rad/s on DM6215; 1 wheel velocity LSB = 90.0/4095.0 = 0.02198 rad/s),
-     * and zero-mean noise unaffected. */
-    const double rate_deadband = 90.0 / 4095.0;
-    double eff_rate = 0.0;
-    if (rate > rate_deadband) {
-        eff_rate = rate - rate_deadband;
-    } else if (rate < -rate_deadband) {
-        eff_rate = rate + rate_deadband;
-    }
-    const double signed_step = eff_rate * (0.001 * dt_ms);
-    const uint8_t fast_moving = (fabs(rate) >= cfg->stuck_rate_thresh) ? 1u : 0u;
-    if (axis->seen != 0u && angle == axis->angle) {
-        if (eff_rate == 0.0 || (axis->stuck_expected_rad * eff_rate < 0.0)) {
-            axis->unchanged_ticks = 0u;
-            axis->stuck_expected_rad = 0.0;
-        } else {
-            axis->unchanged_ticks += 1u;
-            axis->stuck_expected_rad += signed_step;
-        }
-        if (fast_moving != 0u) {
-            axis->unchanged_ms += dt_ms;
-        } else {
-            axis->unchanged_ms = 0.0;
-        }
-    } else {
-        axis->unchanged_ms = 0.0;
-        axis->unchanged_ticks = 0u;
-        axis->stuck_expected_rad = 0.0;
-    }
-    if (axis->unchanged_ms >= cfg->stuck_ms - S11_EPS) {
-        return 1u;
-    }
-    if (fabs(axis->stuck_expected_rad) > 2.0 * cfg->angle_lsb_rad
-        && axis->unchanged_ticks >= cfg->stuck_min_ticks) {
-        return 1u;
-    }
-    return 0u;
-}
-
 static void s11_accept_sample(const S11Config *cfg, S11Axis *axis, uint8_t wheel,
                               double age_ms, double angle, double rate,
                               const uint32_t *seq_ptr)
@@ -511,7 +533,12 @@ static void s11_packets_internal(S11PacketPolicy *state, uint32_t fresh, uint32_
                 && s11_sample_valid(cfg, axis, wheel, ((valid & bit) != 0u) ? 1u : 0u,
                                     local_age[i], local_angle[i],
                                     local_rate[i], dt_ms) != 0u) {
-                if (s11_update_stuck(cfg, axis, local_angle[i], local_rate[i], dt_ms) != 0u) {
+                uint8_t gross = 0u;
+                if (s11_frozen_step_axis(state, i, wheel, local_angle[i], local_rate[i],
+                                         dt_ms, &gross) != 0u) {
+                    /* Torque is not yet enabled while arming: a frozen axis
+                     * keeps the robot unarmed (latched STUCK). */
+                    state->frozen_mask |= bit;
                     state->arm_count = 0u;
                     state->latched = S11_STUCK;
                     state->latched_max_misses = 0u;
@@ -555,6 +582,8 @@ static void s11_packets_internal(S11PacketPolicy *state, uint32_t fresh, uint32_
     /* S11_STATE_ARMED */
     enum S11Mode mode = S11_FRESH;
     uint32_t max_misses = 0u;
+    uint32_t new_frozen = 0u;
+    uint32_t new_gross = 0u;
 
     for (uint32_t i = 0u; i < (uint32_t)S11_AXES; ++i) {
         const uint32_t bit = 1u << i;
@@ -589,8 +618,11 @@ static void s11_packets_internal(S11PacketPolicy *state, uint32_t fresh, uint32_
                     current = s11_classify_hold(cfg, axis);
                 }
             } else {
-                if (s11_update_stuck(cfg, axis, local_angle[i], local_rate[i], dt_ms) != 0u) {
-                    current = S11_STUCK;
+                uint8_t gross = 0u;
+                if (s11_frozen_step_axis(state, i, wheel, local_angle[i], local_rate[i],
+                                         dt_ms, &gross) != 0u) {
+                    new_frozen |= bit;
+                    new_gross += gross;
                 }
                 s11_accept_sample(cfg, axis, wheel, local_age[i], local_angle[i],
                                   local_rate[i], (seq != NULL) ? &local_seq[i] : NULL);
@@ -630,17 +662,81 @@ static void s11_packets_internal(S11PacketPolicy *state, uint32_t fresh, uint32_
         frame->rate[i] = axis->rate;
     }
 
+    /* FW6 frozen-encoder reaction (STEP3RC B6). A newly CONFIRMED axis records
+     * its substitution reference; one axis -> DEGRADED (controlled stop, frame
+     * stays valid); double faults or two simultaneous GROSS -> latched STUCK. */
+    if (new_frozen != 0u) {
+        for (uint32_t i = 0u; i < (uint32_t)S11_AXES; ++i) {
+            if ((new_frozen & (1u << i)) == 0u) {
+                continue;
+            }
+            const uint32_t p = s11_partner_wheel(i);
+            if (p != 0xFFu) {
+                const uint32_t k = (i == 2u) ? 0u : 1u;
+                state->sub_self_unwrapped[k] = state->axis[i].unwrapped_angle;
+                state->sub_partner_unwrapped[k] = state->axis[p].unwrapped_angle;
+            } else {
+                state->hip_hold_angle[i] = state->axis[i].angle;
+                state->hip_mirror_ref[i] = state->axis[(i + 3u) % 6u].angle;
+            }
+        }
+        state->frozen_mask |= new_frozen;
+    }
+    if (state->frozen_mask != 0u
+        && (new_gross >= 2u || s11_frozen_is_double(state->frozen_mask) != 0u)
+        && s11_mode_severity(S11_STUCK) > s11_mode_severity(mode)) {
+        mode = S11_STUCK;
+    }
+
     if (s11_is_fault(mode) != 0u) {
         state->latched = mode;
         state->latched_max_misses = max_misses;
         s11_fill_invalid_frame(frame, mode, max_misses);
+        frame->degraded_mask = state->frozen_mask;
         return;
+    }
+
+    const uint8_t any_limit = (mode == S11_LIMIT) ? 1u : 0u;
+    if (state->frozen_mask != 0u) {
+        for (uint32_t i = 0u; i < (uint32_t)S11_AXES; ++i) {
+            if ((state->frozen_mask & (1u << i)) == 0u) {
+                continue;
+            }
+            const uint32_t p = s11_partner_wheel(i);
+            if (p != 0xFFu) {
+                /* Wheel: partner wheel's angle increment and rate (zero yaw). */
+                const uint32_t k = (i == 2u) ? 0u : 1u;
+                const double u = state->sub_self_unwrapped[k]
+                               + (frame->unwrapped_angle[p] - state->sub_partner_unwrapped[k]);
+                frame->unwrapped_angle[i] = u;
+                frame->angle[i] = s11_wrap_angle(u, cfg->wheel_angle_max_rad);
+                frame->rate[i] = frame->rate[p];
+            } else if (cfg->frozen_hip_mirror != 0u
+                       && (state->frozen_mask & (1u << ((i + 3u) % 6u))) == 0u) {
+                /* Hip, mirror option: other leg's same-role hip increment and rate. */
+                const uint32_t m = (i + 3u) % 6u;
+                frame->angle[i] = state->hip_hold_angle[i]
+                                + (frame->angle[m] - state->hip_mirror_ref[i]);
+                frame->unwrapped_angle[i] = frame->angle[i];
+                frame->rate[i] = frame->rate[m];
+            } else {
+                /* Hip: hold the geometry at confirmation, no rate feedback. */
+                frame->angle[i] = state->hip_hold_angle[i];
+                frame->unwrapped_angle[i] = state->hip_hold_angle[i];
+                frame->rate[i] = 0.0;
+            }
+        }
+        if (s11_mode_severity(S11_DEGRADED) > s11_mode_severity(mode)) {
+            mode = S11_DEGRADED;
+        }
     }
 
     frame->mode = mode;
     frame->max_misses = max_misses;
     frame->valid = 1u;
-    frame->authority = (mode == S11_LIMIT) ? 0.75 : 1.0;
+    frame->authority = (any_limit != 0u) ? 0.75 : 1.0;
+    frame->degraded_mask = state->frozen_mask;
+    frame->advisory_mask = state->advisory_mask;
 }
 
 void s11_packets_ex(S11PacketPolicy *state, uint32_t fresh, uint32_t valid,

@@ -6,7 +6,7 @@
  *
  * Chassis control loop & jump state machine structure adapted from DM-jump:
  *   Copyright (c) 2024-2026 Trần Nguyên Bình
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   Reference: dmBots/wheel-legged (https://github.com/dmBots/wheel-legged)
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  *
@@ -103,6 +103,7 @@ typedef struct {
     uint8_t inhibit_trim;
     uint8_t inhibit_jump;
     uint8_t jump_req;
+    uint8_t step_extra_damping; /* post-run-up height damping (FW6FIX D6: leg-pulse inputs removed) */
     uint8_t mild_sag_setdown;
     float   regen_scale; /* 1.0 normal, tapered to 0.0 above 25.8 V */
 } H5BalanceInput;

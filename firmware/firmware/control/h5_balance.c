@@ -6,7 +6,7 @@
  *
  * Chassis control loop & jump state machine structure adapted from DM-jump:
  *   Copyright (c) 2024-2026 Trần Nguyên Bình
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   Reference: dmBots/wheel-legged (https://github.com/dmBots/wheel-legged)
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  */
@@ -351,6 +351,18 @@ void h5_balance_step_compute(H5BalanceState *st, const H5BalanceInput *in, H5Bal
 
     /* 7. Height PD / Jump FSM */
     h5_update_jump_forces(st, roll_force, in->inhibit_jump, in->jump_req, in->mild_sag_setdown);
+
+    /* Extra height damping for 150 ms after a run-up hand-back. (FW6FIX D6: the
+     * mode-0 leg-pulse target, force ceiling and extension pulse are removed.) */
+    if (in->step_extra_damping != 0u) {
+        const float target = st->h5_leg_ref;
+        const float kd = S4_HEIGHT_KD + 35.0f;
+        const float cap = H5_FORCE_LIMIT_N;
+        st->left.F0 = clamp_f(st->h5_support + S4_HEIGHT_KP * (target - st->left.L0)
+                             - kd * st->left.d_L0, 0.0f, cap);
+        st->right.F0 = clamp_f(st->h5_support + S4_HEIGHT_KP * (target - st->right.L0)
+                              - kd * st->right.d_L0, 0.0f, cap);
+    }
 
     /* 8. Ground contact detection & airborne suppression */
     st->right_air_flag = ground_detectionR(&st->right);

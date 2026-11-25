@@ -3,7 +3,7 @@
  *
  * Adapted from DM-jump (Core/Src/fdcan.c, User/Bsp/can_bsp.c):
  *   Copyright (c) 2024-2026 Tran Nguyen Binh
- *   Project: DM-jump (DM-jump), MIT License
+ *   Project: DM-jump (https://github.com/nguyenbinh-shark/DM-jump), MIT License
  *   See firmware/DM_JUMP_LICENSE.txt for the full MIT license notice.
  */
 

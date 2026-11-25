@@ -13,20 +13,22 @@ int main(void)
     fill_arr(age, 1.0);
 
     /* Case 1: Axis 0 reports rate ~1.0 rad/s (with slight jitter) while angle
-     * stays frozen at 0.5 rad. Must latch S11_STUCK within <= 10 ms (5 ticks).
-     * orig needs 11 identical packets (20 ms) and fails forever if rate jitters. */
+     * stays frozen at 0.5 rad. Must be CONFIRMED within <= 10 ms (5 ticks).
+     * FW6: a single frozen axis reports S11_DEGRADED (valid frame, controlled
+     * stop) instead of the former S11_STUCK torque cut. */
     arm_policy(&st, 1.0, angle, rate, &frame);
     int detected = 0;
     for (unsigned k = 0; k < 5u; ++k) {
         rate[0] = (k % 2u == 0u) ? 1.0 : 1.02;
         s11_packets(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, angle, rate, &frame);
-        if (frame.mode == S11_STUCK) {
+        if (frame.mode == S11_DEGRADED) {
             detected = 1;
             break;
         }
     }
     assert(detected == 1);
-    assert(near_eq(frame.authority, 0.0, 1e-12));
+    assert(frame.valid == 1 && frame.degraded_mask == 0x01u);
+    assert(near_eq(frame.authority, 1.0, 1e-12));
 
 #ifndef S11_TEST_ORIG
     /* Case 2: Stationary joint (rate == 0.0) with frozen mailbox sequence
@@ -68,8 +70,8 @@ int main(void)
     assert(frame.valid == 1);
 
     /* Case 4: Slow frozen angle at 0.1 rad/s (< stuck_rate_thresh 0.12) with
-     * advancing seq[] must accumulate displacement and latch S11_STUCK once
-     * net displacement exceeds 2 * LSB. */
+     * advancing seq[] must accumulate NET evidence (>= 5 LSB) and report
+     * S11_DEGRADED (FW6). */
     double slow_rate[S11_AXES] = {0.1, 0.0, 0.0, 0.0, 0.0, 0.0};
     s11_reset(&st);
     assert(s11_arm(&st) == 1);
@@ -79,13 +81,13 @@ int main(void)
             seq[i] += 1u;
         s11_packets_ex(&st, ALL_AXES, ALL_AXES, ALL_AXES, age, angle, slow_rate,
                        2.0, seq, &frame);
-        if (frame.mode == S11_STUCK) {
+        if (frame.mode == S11_DEGRADED) {
             slow_stuck = 1;
             break;
         }
     }
     assert(slow_stuck == 1);
-    assert(near_eq(frame.authority, 0.0, 1e-12));
+    assert(frame.valid == 1 && frame.degraded_mask == 0x01u);
 
     /* Case 5: Negative control - slow moving joint at 0.1 rad/s whose quantized
      * angle updates by 1 LSB every 4 ms must stay S11_FRESH. */

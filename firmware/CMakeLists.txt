@@ -29,6 +29,7 @@ set(WBR_FIRMWARE_SOURCES
     firmware/damiao_mit.c
     firmware/safety_fsm.c
     firmware/s11_packet_policy.c
+    firmware/s11_frozen.c
     firmware/log_packer.c
     firmware/can_sched.c
     firmware/control/pid.c
@@ -237,6 +238,18 @@ if(NOT CMAKE_CROSSCOMPILING)
     add_fw_test(test_log_packer        test_log_packer.c)
     add_fw_test(test_can_sched         test_can_sched.c)
     add_fw_test(test_balance_ctrl      test_balance_ctrl.c)
+
+    # FW6: STEP3RC part-B frozen-encoder detector (ported host tests) and the
+    # firmware reaction (DEGRADED -> CONTROLLED_STOP, partner wheel, escalation).
+    add_fw_test(test_s11_frozen_reaction test_s11_frozen_reaction.c)
+    add_fw_test(test_runup_balance_ctrl  test_runup_balance_ctrl.c)
+    add_fw_test(test_fz_fixtures         test_fz_fixtures.c)
+    add_fw_test(test_fz_behaviour        test_fz_behaviour.c)
+    add_executable(test_fz_healthy_replay tests/test_fz_healthy_replay.c)
+    target_link_libraries(test_fz_healthy_replay PRIVATE wbr_firmware m)
+    apply_undebug_guard(test_fz_healthy_replay)
+    add_test(NAME test_fz_healthy_replay
+        COMMAND test_fz_healthy_replay "${CMAKE_CURRENT_SOURCE_DIR}/tests/fz_data/healthy_corpus.bin")
 
     # Verified S11 packet-policy suite (18 tests, including reviewer_probes & concurrent mailbox)
     add_s11_verified_test(test_a1_latched_frame              s11_verified/tests/test_a1_latched_frame.c)

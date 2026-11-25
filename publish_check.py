@@ -6,12 +6,18 @@ import ipaddress
 import json
 import os
 import re
+import struct
 import sys
 import zlib
 
 ROOT = Path(__file__).resolve().parent
 MAX_TEXT_BYTES = 10 * 1024 * 1024
 MAX_HARDWARE_KICAD_BYTES = 24 * 1024 * 1024
+# Exact simulated encoder replay input required by the frozen-encoder C test.
+# This exception neither raises the general text limit nor accepts other binaries.
+FIRMWARE_CORPUS = "firmware/tests/fz_data/healthy_corpus.bin"
+FIRMWARE_CORPUS_SIZE = 29288458
+FIRMWARE_CORPUS_SHA256 = "589b52d6d068c37199e4e75c9e6ae889e1f9b28f3b215eaa2d2db347987be9d4"
 PERCEPTION_IMAGE_LIMITS = {".png": 1024**2, ".jpg": 1024**2, ".jpeg": 1024**2, ".gif": 4 * 1024**2}
 # Exact bytes of the reviewed perception visuals. See perception/README.md.
 PERCEPTION_IMAGE_ALLOWLIST = {
@@ -67,11 +73,14 @@ blocked_patterns = [
 ]
 FORBIDDEN_SUFFIXES = {
     ".npz", ".jpg", ".jpeg", ".webp", ".lic", ".step", ".stp", ".stl", ".obj", ".dae", ".slx",
-    ".pdf", ".docx", ".bag", ".db3", ".pt", ".onnx", ".pem", ".pyc",
+    ".wrl", ".pdf", ".docx", ".bag", ".db3", ".pt", ".onnx", ".pem", ".pyc",
 }
 FORBIDDEN_DIRS = {".venv", "venv", ".env", ".aws", ".agents", ".co" + "dex", ".cl" + "aude", "__pycache__", ".pytest_cache"}
 # Only these reviewed PNG paths and exact bytes are accepted.
 PNG_ALLOWLIST = {
+    'hardware/motor-power-board/motor_power_3d.png': '78ca05c1a80f05e9429b6497bca2bc988a6cb45aff40ecc27c79ec1ca2a4aa5b',
+    'hardware/motor-power-board/motor_power_top.png': '703d5a0b8c8466b09cb09c9dd2a5899db1ef6d752c989a0bc2d96f2cf9113bc4',
+    'hardware/motor-power-board/precharge_sensitivity.png': 'e5026ea33c4c051e06d53eb8990ed080f5dcb5978b5b3ca8be720bd5e0844b8a',
     'media/figures/gains.png': 'e6b34ddc3e9ba2e1b4b6874e0585fbeedba911e84eb9a5d72ed62c37a79f8838',
     'media/figures/hip_boundary.png': 'cc5e50c3498a0178e7b09aec53bb983d433552909bee83a8157d43685b620054',
     'media/figures/margins.png': '04f1bf66efb606056efd0bffa4311c93a75572b3d564dc59ba2785ac33593b3d',
@@ -264,6 +273,32 @@ def hardware_pdf_text(raw):
         return "\n".join(page.get_text() for page in pdf)
 
 
+def firmware_corpus_text(raw):
+    """Validate pinned binary records and expose their textual run names."""
+    if (len(raw) != FIRMWARE_CORPUS_SIZE
+            or hashlib.sha256(raw).hexdigest() != FIRMWARE_CORPUS_SHA256):
+        raise ValueError("changed corpus")
+    magic, runs = struct.unpack_from("<4sI", raw)
+    if magic != b"S11C" or runs != 110:
+        raise ValueError("bad corpus header")
+    offset, samples, names = 8, 0, []
+    for _ in range(runs):
+        length = struct.unpack_from("<I", raw, offset)[0]
+        offset += 4
+        if not 0 < length < 128:
+            raise ValueError("bad run name length")
+        names.append(raw[offset:offset + length].decode("ascii"))
+        offset += length
+        count, has_imu = struct.unpack_from("<IB", raw, offset)
+        if count == 0 or has_imu not in (0, 1):
+            raise ValueError("bad run header")
+        samples += count
+        offset += 5 + count * 15 * 2
+    if offset != len(raw) or samples != 976169:
+        raise ValueError("bad corpus record count")
+    return "\n".join(names)
+
+
 def scan(root=None):
     root = Path(root) if root is not None else ROOT
     problems = []
@@ -286,6 +321,7 @@ def scan(root=None):
                 problems.append(f"prohibited symlink: {rel}")
                 continue
             suffix = path.suffix.lower()
+            is_firmware_corpus = rel == FIRMWARE_CORPUS
             under_hardware = len(path.relative_to(root).parts) > 1 and rel.startswith("hardware/")
             is_hardware_pdf = under_hardware and suffix == ".pdf"
             kicad_header = HARDWARE_KICAD_HEADERS.get(suffix) if under_hardware else None
@@ -312,6 +348,8 @@ def scan(root=None):
                 problems.append(f"unapproved compressed data: {rel}")
                 continue
             size_limit = MAX_HARDWARE_KICAD_BYTES if kicad_header else MAX_TEXT_BYTES
+            if is_firmware_corpus:
+                size_limit = FIRMWARE_CORPUS_SIZE
             if not is_video and path.stat().st_size > size_limit:
                 problems.append(f"oversize text or opaque data: {rel}")
                 continue
@@ -343,7 +381,13 @@ def scan(root=None):
                 except ValueError:
                     problems.append(f"unreadable JPEG metadata: {rel}")
                     continue
-            if is_hardware_pdf:
+            if is_firmware_corpus:
+                try:
+                    text = firmware_corpus_text(raw)
+                except (ValueError, UnicodeDecodeError, struct.error):
+                    problems.append(f"unreadable or changed firmware corpus: {rel}")
+                    continue
+            elif is_hardware_pdf:
                 try:
                     text = hardware_pdf_text(raw)
                 except ImportError:

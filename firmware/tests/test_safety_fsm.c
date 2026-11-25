@@ -395,6 +395,14 @@ static void test_balancing_stop_rest_cycle_and_radio_policies(void)
     /* When radio returns fresh with arm SW HIGH + local re-grant -> back to BALANCING */
     in.radio_age_ms = 4u;
     in.radio_arm_sw = 1u;
+    in.boot_self_test_ok = 1u;
+    in.dump_continuity_ok = 1u;
+    in.k1_closed = 1u;
+    in.k2_closed = 1u;
+    in.precharge_dv_ok = 1u;
+    in.drives_healthy_6 = 1u;
+    in.imu_est_valid = 1u;
+    in.v_bus_v = 24.0f;
     in.local_regrant_req = 1u;
     safety_fsm_step(&fsm, &in, &out);
     assert(out.state == SAFETY_STATE_BALANCING);
@@ -761,6 +769,273 @@ static void test_s11_state_wiring_in_safety_fsm(void)
     assert(out.can_disable_cmd == 1u && out.can_abort_tx == 1u);
 }
 
+static void test_step_assist_supervision(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyInputs in = make_disarmed_clean_inputs();
+
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in.radio_arm_sw = 1u;
+    in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u;
+    in.host_valid = 1u;
+    in.host_age_ms = 0u;
+    in.v_target_m_s = 0.12f;
+
+    /* Missing legs/assist is represented by no qualified request. */
+    in.step_assist_req = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+
+    /* Qualified entry keeps torque enabled in the supervised step state. */
+    in.step_assist_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_STEP_ASSIST);
+    assert(out.torque_enable == 1u);
+
+    /* Failure/timeout is a controlled stop, preserving the balance torque path. */
+    in.step_assist_failed = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.torque_enable == 1u);
+
+    /* A fresh attempt can complete and hand back to ordinary balancing. */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in.step_assist_failed = 0u;
+    in.step_assist_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_STEP_ASSIST);
+    in.step_assist_req = 0u;
+    in.step_assist_done = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+}
+
+/* FW6REVIEW: the torque-off paths must also win from STEP_ASSIST (the run-up
+ * charge is the highest-energy state the robot has). */
+static void reach_step_assist(SafetyFsm *fsm, SafetyOutput *out, SafetyInputs *in)
+{
+    safety_fsm_init(fsm);
+    reach_balancing(fsm, out);
+    *in = make_disarmed_clean_inputs();
+    in->k1_closed = 1u;
+    in->k2_closed = 1u;
+    in->radio_arm_sw = 1u;
+    in->v_bus_v = 24.0f;
+    in->drives_healthy_6 = 1u;
+    in->v_target_m_s = 0.12f;
+    in->step_assist_req = 1u;
+    safety_fsm_step(fsm, in, out);
+    assert(out->state == SAFETY_STATE_STEP_ASSIST && out->torque_enable == 1u);
+    in->step_assist_req = 0u;
+}
+
+static void test_step_assist_torque_off_paths(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyInputs in;
+
+    /* wired / safety-radio e-stop */
+    reach_step_assist(&fsm, &out, &in);
+    in.estop_open = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_ESTOP && out.torque_enable == 0u);
+    assert(out.can_disable_cmd == 1u && out.can_abort_tx == 1u);
+
+    /* radio e-stop switch */
+    reach_step_assist(&fsm, &out, &in);
+    in.radio_estop_sw = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u);
+
+    /* drive fault (status) and S11 drive-fault mode */
+    reach_step_assist(&fsm, &out, &in);
+    in.drives_healthy_6 = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT && out.reason == SAFETY_REASON_DRIVE_FAULT);
+    assert(out.torque_enable == 0u && out.can_disable_cmd == 1u);
+    reach_step_assist(&fsm, &out, &in);
+    in.s11_mode = S11_DRIVE_FAULT;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u);
+
+    /* cannot balance: tilt >= 30 deg held 20 ms */
+    reach_step_assist(&fsm, &out, &in);
+    in.pitch_deg = 31.0f;
+    for (unsigned t = 0u; t < 12u && out.state != SAFETY_STATE_FAULT; ++t) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_FAULT && out.reason == SAFETY_REASON_TILT_LIMIT);
+    assert(out.torque_enable == 0u);
+
+    /* arm switch dropped with fresh radio */
+    reach_step_assist(&fsm, &out, &in);
+    in.radio_arm_sw = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u);
+
+    /* S11 double fault (latched STUCK) */
+    reach_step_assist(&fsm, &out, &in);
+    in.s11_mode = S11_STUCK;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u);
+}
+
+/* FW6FIX D3: a run-up abort has its own reason; an operator stop from
+ * STEP_ASSIST keeps VOLUNTARY_STOP. */
+static void test_fw6fix_step_abort_reason(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyInputs in;
+
+    reach_step_assist(&fsm, &out, &in);
+    in.step_assist_failed = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_STEP_ASSIST_ABORT);
+    assert(out.reason != SAFETY_REASON_VOLUNTARY_STOP);
+    assert(out.torque_enable == 1u && out.can_disable_cmd == 0u);
+
+    reach_step_assist(&fsm, &out, &in);
+    in.voluntary_stop_req = 1u;
+    in.step_assist_failed = 1u;   /* operator request takes precedence */
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_VOLUNTARY_STOP);
+
+    /* A failure flag outside STEP_ASSIST is ignored (no spurious abort reason). */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u;
+    in.k2_closed = 1u;
+    in.radio_arm_sw = 1u;
+    in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u;
+    in.step_assist_failed = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING);
+}
+
+/* FW6FIX D2: CONTROLLED_STOP is bounded. A robot that never settles (pitch held
+ * at 7.5 deg > 5 deg REST limit) goes to REST after stop_timeout_ms with torque
+ * kept, the alarm latched and REST not confirmed; torque-off escalations still
+ * apply afterwards. A normal stop is unaffected. */
+static SafetyInputs stop_inputs(void)
+{
+    SafetyInputs in = make_disarmed_clean_inputs();
+    in.k1_closed = 1u;
+    in.k2_closed = 1u;
+    in.radio_arm_sw = 1u;
+    in.v_bus_v = 24.0f;
+    in.drives_healthy_6 = 1u;
+    return in;
+}
+
+static void test_fw6fix_stop_timeout(void)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    const SafetyConfig def = safety_default_config();
+    assert(def.stop_timeout_ms == 20000u);
+
+    /* stuck: never meets the REST condition */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    SafetyInputs in = stop_inputs();
+    in.v_target_m_s = 0.3f;
+    safety_fsm_step(&fsm, &in, &out);
+    in.host_valid = 0u;                     /* host loss -> controlled stop */
+    in.pitch_deg = -7.5f;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    assert(out.reason == SAFETY_REASON_HOST_LOSS);
+    uint32_t ms = 2u;
+    while (out.state == SAFETY_STATE_CONTROLLED_STOP && ms < 30000u) {
+        assert(out.stop_timeout_alarm == 0u);
+        assert(out.torque_enable == 1u);
+        safety_fsm_step(&fsm, &in, &out);
+        ms += 2u;
+    }
+    assert(ms >= 20000u && ms <= 20004u);    /* bounded at 20 s from stop entry */
+    assert(out.state == SAFETY_STATE_REST);
+    assert(out.reason == SAFETY_REASON_STOP_TIMEOUT);
+    assert(out.stop_timeout_alarm == 1u);
+    assert(out.rest_confirmed == 0u);
+    assert(out.torque_enable == 1u && out.can_disable_cmd == 0u);  /* torque kept */
+    assert(out.v_ref_m_s == 0.0f && out.host_lost == 1u && out.host_revoke == 1u);
+    for (unsigned k = 0u; k < 100u; ++k) {    /* alarm stays latched in REST */
+        safety_fsm_step(&fsm, &in, &out);
+        assert(out.state == SAFETY_STATE_REST && out.stop_timeout_alarm == 1u);
+    }
+    /* torque-off escalation still applies from the timed-out REST */
+    in.pitch_deg = 31.0f;
+    for (unsigned t = 0u; t < 12u && out.state != SAFETY_STATE_FAULT; ++t) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_FAULT && out.reason == SAFETY_REASON_TILT_LIMIT);
+    assert(out.torque_enable == 0u && out.stop_timeout_alarm == 0u);
+
+    /* clean disarm from the timed-out REST clears the alarm */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = stop_inputs();
+    in.voluntary_stop_req = 1u;
+    in.pitch_deg = 7.5f;
+    for (uint32_t t = 0u; t <= 20000u; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_REST && out.stop_timeout_alarm == 1u);
+    in.radio_arm_sw = 0u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_DISARMED && out.stop_timeout_alarm == 0u);
+
+    /* local re-grant from the timed-out REST clears the alarm */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = stop_inputs();
+    in.voluntary_stop_req = 1u;
+    in.pitch_deg = 7.5f;
+    for (uint32_t t = 0u; t <= 20000u; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.stop_timeout_alarm == 1u);
+    in.voluntary_stop_req = 0u;
+    in.local_regrant_req = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_BALANCING && out.stop_timeout_alarm == 0u);
+
+    /* a stop that settles reaches a confirmed REST without the alarm */
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    in = stop_inputs();
+    in.voluntary_stop_req = 1u;
+    in.pitch_deg = 1.0f;
+    for (uint32_t t = 0u; t < 2000u && out.state != SAFETY_STATE_REST; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_REST && out.reason == SAFETY_REASON_REST_CONFIRMED);
+    assert(out.rest_confirmed == 1u && out.stop_timeout_alarm == 0u);
+
+    /* stop_timeout_ms = 0 disables the bound (configs not built from the default) */
+    SafetyConfig c = safety_default_config();
+    c.stop_timeout_ms = 0u;
+    safety_fsm_init_with_config(&fsm, &c);
+    reach_balancing(&fsm, &out);
+    in = stop_inputs();
+    in.voluntary_stop_req = 1u;
+    in.pitch_deg = 7.5f;
+    for (uint32_t t = 0u; t < 30000u; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP && out.stop_timeout_alarm == 0u);
+}
+
 int main(void)
 {
     test_disarmed_faults_and_estop();
@@ -769,6 +1044,10 @@ int main(void)
     test_balancing_stop_rest_cycle_and_radio_policies();
     test_fault_overrides_power_tilt_and_reset_guards();
     test_s11_state_wiring_in_safety_fsm();
+    test_step_assist_supervision();
+    test_step_assist_torque_off_paths();
+    test_fw6fix_step_abort_reason();
+    test_fw6fix_stop_timeout();
     printf("test_safety_fsm: ALL PASSED\n");
     return 0;
 }
