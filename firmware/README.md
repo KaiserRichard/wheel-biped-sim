@@ -1,8 +1,8 @@
-**Tóm tắt [FROM FILE / COMPUTED].** Đã đóng gói mã C, lớp phần cứng STM32H723, kiểm thử host và mô hình FIL. Bản FW6FIX có 46 kiểm thử host; các kết quả FIL được trích dẫn riêng và chỉ là mô phỏng. Lớp phần cứng mới chỉ được kiểm tra bằng kiểm thử host và mô phỏng; chưa chạy trên board thật.
+**Tóm tắt [FROM FILE / COMPUTED].** Đã đóng gói mã C, lớp phần cứng STM32H723, kiểm thử host và mô hình FIL. Bản FW9 thêm bám hướng/đường đi, ba sửa lỗi an toàn, bộ ước lượng có chặn trượt và bộ điều tốc bám đường; có 52 kiểm thử host (52/52 đạt, 0 cảnh báo khi build mới). Các kết quả FIL được trích dẫn riêng và chỉ là mô phỏng; chưa chạy trên board thật.
 
 # Portable robot firmware
 
-[FROM FILE] This is the FW6FIX source snapshot, extending slice 7 and the STM32H723 hardware layer. The nested `firmware/` directory contains portable C11 modules; `firmware/target/` adapts them to the CTRL rev4 board. No flashed robot image is included, and the vendor STM32 HAL is not distributed. [Verification receipts](evidence/README.md).
+[FROM FILE] This is the FW9 source snapshot: FW6FIX (slice 7 and the STM32H723 hardware layer) plus the changes in the second table below. The nested `firmware/` directory contains portable C11 modules; `firmware/target/` adapts them to the CTRL rev4 board. No flashed robot image is included, and the vendor STM32 HAL is not distributed. [Verification receipts](evidence/README.md).
 
 | Development slice | Change retained in this snapshot [FROM FILE] |
 | --- | --- |
@@ -12,6 +12,18 @@
 | 5 | Paired driving FIL comparison exposed a remaining speed-tracking failure, motivating the controller corrections in the next slice. |
 | 6 | Predictor history stores feedback deviations separately from feedforward; wheel-loss adaptation and authority scaling corrections. |
 | 7 | Integrates the reviewed S11 mailbox/policy and retains the controller corrections. A velocity quantization deadband prevents false frozen-encoder faults at standstill. |
+
+| Change after FW6FIX | What it does [FROM FILE unless tagged] |
+| --- | --- |
+| Heading and path tracking | `control/yaw_track.c`: optional heading or path mode (heading wrap, yaw-rate limit, cross-track term, path progress); default stays the plain yaw-rate mode. Host test `test_yaw_track`. [Figure-8 study](../docs/studies/figure-8-path-tracking.md). |
+| Lateral-push replay | `test_fz_lateral_push_replay` replays 16 simulated 30 N low-friction push streams through the frozen-encoder detector; no firmware change. [Study](../docs/studies/lateral-push-low-friction.md). |
+| Degraded-stop trim | After the brake ramp, a stop whose only S11 issue is a single-axis degraded substitution keeps learning the balance trim (`degraded_settle_trim`, default on), so a stop with a frozen encoder settles to REST instead of waiting for the 20 s stop timeout. Torque-off escalations are unchanged. |
+| Yaw review fixes | Yaw for the tracker is reduced modulo 2π in double precision, so long runs keep float resolution. |
+| Safety fixes | Arm switch LOW brakes to `CONTROLLED_STOP` instead of a torque-off FAULT; the fatal halt keeps sending motor-disable frames; estimator startup accepts only still samples. Tests `fw8_*`, `target_fatal_halt_repeat`. [Study](../docs/studies/firmware-safety-fixes.md). |
+| Slip-gated estimator | The S10 slip alarm blocks wheel-speed recapture. [Study](../docs/studies/slip-estimator-and-traction-governor.md). |
+| Traction governor | On a slip alarm the speed reference follows the estimated speed (development values 0.10 m/s, 0.5 m/s², 300 ms) and is off while S11 flags a frozen or advisory encoder. 2 of 16 slip-matrix cases still fall. [Study](../docs/studies/slip-estimator-and-traction-governor.md). |
+
+[COMPUTED: fresh native Release build of this folder] 0 compiler warnings; CTest **52/52** passed.
 
 [FROM FILE] The slice summaries are edited from the development reports; internal working reports and prebuilt binaries are omitted. The independent S11 suite lives in `s11_verified/`; the runtime implementation is `firmware/s11_packet_policy.c`. The runtime includes the later quantization correction, so it is not byte-identical to the archival round-two policy. See [packet review evidence](../docs/evidence/s11-packet-policy-fix.md).
 
@@ -39,7 +51,7 @@ ctest --test-dir build --output-on-failure
 
 [FROM FILE: supplied FW6FIX report, Gates; FW6 review, What I reran] Simulation-only development results: **CTest 46/46, FIL 6/6, 108 frozen-encoder runs with 0 falls** (72 detected stops, 36 undetected freezes). These are supplied evidence; public host tests can be rerun with the commands above. No hardware validation or new FIL campaign is claimed by this publication batch. See the [measurement checklist](../docs/sim-to-real/sim-to-real-checklist.md).
 
-[FROM FILE] The standalone contract fixture includes its netlist and clock audit under `tests/contract/`. The healthy replay corpus contains 110 simulated runs (976,169 samples); it is test input, not a real-robot log.
+[FROM FILE] The standalone contract fixture includes its netlist and clock audit under `tests/contract/`. The healthy replay corpus contains 110 simulated runs (976,169 samples) and the lateral-push corpus 16 simulated runs (28,000 samples); both are test input, not real-robot logs.
 
 ## STM32H723 hardware layer
 

@@ -106,6 +106,11 @@ typedef struct {
     float    degraded_pitch_fault_deg;  /* Default 15.0 deg: S11_DEGRADED stop escalates to FAULT */
     uint32_t stop_timeout_ms;         /* Default 20000 ms (FW6FIX D2): ~2x the slowest healthy
                                        * stop-to-REST seen in FIL (draw_001, 0.3 m/s: 10.1 s) */
+    uint8_t  degraded_settle_trim;    /* Default 1 (FW7): after the brake ramp of a
+                                       * CONTROLLED_STOP and in REST, a pure single-axis
+                                       * S11_DEGRADED substitution (s11_degraded_only) no
+                                       * longer inhibits the S9 balance-point trim.
+                                       * 0 = FW6FIX behaviour (trim frozen while degraded). */
 } SafetyConfig;
 
 typedef struct {
@@ -134,7 +139,10 @@ typedef struct {
     uint8_t      s11_fault;          /* 1 = S11 packet guard latched fault */
     uint8_t      s11_limited;        /* 1 = S11 authority < 1.0 (inhibit trim/jump) */
     uint8_t      s11_degraded;       /* 1 = S11_DEGRADED: one axis frozen, data substituted */
-    enum S11Mode s11_mode;           /* Verified S11 mode (default 0 = S11_FRESH) */
+    uint8_t      s11_degraded_only;  /* FW7: 1 = the only S11/CAN limit is the DEGRADED
+                                      * substitution (full authority, no stale packet, no
+                                      * CAN error-passive). Default 0 = not claimed. */
+    enum S11Mode s11_mode;          /* Verified S11 mode (default 0 = S11_FRESH) */
     uint8_t      s11_frame_bound;    /* 1 = populated via safety_fsm_bind_s11_frame() */
     float        s11_authority;      /* S11 authority scale when s11_frame_bound == 1 */
     uint8_t      imu_est_valid;      /* 1 = IMU & state estimator healthy/converged */

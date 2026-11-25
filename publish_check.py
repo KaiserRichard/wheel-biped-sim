@@ -18,6 +18,15 @@ MAX_HARDWARE_KICAD_BYTES = 24 * 1024 * 1024
 FIRMWARE_CORPUS = "firmware/tests/fz_data/healthy_corpus.bin"
 FIRMWARE_CORPUS_SIZE = 29288458
 FIRMWARE_CORPUS_SHA256 = "589b52d6d068c37199e4e75c9e6ae889e1f9b28f3b215eaa2d2db347987be9d4"
+# Every pinned S11C replay corpus: exact path -> (bytes, SHA-256, runs, samples).
+# The second entry is the simulated 30 N lateral-push replay used by the
+# test_fz_lateral_push_replay C test. Each entry is checked in full; no other
+# binary is accepted and the general text limit is unchanged.
+FIRMWARE_CORPORA = {
+    FIRMWARE_CORPUS: (FIRMWARE_CORPUS_SIZE, FIRMWARE_CORPUS_SHA256, 110, 976169),
+    "firmware/tests/fz_data/lateral_lowmu_push_corpus.bin": (
+        840576, "69972fb9dd1924359b0dddd038b344260543b8901bf3b34c38fab79a6eea15f9", 16, 28000),
+}
 PERCEPTION_IMAGE_LIMITS = {".png": 1024**2, ".jpg": 1024**2, ".jpeg": 1024**2, ".gif": 4 * 1024**2}
 # Exact bytes of the reviewed perception visuals. See perception/README.md.
 PERCEPTION_IMAGE_ALLOWLIST = {
@@ -133,6 +142,9 @@ PNG_ALLOWLIST = {
     'docs/studies/figures/push3b-pareto.png': 'b5db8990f07e802bf5cc8c9829d81878845c24649daa21fde4a1ec4fee7721b4',
     'docs/studies/figures/contact-sensitivity.png': '28e3fb7d63e1d9eda67b780ff02a9196bc458af127f16d785e6293778dda7c2c',
     'docs/studies/figures/monte-carlo-published-firmware.png': 'f98bec9e8dada1910ece2d29a64ca39dd9c8aa006f74186fac216f4224791ab8',
+    'docs/studies/figures/figure-8-cross-track-error.png': 'f4b345520eec62742f1b87387bf45ba56be649243cd4e20f5a7ae6050ed8e5e3',
+    'docs/studies/figures/figure-8-pose-comparison.png': 'adbaaba262c176ae25ec074ee036948e554b5ba094dd68dc0db273c4169ca226',
+    'docs/studies/figures/lateral-push-root-cause.png': '36c847b004e99bf8be25c77e995c6340f468bd323c089c0890229cef97a492b5',
     'demo/overlay.png': '4bde18346fe6b80c0eb482b1087720c8b1a78142e79d3d863fc6efedd50670cb',
     'media/hardware/motor-power-board-perspective.png': '78ca05c1a80f05e9429b6497bca2bc988a6cb45aff40ecc27c79ec1ca2a4aa5b',
     'media/hardware/motor-power-board-top.png': '703d5a0b8c8466b09cb09c9dd2a5899db1ef6d752c989a0bc2d96f2cf9113bc4',
@@ -273,13 +285,13 @@ def hardware_pdf_text(raw):
         return "\n".join(page.get_text() for page in pdf)
 
 
-def firmware_corpus_text(raw):
+def firmware_corpus_text(raw, rel=FIRMWARE_CORPUS):
     """Validate pinned binary records and expose their textual run names."""
-    if (len(raw) != FIRMWARE_CORPUS_SIZE
-            or hashlib.sha256(raw).hexdigest() != FIRMWARE_CORPUS_SHA256):
+    size, digest, expected_runs, expected_samples = FIRMWARE_CORPORA[rel]
+    if len(raw) != size or hashlib.sha256(raw).hexdigest() != digest:
         raise ValueError("changed corpus")
     magic, runs = struct.unpack_from("<4sI", raw)
-    if magic != b"S11C" or runs != 110:
+    if magic != b"S11C" or runs != expected_runs:
         raise ValueError("bad corpus header")
     offset, samples, names = 8, 0, []
     for _ in range(runs):
@@ -294,7 +306,7 @@ def firmware_corpus_text(raw):
             raise ValueError("bad run header")
         samples += count
         offset += 5 + count * 15 * 2
-    if offset != len(raw) or samples != 976169:
+    if offset != len(raw) or samples != expected_samples:
         raise ValueError("bad corpus record count")
     return "\n".join(names)
 
@@ -321,7 +333,7 @@ def scan(root=None):
                 problems.append(f"prohibited symlink: {rel}")
                 continue
             suffix = path.suffix.lower()
-            is_firmware_corpus = rel == FIRMWARE_CORPUS
+            is_firmware_corpus = rel in FIRMWARE_CORPORA
             under_hardware = len(path.relative_to(root).parts) > 1 and rel.startswith("hardware/")
             is_hardware_pdf = under_hardware and suffix == ".pdf"
             kicad_header = HARDWARE_KICAD_HEADERS.get(suffix) if under_hardware else None
@@ -349,7 +361,7 @@ def scan(root=None):
                 continue
             size_limit = MAX_HARDWARE_KICAD_BYTES if kicad_header else MAX_TEXT_BYTES
             if is_firmware_corpus:
-                size_limit = FIRMWARE_CORPUS_SIZE
+                size_limit = FIRMWARE_CORPORA[rel][0]
             if not is_video and path.stat().st_size > size_limit:
                 problems.append(f"oversize text or opaque data: {rel}")
                 continue
@@ -383,7 +395,7 @@ def scan(root=None):
                     continue
             if is_firmware_corpus:
                 try:
-                    text = firmware_corpus_text(raw)
+                    text = firmware_corpus_text(raw, rel)
                 except (ValueError, UnicodeDecodeError, struct.error):
                     problems.append(f"unreadable or changed firmware corpus: {rel}")
                     continue

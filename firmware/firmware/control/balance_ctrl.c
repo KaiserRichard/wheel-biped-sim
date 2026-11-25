@@ -100,6 +100,22 @@ void balance_ctrl_init(BalanceCtrl *ctrl, const BalanceCtrlConfig *cfg)
     ctrl->s10.robust = (ctrl->cfg.s10_robust != 0u) ? 1 : 0;
     safety_fsm_init_with_config(&ctrl->safety, &ctrl->cfg.safety_cfg);
     h5_balance_init(&ctrl->h5, &ctrl->cfg.h5_cfg);
+    yaw_track_init(&ctrl->yaw_track, NULL);
+}
+
+void balance_ctrl_set_yaw_mode(BalanceCtrl *ctrl, uint8_t mode, float heading_target_rad)
+{
+    if (ctrl == NULL) {
+        return;
+    }
+    ctrl->yaw_track.mode = (mode == (uint8_t)YAW_MODE_HEADING || mode == (uint8_t)YAW_MODE_PATH)
+                         ? mode : (uint8_t)YAW_MODE_RATE;
+    ctrl->yaw_track.heading_target_rad = yaw_wrap_pi(heading_target_rad);
+}
+
+YawTrack *balance_ctrl_yaw_track(BalanceCtrl *ctrl)
+{
+    return (ctrl != NULL) ? &ctrl->yaw_track : NULL;
 }
 
 void balance_ctrl_attach_flight_ring(BalanceCtrl *ctrl, LogFlightRing *ring)
@@ -242,6 +258,7 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     float est_pitch = 0.0f;
     float est_roll = 0.0f;
     float est_yaw = 0.0f;
+    float est_yaw_trk = 0.0f;   /* FW7B: yaw for yaw_track, reduced mod 2 pi in double */
     float est_roll_rate = 0.0f;
     float est_pitch_rate = 0.0f;
     float est_yaw_rate = 0.0f;
@@ -255,6 +272,9 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
             est_pitch      = (float)out->est_frame.pitch;
             est_roll       = (float)out->est_frame.roll;
             est_yaw        = (float)out->est_frame.yaw;
+            /* S10 integrates yaw unwrapped in double; reduce it before the float
+             * cast so a long run keeps full float resolution in yaw_track. */
+            est_yaw_trk    = (float)fmod(out->est_frame.yaw, 6.283185307179586);
             est_roll_rate  = (float)out->est_frame.rate[0];
             est_pitch_rate = (float)out->est_frame.rate[1];
             est_yaw_rate   = (float)out->est_frame.rate[2];
@@ -266,6 +286,7 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         est_pitch      = in->ext_state.pitch_rad;
         est_roll       = in->ext_state.roll_rad;
         est_yaw        = in->ext_state.yaw_rad;
+        est_yaw_trk    = est_yaw;
         est_roll_rate  = in->ext_state.roll_rate_rad_s;
         est_pitch_rate = in->ext_state.pitch_rate_rad_s;
         est_yaw_rate   = in->ext_state.yaw_rate_rad_s;
@@ -308,6 +329,12 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     s_in.drive_enable_fail  = in->drive_enable_fail;
     s_in.s11_fault          = s11_fault;
     s_in.s11_limited        = (s11_limited != 0u || out->can_health.inhibit_jump != 0u) ? 1u : 0u;
+    /* FW7: a pure single-axis DEGRADED substitution (full authority, no stale-packet
+     * limit, no CAN error-passive); lets the stop/REST S9 trim keep learning. */
+    s_in.s11_degraded_only  = (out->s11_frame.valid != 0u
+                               && out->s11_frame.mode == S11_DEGRADED
+                               && out->s11_frame.authority >= 1.0
+                               && out->can_health.inhibit_jump == 0u) ? 1u : 0u;
     s_in.imu_est_valid      = est_valid;
     s_in.ground_left        = (est_air == 0u) ? 1u : 0u;
     s_in.ground_right       = (est_air == 0u) ? 1u : 0u;
@@ -321,7 +348,15 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     s_in.host_age_ms        = in->host_age_ms;
     s_in.host_valid         = in->host_valid;
     s_in.v_target_m_s       = in->v_target_m_s;
-    s_in.yaw_target_rad_s   = in->yaw_target_rad_s;
+    /* YAW1: in the default YAW_MODE_RATE this returns in->yaw_target_rad_s
+     * unchanged. HEADING/PATH modes act only while BALANCING (previous-tick FSM
+     * state); every stop/rest/fault path keeps its existing yaw handling.
+     * FW7B: yaw_track gets the 2 pi-reduced yaw (it only uses yaw increments). */
+    ctrl->yaw_last_est_rad = est_yaw_trk;
+    s_in.yaw_target_rad_s   = yaw_track_step(&ctrl->yaw_track, est_yaw_trk, est_v,
+                                             in->yaw_target_rad_s, BALANCE_CTRL_DT_S,
+                                             (ctrl->safety.state == SAFETY_STATE_BALANCING
+                                              && est_valid != 0u) ? 1u : 0u);
     s_in.stand_handoff_req  = in->stand_handoff_req;
     /* Stop a blocked drive before reference integration causes breakaway slip.
      * Qualify previous progress to exclude startup/trim capture, then require
@@ -523,6 +558,86 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         out->safety_out.inhibit_jump = 1u;
     }
 
+    /* TRAC2 traction governor. A wheeled pendulum cannot decelerate its centre
+     * of mass faster than mu*g, and building the backward lean first needs a
+     * forward wheel push that low friction cannot carry. While the S10 slip
+     * alarm is asserted (and for a hold time after it clears) the speed
+     * reference restarts from the inertial speed estimate, stays within a
+     * bounded lead of it while slipping, and then slews to the supervisor's
+     * reference at a reduced rate without host accel/jerk feed-forward. This
+     * lengthens any stop (host command or supervisor ramp) on slip only; with
+     * no alarm the reference passes through unchanged. Development values.
+     * FW9: a frozen or chattering encoder corrupts the wheel speed that the S10
+     * slip alarm compares, so the alarm is not slip evidence while S11 reports
+     * any CONFIRMED-frozen (degraded) or ADVISORY axis. The governor is then
+     * ineligible, so it never engages and an active governance ends there
+     * (TRAC2 side effect: 31/108 frozen-encoder runs engaged, more pitch/drift). */
+    uint8_t trac_on = 0u;
+    float trac_a = 0.0f;
+    {
+        const float v_cmd = out->safety_out.v_ref_m_s;
+        const uint8_t s11_suspect = (out->s11_frame.degraded_mask != 0u
+                                     || out->s11_frame.advisory_mask != 0u) ? 1u : 0u;
+        if (s11_suspect != 0u && ctrl->s10.alarm != 0
+            && ctrl->trac_mask_block_n < UINT32_MAX) {
+            ctrl->trac_mask_block_n++;
+        }
+        const uint8_t eligible = (ctrl->cfg.use_s10_estimator != 0u
+            && out->safety_out.torque_enable != 0u
+            && est_air == 0u
+            && s11_suspect == 0u
+            && (ctrl->safety.state == SAFETY_STATE_BALANCING
+                || ctrl->safety.state == SAFETY_STATE_CONTROLLED_STOP
+                || ctrl->safety.state == SAFETY_STATE_REST)) ? 1u : 0u;
+        const uint8_t slip = (eligible != 0u && ctrl->s10.alarm != 0) ? 1u : 0u;
+        if (eligible == 0u) {
+            ctrl->trac_active = 0u;
+            ctrl->trac_clear_ms = 0u;
+            ctrl->trac_v_m_s = v_cmd;
+        } else {
+            if (slip != 0u) {
+                if (ctrl->trac_active == 0u) {
+                    ctrl->trac_active = 1u;
+                    ctrl->trac_v_m_s = est_v;
+                    if (ctrl->trac_events_n < UINT32_MAX) {
+                        ctrl->trac_events_n++;
+                    }
+                }
+                ctrl->trac_clear_ms = 0u;
+            } else if (ctrl->trac_active != 0u
+                       && ctrl->trac_clear_ms < BALANCE_TRAC_HOLD_MS) {
+                ctrl->trac_clear_ms += BALANCE_CTRL_DT_MS;
+            }
+            if (ctrl->trac_active != 0u) {
+                const float dv_max = BALANCE_TRAC_DECEL_M_S2 * BALANCE_CTRL_DT_S;
+                const float prev = ctrl->trac_v_m_s;
+                float v_gov = prev + clamp_f32(v_cmd - prev, -dv_max, dv_max);
+                if (slip != 0u) {
+                    v_gov = clamp_f32(v_gov, est_v - BALANCE_TRAC_LEAD_M_S,
+                                      est_v + BALANCE_TRAC_LEAD_M_S);
+                    /* No position wind-up against a slipping wheel: neither
+                     * the drive position error nor the S9 host-loss brake
+                     * position (which otherwise keeps a saturated brake). */
+                    ctrl->h5.x_set_m = ctrl->h5.x_est_m;
+                    ctrl->h5.s9_brake.position_m = 0.0f;
+                    ctrl->h5.s9_brake.blend_m = 0.0f;
+                }
+                ctrl->trac_v_m_s = v_gov;
+                trac_a = clamp_f32((v_gov - prev) / BALANCE_CTRL_DT_S,
+                                   -BALANCE_TRAC_DECEL_M_S2, BALANCE_TRAC_DECEL_M_S2);
+                out->safety_out.v_ref_m_s = v_gov;
+                trac_on = 1u;
+                if (slip == 0u && ctrl->trac_clear_ms >= BALANCE_TRAC_HOLD_MS
+                    && fabsf(v_gov - v_cmd) < 1e-3f) {
+                    ctrl->trac_active = 0u;
+                    ctrl->trac_clear_ms = 0u;
+                }
+            } else {
+                ctrl->trac_v_m_s = v_cmd;
+            }
+        }
+    }
+
     /* =========================================================================
      * STEP 5: S9 Host-Loss Brake (every enabled tick) & Balance-Point Trim
      * STEP 6: VMC + S7/S5 Predictor + PIDs + Jump FSM + Clamps & Regen Taper
@@ -561,6 +676,11 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         h5_in.accel_ref_m_s2   = (out->safety_out.host_lost != 0u) ? 0.0f
                                : (runup != 0u ? ctrl->step_a_m_s2 : in->accel_ref_m_s2);
         h5_in.jerk_ref_m_s3    = (out->safety_out.host_lost != 0u) ? 0.0f : in->jerk_ref_m_s3;
+        if (trac_on != 0u) {
+            /* Governed reference: no host lean/jerk feed-forward under slip. */
+            h5_in.accel_ref_m_s2 = (out->safety_out.host_lost != 0u) ? 0.0f : trac_a;
+            h5_in.jerk_ref_m_s3  = 0.0f;
+        }
         for (uint32_t i = 0u; i < 6u; ++i) {
             h5_in.angle[i] = (float)out->s11_frame.angle[i];
             h5_in.rate[i]  = (float)out->s11_frame.rate[i];
@@ -813,6 +933,20 @@ void balance_ctrl_fil_s11_hip_mirror(void *state_buf, uint8_t enable)
     }
 }
 
+uint8_t balance_ctrl_fil_wheel_radius_scale(void *state_buf, float scale)
+{
+    /* FIL-only (FW7 open point B): scale the S10 wheel radius used for the wheel
+     * speed observation to cfg.wheel_radius_m * scale. On the target the same effect
+     * is BalanceCtrlConfig.wheel_radius_m (a calibrated rolling radius). Accepts
+     * 0.95..1.05; returns 1 if applied. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl == NULL || !isfinite(scale) || scale < 0.95f || scale > 1.05f) {
+        return 0u;
+    }
+    ctrl->s10.radius = ctrl->cfg.wheel_radius_m * (double)scale;
+    return 1u;
+}
+
 void balance_ctrl_fil_s11_diag(void *state_buf, float diag[10])
 {
     /* FIL-only: [0] CONFIRMED mask, [1] ADVISORY mask, [2] IMU gate, [3..8]
@@ -852,6 +986,56 @@ void balance_ctrl_fil_alarm_diag(void *state_buf, float diag[4])
         diag[1] = (float)ctrl->safety.stop_timeout_latched;
         diag[2] = (float)ctrl->safety.reason;
         diag[3] = (float)ctrl->step_abort;
+    }
+}
+
+void balance_ctrl_fil_yaw_config(void *state_buf, const float p[12])
+{
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl == NULL || p == NULL) {
+        return;
+    }
+    YawTrack *t = &ctrl->yaw_track;
+    YawTrackConfig c = yaw_track_default_config();
+    if (p[4] > 0.0f) { c.heading_kp_1_s = p[4]; }
+    if (p[5] > 0.0f) { c.max_rate_rad_s = p[5]; }
+    if (p[6] > 0.0f) { c.max_accel_rad_s2 = p[6]; }
+    if (p[7] > 0.0f) { c.xtrack_k_1_s = p[7]; }
+    if (p[8] > 0.0f) { c.xtrack_max_rad = p[8]; }
+    if (p[9] > 0.0f) { c.min_speed_m_s = p[9]; }
+    if (p[10] > 0.0f) { c.ff_preview_s = p[10]; }
+    t->cfg = c;
+    if (p[2] > 0.0f) {
+        (void)yaw_path_figure8(t, 0.0f, 0.0f, 0.0f, p[2], (uint8_t)(p[3] > 0.5f ? 1u : 0u));
+    }
+    yaw_track_reset_odom(t, 0.0f, 0.0f, ctrl->yaw_last_est_rad, 0.0f);
+    balance_ctrl_set_yaw_mode(ctrl, (uint8_t)(p[0] > 1.5f ? 2u : (p[0] > 0.5f ? 1u : 0u)), p[1]);
+}
+
+void balance_ctrl_fil_yaw_pose(void *state_buf, float x_m, float y_m, float yaw_rad,
+                               uint8_t valid)
+{
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        yaw_track_set_ext_pose(&ctrl->yaw_track, x_m, y_m, yaw_rad, valid);
+    }
+}
+
+void balance_ctrl_fil_yaw_diag(void *state_buf, float diag[10])
+{
+    const BalanceCtrl *ctrl = (const BalanceCtrl *)state_buf;
+    if (ctrl != NULL && diag != NULL) {
+        const YawTrack *t = &ctrl->yaw_track;
+        diag[0] = t->diag.e_y_m;
+        diag[1] = t->diag.e_psi_rad;
+        diag[2] = t->diag.s_total_m;
+        diag[3] = t->diag.kappa_1_m;
+        diag[4] = (float)t->diag.seg_idx;
+        diag[5] = (float)t->diag.done;
+        diag[6] = t->x_m;
+        diag[7] = t->y_m;
+        diag[8] = t->rate_cmd_rad_s;
+        diag[9] = (float)t->mode;
     }
 }
 

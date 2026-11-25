@@ -139,6 +139,8 @@ Everything below is simulation, played back from saved runs. Nothing here is foo
 | --- | --- |
 | [ppo-vs-lqr.mp4](../media/ppo-vs-lqr.mp4) | Recovery from +40°, −40° and +25° tilts by R4, LQR and PPO, with a results card after each |
 | [firmware-in-loop-step-and-push.mp4](../media/firmware-in-loop-step-and-push.mp4) | The C firmware driving MuJoCo: a 30 N sideways push, a 5 mm step at floor friction 0.38 (falls), the same step with a blocked-drive stop (stops and keeps balancing; not yet in the public firmware), and the step at friction 0.8 (crosses) |
+| [figure-8-path-tracking.mp4](../media/figure-8-path-tracking.mp4) | The C firmware tracking a figure-8 of two 0.5 m circles at 0.4 m/s on floor friction 0.38, 6.2 kg model, onboard odometry ([study](studies/figure-8-path-tracking.md)) |
+| [lateral-push-low-friction.mp4](../media/lateral-push-low-friction.mp4) | A 30 N sideways push on floor friction 0.25, earlier and current firmware side by side: the earlier one trips a false stuck-encoder fault and falls ([study](studies/lateral-push-low-friction.md)) |
 
 ### CAD robot, 3.72 kg model
 

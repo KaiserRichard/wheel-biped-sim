@@ -111,6 +111,25 @@ void target_estop_force_trip(void)
     }
 }
 
+void target_estop_fatal_halt(void)
+{
+    /* Latch emergency stop & transmit 3-bus torque-off before halting */
+    target_estop_force_trip();
+    __disable_irq();
+    for (;;) {
+        /* FW8 F-05: with IRQs masked, SysTick/FDCAN callbacks can no longer emit
+         * the +1 ms 0xFF..FD repeat or frames that did not fit the TX FIFO, so
+         * poll the service here (DWT time runs under PRIMASK). It only ever
+         * sends disable frames; the IWDG still resets the core. */
+        target_fdcan_emergency_service();
+#ifdef TARGET_HOST_TEST
+        if (stub_halt_poll() != 0u) {
+            return;
+        }
+#endif
+    }
+}
+
 void target_estop_set_permit(uint8_t enable)
 {
     uint32_t saved = target_irq_save();

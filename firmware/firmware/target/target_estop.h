@@ -38,6 +38,10 @@ void target_estop_exti_isr(void);
 /* Software-triggered emergency latch & immediate 3-bus torque-off. */
 void target_estop_force_trip(void);
 
+/* Fatal-fault halt for Error_Handler / HardFault: trip, mask IRQs, never return
+ * (host test build returns when stub_halt_poll() says so). */
+void target_estop_fatal_halt(void);
+
 /* Enable/disable PD11 watchdog edges (only enabled while latch and inputs are healthy). */
 void target_estop_set_permit(uint8_t enable);
 

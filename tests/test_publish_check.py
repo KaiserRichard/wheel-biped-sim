@@ -6,15 +6,20 @@ from pathlib import Path
 
 import pytest
 
-from publish_check import PERCEPTION_IMAGE_ALLOWLIST, PNG_ALLOWLIST, ROOT, scan
+from publish_check import MAX_TEXT_BYTES, PERCEPTION_IMAGE_ALLOWLIST, PNG_ALLOWLIST, ROOT, scan
 
 
-def test_frozen_encoder_corpus_is_pinned(tmp_path):
-    from publish_check import FIRMWARE_CORPUS
+@pytest.mark.parametrize("corpus", [
+    "firmware/tests/fz_data/healthy_corpus.bin",
+    "firmware/tests/fz_data/lateral_lowmu_push_corpus.bin",
+])
+def test_frozen_encoder_corpus_is_pinned(tmp_path, corpus):
+    from publish_check import FIRMWARE_CORPORA
 
-    target = tmp_path / FIRMWARE_CORPUS
+    assert corpus in FIRMWARE_CORPORA
+    target = tmp_path / corpus
     target.parent.mkdir(parents=True)
-    shutil.copyfile(ROOT / FIRMWARE_CORPUS, target)
+    shutil.copyfile(ROOT / corpus, target)
     assert scan(tmp_path) == []
     with target.open("r+b") as stream:
         stream.seek(-1, 2)
@@ -22,8 +27,9 @@ def test_frozen_encoder_corpus_is_pinned(tmp_path):
         stream.seek(-1, 2)
         stream.write(bytes([last[0] ^ 1]))
     assert any("changed firmware corpus" in item for item in scan(tmp_path))
-    target.rename(target.with_name("other.bin"))
-    assert any("oversize text or opaque data" in item for item in scan(tmp_path))
+    if FIRMWARE_CORPORA[corpus][0] > MAX_TEXT_BYTES:
+        target.rename(target.with_name("other.bin"))
+        assert any("oversize text or opaque data" in item for item in scan(tmp_path))
 
 
 def check_case(tmp_path, name, rejected, accepted, safe_name="doc.md"):

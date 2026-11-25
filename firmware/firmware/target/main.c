@@ -185,11 +185,7 @@ static void PeriphCommonClock_Config(void)
 
 void Error_Handler(void)
 {
-    /* Latch emergency stop & transmit 3-bus torque-off before halting */
-    target_estop_force_trip();
-    __disable_irq();
-    while (1) {
-    }
+    target_estop_fatal_halt();
 }
 
 /* ============================================================================

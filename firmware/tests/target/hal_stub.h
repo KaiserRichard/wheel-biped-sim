@@ -69,6 +69,10 @@ extern uint32_t stub_primask, stub_exti_pending, stub_reset_flags, stub_now;
 extern uint8_t stub_stop_closed, stub_opto_closed, stub_permit;
 extern void (*stub_irq_on_enable)(void);
 extern void (*stub_before_irq_disable)(void);
+/* FW8: host exit for target_estop_fatal_halt(); each poll advances stub_now by
+ * 100 us and returns 1 after stub_halt_polls_max polls. */
+extern uint32_t stub_halt_polls, stub_halt_polls_max;
+uint8_t stub_halt_poll(void);
 uint32_t __get_PRIMASK(void);
 void __disable_irq(void);
 void __enable_irq(void);

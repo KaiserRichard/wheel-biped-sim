@@ -30,6 +30,13 @@ void stub_reset(void) {
  for (unsigned i = 0; i < 3; ++i) { stub_free[i] = 8u; }
  stub_usb_active = NULL; stub_usb_len = stub_usb_calls = stub_usb_fail = 0u;
  stub_iwdg_refreshes = 0u;
+ stub_halt_polls = 0u; stub_halt_polls_max = 0u;
+}
+uint32_t stub_halt_polls, stub_halt_polls_max;
+uint8_t stub_halt_poll(void) {
+ assert(stub_primask == 1u); /* fatal halt must keep IRQs masked */
+ stub_now += 100u;
+ return (++stub_halt_polls >= stub_halt_polls_max) ? 1u : 0u;
 }
 uint32_t __get_PRIMASK(void) { return stub_primask; }
 void __disable_irq(void) {

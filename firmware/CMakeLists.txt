@@ -37,6 +37,7 @@ set(WBR_FIRMWARE_SOURCES
     firmware/control/s10_estimator.c
     firmware/control/h5_balance.c
     firmware/control/balance_ctrl.c
+    firmware/control/yaw_track.c
 )
 
 set(WBR_STM32H723_TARGET_SOURCES
@@ -197,7 +198,7 @@ if(NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(test_target_hal PRIVATE wbr_firmware m)
     foreach(scenario estop can rx operator watchdog imu radio usb
             opto_pending_permit opto_pending_clear opto_pending_tx
-            rev4_mapping emergency_clock watchdog_config)
+            rev4_mapping emergency_clock watchdog_config fatal_halt_repeat)
         add_test(NAME target_${scenario} COMMAND test_target_hal ${scenario})
     endforeach()
 
@@ -238,6 +239,17 @@ if(NOT CMAKE_CROSSCOMPILING)
     add_fw_test(test_log_packer        test_log_packer.c)
     add_fw_test(test_can_sched         test_can_sched.c)
     add_fw_test(test_balance_ctrl      test_balance_ctrl.c)
+    # YAW1: heading wrap, rate limit, path geometry/progress, default-off pass-through
+    add_fw_test(test_yaw_track         test_yaw_track.c)
+
+    # FW8: confirmed should-fix findings of the firmware safety review (F-04, F-06).
+    add_executable(test_fw8_safety tests/test_fw8_safety.c)
+    target_link_libraries(test_fw8_safety PRIVATE wbr_firmware m)
+    target_compile_options(test_fw8_safety PRIVATE ${FW_COMMON_WARNINGS})
+    apply_undebug_guard(test_fw8_safety)
+    foreach(scenario arm_stop startup_motion startup_gravity)
+        add_test(NAME fw8_${scenario} COMMAND test_fw8_safety ${scenario})
+    endforeach()
 
     # FW6: STEP3RC part-B frozen-encoder detector (ported host tests) and the
     # firmware reaction (DEGRADED -> CONTROLLED_STOP, partner wheel, escalation).
@@ -250,6 +262,11 @@ if(NOT CMAKE_CROSSCOMPILING)
     apply_undebug_guard(test_fz_healthy_replay)
     add_test(NAME test_fz_healthy_replay
         COMMAND test_fz_healthy_replay "${CMAKE_CURRENT_SOURCE_DIR}/tests/fz_data/healthy_corpus.bin")
+    # LAT1: 30 N / 100 ms lateral push at mu 0.25/0.38/0.5/0.8 on four mass models (16 FIL runs,
+    # -0.5..+3.0 s around the push). The pre-FW6 S11 stuck rule false-tripped on this kind of
+    # stream (wheel-slip contact chatter) and cut torque -> fall; must stay CONFIRMED/ADVISORY-free.
+    add_test(NAME test_fz_lateral_push_replay
+        COMMAND test_fz_healthy_replay "${CMAKE_CURRENT_SOURCE_DIR}/tests/fz_data/lateral_lowmu_push_corpus.bin")
 
     # Verified S11 packet-policy suite (18 tests, including reviewer_probes & concurrent mailbox)
     add_s11_verified_test(test_a1_latched_frame              s11_verified/tests/test_a1_latched_frame.c)

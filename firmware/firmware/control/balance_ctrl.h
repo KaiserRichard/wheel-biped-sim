@@ -26,6 +26,7 @@
 #include "safety_fsm.h"
 #include "control/h5_balance.h"
 #include "control/s10_estimator.h"
+#include "control/yaw_track.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -88,6 +89,10 @@ enum {
     BALANCE_STEP_DECL_FIELD = 2
 };
 #define BALANCE_STEP_MAX_HEIGHT_M   0.0121f
+/* TRAC2 traction governor: development values (simulation, not hardware). */
+#define BALANCE_TRAC_DECEL_M_S2  0.5f  /* slew while slip-governed */
+#define BALANCE_TRAC_LEAD_M_S    0.10f /* max reference lead over est. speed while slipping */
+#define BALANCE_TRAC_HOLD_MS     300u  /* alarm-clear time before release */
 
 typedef struct {
     uint32_t         tick_us;          /* Monotonic 500 Hz tick timestamp (us) */
@@ -195,11 +200,27 @@ typedef struct {
     uint8_t           fil_step_decl;      /* FIL-only declaration passed to the tick */
     float             fil_step_decl_h_m;
     float             fil_step_field_m;
+    /* YAW1: optional heading / path mode (yaw_track.h). Default YAW_MODE_RATE:
+     * the host yaw-rate target is passed through unchanged. */
+    YawTrack          yaw_track;
+    float             yaw_last_est_rad;
+    /* TRAC2 traction governor (low-friction stop). */
+    uint8_t           trac_active;   /* 1 while the slip-governed reference is in use */
+    uint32_t          trac_clear_ms; /* time since the S10 slip alarm last asserted */
+    float             trac_v_m_s;    /* governed speed reference */
+    uint32_t          trac_events_n; /* governor activations (diagnostic) */
+    uint32_t          trac_mask_block_n; /* FW9: ticks with slip alarm ignored (S11 frozen/advisory) */
 } BalanceCtrl;
 
 BalanceCtrlConfig balance_ctrl_default_config(void);
 void balance_ctrl_init(BalanceCtrl *ctrl, const BalanceCtrlConfig *cfg);
 void balance_ctrl_attach_flight_ring(BalanceCtrl *ctrl, LogFlightRing *ring);
+
+/* YAW1: select the yaw mode (YAW_MODE_RATE default / _HEADING / _PATH) and the
+ * heading target used by YAW_MODE_HEADING. Unknown modes fall back to RATE.
+ * The path itself is set up on balance_ctrl_yaw_track() with yaw_path_*(). */
+void balance_ctrl_set_yaw_mode(BalanceCtrl *ctrl, uint8_t mode, float heading_target_rad);
+YawTrack *balance_ctrl_yaw_track(BalanceCtrl *ctrl);
 
 /* Feed one 1 kHz IMU sample directly into the S10 estimator (for 1 kHz imu_task). */
 void balance_ctrl_feed_imu_1khz(BalanceCtrl *ctrl, int32_t tick_ms,
@@ -219,9 +240,22 @@ void balance_ctrl_fil_step_declare(void *state_buf, uint8_t declaration,
                                    float height_m, float field_length_m);
 void balance_ctrl_fil_s11_diag(void *state_buf, float diag[10]);
 void balance_ctrl_fil_s11_hip_mirror(void *state_buf, uint8_t enable);
+uint8_t balance_ctrl_fil_wheel_radius_scale(void *state_buf, float scale);
 /* FW6FIX FIL diag: [0] refused FIELD-declaration ticks, [1] stop-timeout alarm latch,
  * [2] safety reason, [3] last run-up abort code. */
 void balance_ctrl_fil_alarm_diag(void *state_buf, float diag[4]);
+/* YAW1 FIL: p[0] mode, p[1] heading target rad, p[2] figure-8 radius m (<= 0: no
+ * path), p[3] closed, p[4] heading kp, p[5] max rate, p[6] max accel, p[7] cross-
+ * track k, p[8] cross-track max rad, p[9] min speed, p[10] curvature preview s
+ * (p[4..10] <= 0 keep default; p[11] reserved).
+ * Resets odometry to (0, 0, yaw 0) at the current estimator yaw. */
+void balance_ctrl_fil_yaw_config(void *state_buf, const float p[12]);
+/* YAW1 FIL: external pose for the next ticks (valid = 0 -> onboard odometry). */
+void balance_ctrl_fil_yaw_pose(void *state_buf, float x_m, float y_m, float yaw_rad,
+                               uint8_t valid);
+/* YAW1 FIL diag: [0] e_y m, [1] e_psi rad, [2] s_total m, [3] kappa, [4] seg idx,
+ * [5] done, [6] odom x m, [7] odom y m, [8] yaw-rate cmd rad/s, [9] mode. */
+void balance_ctrl_fil_yaw_diag(void *state_buf, float diag[10]);
 void    balance_ctrl_fil_init(void *state_buf, float mass_kg, float length_ref_m,
                               uint8_t radio_loss_policy);
 void    balance_ctrl_fil_imu_1khz(void *state_buf, int32_t tick_ms,

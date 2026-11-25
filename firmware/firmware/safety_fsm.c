@@ -296,10 +296,24 @@ static void populate_output(const SafetyFsm *fsm, const SafetyInputs *in,
         (fsm->state == SAFETY_STATE_CONTROLLED_STOP
          && fsm->brake_elapsed_ms < fsm->config.brake_duration_ms) ? 1u : 0u;
 
+    /* FW7 (FW6FIX open point): a frozen encoder confirmed during a stop used to
+     * freeze the S9 trim before it had learned an offset COM (draw_001 needs about
+     * 5.9 deg), so the robot held still at about -5.6 deg pitch, just past the REST
+     * limit, until the 20 s stop timeout. Once the brake ramp is over, a stop or REST
+     * whose only S11 issue is a single-axis DEGRADED substitution may keep learning
+     * the trim. All other trim gates (ramp, ground, quiet/motion checks in h5) and
+     * every torque-off escalation are unchanged. */
+    const uint8_t degraded_settle_trim =
+        (fsm->config.degraded_settle_trim != 0u
+         && in->s11_degraded_only != 0u
+         && s11_is_degraded(in) != 0u
+         && (fsm->state == SAFETY_STATE_CONTROLLED_STOP
+             || fsm->state == SAFETY_STATE_REST)) ? 1u : 0u;
+
     out->inhibit_trim = (fsm->state == SAFETY_STATE_ARMED
                       || fsm->state == SAFETY_STATE_STEP_ASSIST
                       || active_brake_ramp != 0u
-                      || s11_lim != 0u
+                      || (s11_lim != 0u && degraded_settle_trim == 0u)
                       || s11_unarmed != 0u
                       || in->ground_left == 0u
                       || in->ground_right == 0u) ? 1u : 0u;
@@ -331,6 +345,7 @@ SafetyConfig safety_default_config(void)
     c.rest_pitch_rate_max_deg_s = 2.0f;
     c.degraded_pitch_fault_deg  = 15.0f;
     c.stop_timeout_ms           = 20000u;
+    c.degraded_settle_trim      = 1u;
     return c;
 }
 
@@ -501,8 +516,10 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
     case SAFETY_STATE_BALANCING:
     case SAFETY_STATE_STEP_ASSIST:
         if (radio_lost == 0u && in->radio_arm_sw == 0u) {
-            /* Qualified arm switch LOW while actively balancing -> latched FAULT (immediate disable). */
-            enter_fault(fsm, SAFETY_REASON_ARM_SW_DROPPED);
+            /* FW8 F-04: arm switch LOW while balancing is a pilot disarm, not an
+             * emergency: brake to REST (then clean disarm there). Torque cuts stay
+             * with check_active_faults() (radio e-stop switch, tilt, drives, power). */
+            enter_controlled_stop(fsm, SAFETY_REASON_ARM_SW_DROPPED);
         } else {
             const uint8_t host_lost_now =
                 (in->host_valid == 0u || in->host_age_ms > cfg->host_timeout_ms) ? 1u : 0u;
@@ -539,9 +556,8 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
         break;
 
     case SAFETY_STATE_CONTROLLED_STOP:
-        if (radio_lost == 0u && in->radio_arm_sw == 0u) {
-            enter_fault(fsm, SAFETY_REASON_ARM_SW_DROPPED);
-        } else if (s11_is_degraded(in) != 0u
+        /* FW8 F-04: arm LOW here keeps braking (REST then clean-disarms). */
+        if (s11_is_degraded(in) != 0u
                    && fabsf(in->pitch_deg) > cfg->degraded_pitch_fault_deg) {
             /* Degraded stop is not holding the robot: escalate to torque-off. */
             enter_fault(fsm, SAFETY_REASON_S11_FAULT);

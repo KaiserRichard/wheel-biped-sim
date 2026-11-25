@@ -33,6 +33,11 @@ Click any clip for the full MP4. All clips are played back from simulation runs,
 <td align="center"><a href="media/mass-8.5kg-drop.mp4"><img src="media/preview/mass-8.5kg-drop.gif" width="260" alt="8.5 kg, 0.245 m drop"></a><br>8.5 kg: 0.245 m drop</td>
 <td align="center"><a href="media/cad-obstacle-2ms-falls.mp4"><img src="media/preview/cad-obstacle-2ms-falls.gif" width="260" alt="2 ms delay: falls"></a><br>2 ms extra delay: the first controller falls</td>
 </tr>
+<tr>
+<td align="center"><a href="media/figure-8-path-tracking.mp4"><img src="media/preview/figure-8-path-tracking.gif" width="260" alt="Figure-8 path tracking at 0.4 m/s with the C firmware in the loop"></a><br>Firmware in the loop: <a href="docs/studies/figure-8-path-tracking.md">figure-8 path tracking</a></td>
+<td align="center"><a href="media/lateral-push-low-friction.mp4"><img src="media/preview/lateral-push-low-friction.gif" width="260" alt="30 N sideways push on friction 0.25, earlier and current firmware side by side"></a><br>Firmware in the loop: <a href="docs/studies/lateral-push-low-friction.md">30 N push on a slippery floor</a></td>
+<td></td>
+</tr>
 </table>
 
 The full clip list, the MATLAB figures and the control story are in [docs/DETAILS.md](docs/DETAILS.md).

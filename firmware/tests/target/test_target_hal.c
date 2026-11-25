@@ -134,6 +134,39 @@ static void emergency_clock_test(void) {
  printf("1001,%u\n", (unsigned)stub_tx_count);
  __disable_irq(); target_fdcan_emergency_service(); assert(stub_primask == 1u); __enable_irq();
 }
+/* FW8 F-05: Error_Handler/HardFault path. IRQs stay masked, so no SysTick or
+ * FDCAN callback can emit the +1 ms disable repeat; the halt loop must. */
+static void fatal_halt_repeat_test(void) {
+ setup();
+ stub_now = 500u;
+ stub_halt_polls_max = 50u; /* 5 ms of halt-loop polling at 100 us per poll */
+ target_estop_fatal_halt();
+ assert(stub_primask == 1u);
+ unsigned disable = 0u;
+ unsigned per_id[7] = {0u};
+ for (unsigned i = 0u; i < stub_tx_count; ++i) {
+  assert(stub_tx[i].data[7] == 0xFDu);
+  disable++;
+  if (stub_tx[i].id >= 1u && stub_tx[i].id <= 6u) { per_id[stub_tx[i].id]++; }
+ }
+ printf("fatal_halt: disable_frames=%u over %u us\n", disable, (unsigned)(stub_now - 500u));
+ assert(disable == 12u); /* first burst + one +1 ms repeat, no more */
+ for (unsigned id = 1u; id <= 6u; ++id) { assert(per_id[id] == 2u); }
+
+ /* A full TX FIFO at trip time: frames that did not fit are sent once room appears. */
+ setup();
+ stub_now = 500u;
+ for (unsigned b = 0u; b < 3u; ++b) { stub_free[b] = 1u; }
+ stub_halt_polls_max = 1u;
+ target_estop_fatal_halt();
+ unsigned first = stub_tx_count;
+ for (unsigned b = 0u; b < 3u; ++b) { stub_free[b] = 8u; }
+ stub_halt_polls = 0u; stub_halt_polls_max = 50u;
+ /* re-enter the loop body as the halted core would keep doing */
+ target_estop_fatal_halt();
+ printf("fatal_halt with full FIFO: first=%u total=%u\n", first, (unsigned)stub_tx_count);
+ assert(first == 2u && stub_tx_count == 12u);
+}
 static void watchdog_config_test(void) {
  setup(); assert(target_iwdg_init(0u) == HAL_OK);
  assert(stub_iwdg_config.Init.Reload == 52u);
@@ -454,6 +487,7 @@ int main(int argc, char **argv) {
  else if (strcmp(argv[1], "rev4_mapping") == 0) { rev4_mapping_test(); }
  else if (strcmp(argv[1], "emergency_clock") == 0) { emergency_clock_test(); }
  else if (strcmp(argv[1], "watchdog_config") == 0) { watchdog_config_test(); }
+ else if (strcmp(argv[1], "fatal_halt_repeat") == 0) { fatal_halt_repeat_test(); }
  else if (strcmp(argv[1], "can") == 0) { can_test(); }
  else if (strcmp(argv[1], "rx") == 0) { rx_test(); }
  else if (strcmp(argv[1], "operator") == 0) { operator_test(); }

@@ -620,10 +620,14 @@ static void test_fault_overrides_power_tilt_and_reset_guards(void)
     reach_balancing(&fsm, &out);
     in = make_disarmed_clean_inputs();
     in.k1_closed = 1u; in.k2_closed = 1u; in.v_bus_v = 24.0f;
-    in.drives_healthy_6 = 1u; in.radio_arm_sw = 0u; /* Arm SW LOW while balancing -> FAULT */
+    in.drives_healthy_6 = 1u; in.radio_arm_sw = 0u;
+    /* FW8 F-04: arm SW LOW alone now brakes (CONTROLLED_STOP); reach FAULT via
+     * the radio e-stop switch instead, then release it for the reset guards. */
+    in.radio_estop_sw = 1u;
     safety_fsm_step(&fsm, &in, &out);
     assert(out.state == SAFETY_STATE_FAULT);
-    assert(out.reason == SAFETY_REASON_ARM_SW_DROPPED);
+    assert(out.reason == SAFETY_REASON_RADIO_ESTOP_SW);
+    in.radio_estop_sw = 0u;
 
     /* Manual reset blocked while K1 closed or link >= 5 V or arm SW HIGH */
     in.local_reset_req = 1u;
@@ -872,11 +876,13 @@ static void test_step_assist_torque_off_paths(void)
     assert(out.state == SAFETY_STATE_FAULT && out.reason == SAFETY_REASON_TILT_LIMIT);
     assert(out.torque_enable == 0u);
 
-    /* arm switch dropped with fresh radio */
+    /* arm switch dropped with fresh radio: FW8 F-04 brakes instead of cutting
+     * torque (same path as radio loss over the curb); e-stop above still cuts. */
     reach_step_assist(&fsm, &out, &in);
     in.radio_arm_sw = 0u;
     safety_fsm_step(&fsm, &in, &out);
-    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP && out.torque_enable == 1u);
+    assert(out.reason == SAFETY_REASON_ARM_SW_DROPPED);
 
     /* S11 double fault (latched STUCK) */
     reach_step_assist(&fsm, &out, &in);
@@ -1036,6 +1042,82 @@ static void test_fw6fix_stop_timeout(void)
     assert(out.state == SAFETY_STATE_CONTROLLED_STOP && out.stop_timeout_alarm == 0u);
 }
 
+/* FW7 open point A: a pure single-axis S11_DEGRADED substitution no longer freezes
+ * the S9 trim once the brake ramp is over (CONTROLLED_STOP and REST). The trim stays
+ * inhibited during the ramp, when the frame is not claimed degraded-only (stale
+ * packets / CAN error-passive), in BALANCING, and with the config flag off. */
+static int fw7_trim_open_after_ramp(uint8_t cfg_flag, uint8_t degraded_only,
+                                    enum S11Mode mode, uint8_t *ramp_inhibit)
+{
+    SafetyFsm fsm;
+    SafetyOutput out;
+    SafetyConfig cfg = safety_default_config();
+    cfg.degraded_settle_trim = cfg_flag;
+    safety_fsm_init_with_config(&fsm, &cfg);
+    reach_balancing(&fsm, &out);
+    SafetyInputs in = stop_inputs();
+    in.s11_mode = mode;
+    in.s11_degraded = (mode == S11_DEGRADED) ? 1u : 0u;
+    in.s11_limited = 1u;
+    in.s11_degraded_only = degraded_only;
+    in.pitch_deg = -5.6f;                    /* held just past the REST limit */
+    if (mode != S11_DEGRADED) {
+        in.voluntary_stop_req = 1u;           /* LIMIT alone does not stop */
+    }
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP);
+    *ramp_inhibit = out.inhibit_trim;
+    for (uint32_t t = 0u; t < 1000u; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+        if (t < 500u) {
+            assert(out.inhibit_trim == 1u);   /* 600 ms brake ramp: always inhibited */
+        }
+    }
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP && out.torque_enable == 1u);
+    const int open_stop = (out.inhibit_trim == 0u);
+    /* settle (trim learned) -> REST confirmed; trim gate identical in REST */
+    in.pitch_deg = -1.0f;
+    for (uint32_t t = 0u; t < 400u; t += 2u) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_REST && out.rest_confirmed == 1u);
+    assert(out.torque_enable == 1u);
+    assert((out.inhibit_trim == 0u) == open_stop);
+    /* torque-off escalation is unchanged: tilt > 30 deg from REST -> FAULT */
+    in.pitch_deg = 31.0f;
+    for (unsigned k = 0u; k < 12u && out.state != SAFETY_STATE_FAULT; ++k) {
+        safety_fsm_step(&fsm, &in, &out);
+    }
+    assert(out.state == SAFETY_STATE_FAULT && out.torque_enable == 0u && out.inhibit_trim == 1u);
+    return open_stop;
+}
+
+static void test_fw7_degraded_settle_trim(void)
+{
+    uint8_t ramp = 0u;
+    assert(safety_default_config().degraded_settle_trim == 1u);
+    assert(fw7_trim_open_after_ramp(1u, 1u, S11_DEGRADED, &ramp) == 1 && ramp == 1u);
+    assert(fw7_trim_open_after_ramp(1u, 0u, S11_DEGRADED, &ramp) == 0 && ramp == 1u);
+    assert(fw7_trim_open_after_ramp(0u, 1u, S11_DEGRADED, &ramp) == 0 && ramp == 1u);
+    /* a degraded_only claim without a DEGRADED frame (e.g. LIMIT) is ignored */
+    assert(fw7_trim_open_after_ramp(1u, 1u, S11_LIMIT, &ramp) == 0 && ramp == 1u);
+    /* BALANCING with a DEGRADED frame never reaches here without a stop; trim stays
+     * inhibited on the entry tick (the stop is entered on the same tick) */
+    SafetyFsm fsm;
+    SafetyOutput out;
+    safety_fsm_init(&fsm);
+    reach_balancing(&fsm, &out);
+    SafetyInputs in = stop_inputs();
+    in.s11_mode = S11_DEGRADED;
+    in.s11_degraded = 1u;
+    in.s11_limited = 1u;
+    in.s11_degraded_only = 1u;
+    safety_fsm_step(&fsm, &in, &out);
+    assert(out.state == SAFETY_STATE_CONTROLLED_STOP && out.reason == SAFETY_REASON_S11_DEGRADED);
+    assert(out.inhibit_trim == 1u);
+    printf("test_fw7_degraded_settle_trim: passed\n");
+}
+
 int main(void)
 {
     test_disarmed_faults_and_estop();
@@ -1048,6 +1130,7 @@ int main(void)
     test_step_assist_torque_off_paths();
     test_fw6fix_step_abort_reason();
     test_fw6fix_stop_timeout();
+    test_fw7_degraded_settle_trim();
     printf("test_safety_fsm: ALL PASSED\n");
     return 0;
 }

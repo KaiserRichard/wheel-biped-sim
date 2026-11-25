@@ -182,6 +182,18 @@ void s10_imu(S10Estimator *s, int32_t tick, const double gyro[3], const double f
     const double h = (s->imu_tick == s10_no_tick) ? 0.001 : ((double)(tick - s->imu_tick) * 0.001);
     s->imu_tick = tick;
     if (s->n < S10_STARTUP) {
+        /* FW8 F-06: the startup mean becomes the gyro bias and the initial
+         * attitude, so every sample of the window must be stationary (|gyro| <=
+         * 0.05 rad/s per axis, |a| within 10 % of 1 g, same band as accel_ok).
+         * A moving sample restarts the window; it does not latch a failure. */
+        const double fnorm = hypot(force[0], hypot(force[1], force[2]));
+        if (!(fabs(gyro[0]) <= 0.05 && fabs(gyro[1]) <= 0.05 && fabs(gyro[2]) <= 0.05
+              && fabs(fnorm / s10_gravity - 1.0) <= 0.10)) {
+            s->n = 0;
+            memset(s->gyro_sum, 0, sizeof(s->gyro_sum));
+            memset(s->force_sum, 0, sizeof(s->force_sum));
+            return;
+        }
         for (int32_t axis = 0; axis < 3; ++axis) {
             s->gyro_sum[axis] += gyro[axis];
             s->force_sum[axis] += force[axis];
@@ -354,9 +366,12 @@ void s10_encoder(S10Estimator *s, int32_t tick, int32_t release, const S10Encode
     const double score = fmax(fabs(s->common_error) / 0.095, fabs(s->wheel_difference) / 0.14);
     s->fast += s10_blend(h, 0.085) * s->common_error;
     s->alarm = (s->air == 0 && fmax(fabs(speed[0]), fabs(speed[1])) > 0.15 && score >= 1.0) ? 1 : 0;
-    if (s->robust != 0 && s->air == 0 && fabs(s->wheel_difference) < 0.14) {
+    if (s->robust != 0 && s->air == 0 && s->alarm == 0
+        && fabs(s->wheel_difference) < 0.14) {
         /* Two agreeing wheels can recapture a drifting inertial speed.
-         * Bound the correction when common-mode slip remains plausible. */
+         * Agreement alone does not establish rolling: both can spin together.
+         * Keep inertial propagation while the existing slip alarm is active;
+         * bound the correction once the rolling observation is trusted again. */
         const double error = fmax(-0.10, fmin(0.10, mean - s->speed));
         s->speed += s10_blend(h, 0.04) * error;
     } else if (s->air == 0 && s->alarm == 0) {
