@@ -29,8 +29,10 @@
 #include "target_estop.h"
 #include "target_timer.h"
 #include "target_safety_io.h"
+#include "target_imu.h"
 
 #include "control/balance_ctrl.h"
+#include "bringup_mode.h"
 #include "log_packer.h"
 
 #include <string.h>
@@ -38,6 +40,45 @@
 /* 500 ms circular flight recorder at 500 Hz (250 records, 50 post-fault ticks = 100 ms) */
 #define TARGET_FLIGHT_RING_CAPACITY     250u
 #define TARGET_FLIGHT_POST_FAULT_TICKS  50u
+
+/* FW10 compile-time bring-up image (-DWBR_BRINGUP_MODE=0/1/2 from CMake).
+ * Default is the most restrictive image: BENCH (torque impossible). */
+#ifndef WBR_BRINGUP_MODE
+#define WBR_BRINGUP_MODE 1
+#endif
+#if WBR_BRINGUP_MODE == 0
+#define WBR_MODE_NAME "RUN"
+#elif WBR_BRINGUP_MODE == 1
+#define WBR_MODE_NAME "BENCH"
+#elif WBR_BRINGUP_MODE == 2
+#define WBR_MODE_NAME "MOTOR_ID"
+#else
+#error "WBR_BRINGUP_MODE must be 0 (RUN), 1 (BENCH) or 2 (MOTOR_ID)"
+#endif
+#ifndef WBR_BUILD_TYPE
+#define WBR_BUILD_TYPE "Release"
+#endif
+/* Identification string kept in flash (no timestamps: reproducible images). */
+__attribute__((used)) const char g_wbr_build_id[] =
+    "WBR-FW10 mode=" WBR_MODE_NAME " build=" WBR_BUILD_TYPE;
+
+/* power_io_bits (TELEM_HEALTH) FW10 additions; bits 0..2 are the FW9 e-stop bits. */
+#define TARGET_PIO_BENCH_IMAGE      0x0008u
+#define TARGET_PIO_MOTOR_ID_IMAGE   0x0010u
+#define TARGET_PIO_IMU_OK           0x0020u
+#define TARGET_PIO_PULSE_ACTIVE     0x0040u
+#define TARGET_PIO_BENCH_VIOLATION  0x0080u
+#define TARGET_STACK_PAINT          0xA5A5A5A5u
+
+extern uint32_t _end[];    /* linker: end of .bss / start of free DTCM */
+extern uint32_t _estack[]; /* linker: top of DTCM */
+extern uint32_t g_pfnVectors[];
+
+static BringupCtx        s_bringup;
+static BringupTickOutput s_bringup_out;
+static ImuSample         s_imu_raw;
+static uint8_t           s_imu_fresh;
+static uint32_t          s_busy_max_us;
 
 static BalanceCtrl       s_ctrl;
 static LogFlightRecord   s_flight_storage[TARGET_FLIGHT_RING_CAPACITY];
@@ -189,6 +230,65 @@ void Error_Handler(void)
 }
 
 /* ============================================================================
+ * 2b. FW10 Cortex-M7 MPU / cache / vector table
+ *     - VTOR pinned to the linked vector table (flash 0x08000000) instead of
+ *       relying on the BOOT_ADD0 option byte alone.
+ *     - MPU region 0: the CubeMX default speculative-access guard. 4 GB,
+ *       subregions 0,1,2,7 disabled (code, SRAM, peripherals, system keep the
+ *       default map); 0x60000000-0xDFFFFFFF (unused FMC/OCTOSPI space) is
+ *       no-access, never executable. PRIVDEFENA keeps the default map elsewhere.
+ *     - I-cache and D-cache on. All RW data and the stack are in DTCM (never
+ *       cached); there is no DMA (USB dma_enable = DISABLE, UART/SPI polled or
+ *       IT, FDCAN message RAM is device memory), so no cache maintenance needed.
+ * ============================================================================ */
+static void target_mpu_cache_config(void)
+{
+    MPU_Region_InitTypeDef region;
+    memset(&region, 0, sizeof(region));
+
+    HAL_MPU_Disable();
+    region.Enable           = MPU_REGION_ENABLE;
+    region.Number           = MPU_REGION_NUMBER0;
+    region.BaseAddress      = 0x00000000u;
+    region.Size             = MPU_REGION_SIZE_4GB;
+    region.SubRegionDisable = 0x87u;
+    region.TypeExtField     = MPU_TEX_LEVEL0;
+    region.AccessPermission = MPU_REGION_NO_ACCESS;
+    region.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
+    region.IsShareable      = MPU_ACCESS_SHAREABLE;
+    region.IsCacheable      = MPU_ACCESS_NOT_CACHEABLE;
+    region.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+    HAL_MPU_ConfigRegion(&region);
+    HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
+
+    SCB_EnableICache();
+    SCB_EnableDCache();
+}
+
+/* Paint free DTCM between the end of .bss and the live stack pointer so the
+ * telemetry can report the stack high-water mark (min_stack_words[0]). */
+static void target_stack_paint(void)
+{
+    uint32_t *p = _end;
+    const uint32_t *limit = (const uint32_t *)(__get_MSP() - 256u);
+    while ((const uint32_t *)p < limit) {
+        *p++ = TARGET_STACK_PAINT;
+    }
+}
+
+static uint32_t target_stack_free_words(void)
+{
+    const uint32_t *p = _end;
+    const uint32_t *top = _estack;
+    uint32_t n = 0u;
+    while (p < top && *p == TARGET_STACK_PAINT) {
+        ++p;
+        ++n;
+    }
+    return n;
+}
+
+/* ============================================================================
  * 3. Cortex-M7 Exception & Peripheral Interrupt Vector Handlers
  * ============================================================================ */
 
@@ -319,6 +419,10 @@ static void target_emit_telem_fast(uint64_t now_us64,
         }
         fast.enc_age_us[i] = (uint16_t)age_us;
     }
+    /* FW10 MOTOR_ID: show the commanded bench pulse on its axis. */
+    if (s_bringup_out.active_axis < LOG_NUM_AXES) {
+        fast.motor_tor_cmd_nm[s_bringup_out.active_axis] = s_bringup_out.torque_nm;
+    }
 
     fast.s9_trim_rad       = out->h5_out.s9_pitch_ref_rad;
     fast.gyro_bias_y_rad_s = (float)s_ctrl.s10.bias[1];
@@ -369,13 +473,64 @@ static void target_emit_telem_health(uint64_t now_us64,
                              ? (uint16_t)65535u
                              : (uint16_t)rc_snap->radio_age_ms;
     health.rc_switches   = rc_snap->switch_bitmask;
-    health.power_io_bits = (uint16_t)((estop_st->pin_open        ? 0x01u : 0x00u) |
-                                      (estop_st->latched         ? 0x02u : 0x00u) |
-                                      (estop_st->permit_asserted ? 0x04u : 0x00u));
+    TargetImuStatus imu_st;
+    target_imu_get_status(&imu_st);
+    uint32_t pio = (estop_st->pin_open        ? 0x01u : 0x00u) |
+                   (estop_st->latched         ? 0x02u : 0x00u) |
+                   (estop_st->permit_asserted ? 0x04u : 0x00u);
+    pio |= (s_bringup.mode == BRINGUP_MODE_BENCH)    ? TARGET_PIO_BENCH_IMAGE : 0u;
+    pio |= (s_bringup.mode == BRINGUP_MODE_MOTOR_ID) ? TARGET_PIO_MOTOR_ID_IMAGE : 0u;
+    pio |= (imu_st.init_ok != 0u)                    ? TARGET_PIO_IMU_OK : 0u;
+    pio |= (s_bringup_out.active_axis < LOG_NUM_AXES) ? TARGET_PIO_PULSE_ACTIVE : 0u;
+    pio |= (s_bringup.bench_violations != 0u)        ? TARGET_PIO_BENCH_VIOLATION : 0u;
+    pio |= ((uint32_t)(s_bringup_out.last_reject & 0x0Fu)) << 8u;
+    pio |= ((uint32_t)(s_bringup_out.state & 0x07u)) << 12u;
+    health.power_io_bits = (uint16_t)pio;
     health.reset_cause   = iwdg_st->reset_cause_bits;
-    health.cpu_load_pct  = 0u;
+    /* Worst-case loop busy time over the last health window, % of 2000 us. */
+    uint32_t load = (s_busy_max_us * 100u) / TARGET_CTRL_PERIOD_US;
+    health.cpu_load_pct  = (uint8_t)((load > 255u) ? 255u : load);
+    s_busy_max_us = 0u;
+    uint32_t free_words = target_stack_free_words();
+    health.min_stack_words[0] = (uint16_t)((free_words > 65535u) ? 65535u : free_words);
+    uint32_t blocked = target_fdcan_tx_gate_blocked();
+    health.min_stack_words[1] = (uint16_t)((blocked > 65535u) ? 65535u : blocked);
 
     (void)target_usb_cdc_send_telem_health(now_us64, 0u, &health);
+}
+
+/* FW10 BENCH_RAW_LOG (0x85): raw IMU sensor sample + encoder replies. The
+ * three reserved bytes carry the IMU sensor accel/gyro CHIP_ID read-backs and
+ * the first failing init step (0xFF = none) for bench stage 2.1. */
+static void target_emit_bench_raw(uint64_t now_us64, const BalanceTickOutput *out)
+{
+    LogBenchRaw raw;
+    memset(&raw, 0, sizeof(raw));
+    TargetImuStatus imu_st;
+    target_imu_get_status(&imu_st);
+    raw.imu_ts_us = now_us64;
+    if (s_imu_fresh != 0u) {
+        for (uint32_t i = 0u; i < 3u; ++i) {
+            raw.gyro_rad_s[i] = (float)s_imu_raw.gyro_rad_s[i];
+            raw.accel_m_s2[i] = (float)s_imu_raw.accel_m_s2[i];
+        }
+    }
+    raw.imu_temp_c = imu_st.temp_c;
+    uint8_t fresh = 0u;
+    for (uint8_t i = 0u; i < LOG_NUM_AXES; ++i) {
+        const CanAxisRxSlot *slot = &s_ctrl.can_sched.axis_rx[i];
+        raw.motor_pos_rad[i]   = slot->fb.pos;
+        raw.motor_vel_rad_s[i] = slot->fb.vel;
+        raw.motor_rx_us[i]     = slot->rx_us;
+        fresh = (uint8_t)(fresh | ((slot->valid != 0u) ? (1u << i) : 0u));
+    }
+    raw.fresh_mask    = fresh;
+    raw.reserved[0]   = imu_st.acc_chip_id;
+    raw.reserved[1]   = imu_st.gyr_chip_id;
+    raw.reserved[2]   = imu_st.fail_step;
+    raw.pitch_s10_rad = (float)out->est_frame.pitch;
+    raw.v_s10_m_s     = (float)out->est_frame.speed;
+    (void)target_usb_cdc_send_bench_raw(now_us64, 0u, &raw);
 }
 
 /* ============================================================================
@@ -384,8 +539,16 @@ static void target_emit_telem_health(uint64_t now_us64,
 
 int main(void)
 {
+    /* FW10: vector table, MPU guard and caches before anything else. */
+    SCB->VTOR = (uint32_t)g_pfnVectors;
+    __DSB();
+    __ISB();
+    target_mpu_cache_config();
+    target_stack_paint();
+
     HAL_Init();
     target_estop_init(); /* Permit LOW before any fallible clock setup. */
+    target_board_outputs_init(); /* FW10: heater/buzzer LOW, LEDs off, IMU CS HIGH */
     target_safety_io_init();
     SystemClock_Config();
     PeriphCommonClock_Config();
@@ -393,9 +556,18 @@ int main(void)
     target_dwt_init(TARGET_SYSCLK_MHZ);
     target_iwdg_capture_reset_cause();
 
+    /* FW10 bring-up image and its CAN TX gate (bound before any bus starts). */
+    bringup_init(&s_bringup, (BringupMode)WBR_BRINGUP_MODE);
+    target_fdcan_bind_tx_gate(&s_bringup);
+    memset(&s_bringup_out, 0, sizeof(s_bringup_out));
+    s_bringup_out.active_axis = BRINGUP_NO_AXIS;
+    /* Never fatal: a missing/wrong sensor is reported over USB (stage 2.1). */
+    (void)target_imu_init();
+
     /* Initialize portable 500 Hz BalanceCtrl with radio-loss policy c (BRAKE_BALANCE) */
     BalanceCtrlConfig ctrl_cfg = balance_ctrl_default_config();
     ctrl_cfg.safety_cfg.radio_loss_policy = RADIO_LOSS_BRAKE_BALANCE;
+    ctrl_cfg.safety_cfg.diagnostic_only = s_bringup.mode != BRINGUP_MODE_RUN ? 1u : 0u;
     balance_ctrl_init(&s_ctrl, &ctrl_cfg);
 
     (void)log_ring_init(&s_flight_ring,
@@ -480,7 +652,11 @@ int main(void)
          * to come from the future relative to this control iteration. */
         in.tick_us               = target_micros();
         in.enc_tick_ms           = (int32_t)(tick_seq * BALANCE_CTRL_DT_MS);
-        in.imu_sample_count      = target_imu_snapshot(&in.imu_samples[0]);
+        /* FW10: one synchronous IMU sensor sample per 500 Hz tick, stamped on
+         * the encoder tick base (S10 derives dt from tick deltas). */
+        s_imu_fresh              = target_imu_read(in.enc_tick_ms, &in.imu_samples[0],
+                                                   &s_imu_raw);
+        in.imu_sample_count      = s_imu_fresh;
         in.use_can_sched_rx      = 1u;
 
         /* Unwired power-path sensing blocks PRECHARGE, never pretends healthy. */
@@ -496,18 +672,8 @@ int main(void)
                                     &in.radio_arm_sw,
                                     &in.radio_estop_sw);
 
-        /* Pi 5 USB CDC host inputs */
-        in.host_age_ms           = usb_cmd.host_age_ms;
-        in.host_valid            = usb_cmd.host_valid;
-
-        /* Motion targets: use USB host twist when host_valid, else pilot CRSF sticks */
-        if (usb_cmd.host_valid != 0u) {
-            in.v_target_m_s      = usb_cmd.v_cmd_m_s;
-            in.yaw_target_rad_s  = usb_cmd.yaw_rate_cmd_rad_s;
-        } else {
-            in.v_target_m_s      = rc_snap.v_target_m_s;
-            in.yaw_target_rad_s  = rc_snap.yaw_target_rad_s;
-        }
+        /* USB trajectory incl. feed-forward; stale USB falls back to CRSF. */
+        target_usb_apply_motion(&usb_cmd, rc_snap.v_target_m_s, rc_snap.yaw_target_rad_s, &in);
 
         in.stand_handoff_req     = (rc_snap.stand_handoff_req != 0u || usb_cmd.stand_handoff_req != 0u) ? 1u : 0u;
         in.voluntary_stop_req    = (rc_snap.voluntary_stop_req != 0u || usb_cmd.voluntary_stop_req != 0u) ? 1u : 0u;
@@ -518,24 +684,75 @@ int main(void)
         in.local_regrant_req     = rc_snap.stand_handoff_req;
         in.external_inhibit_trim = 0u;
 
+        /* FW10: BENCH / MOTOR_ID images drop every request that could leave
+         * DISARMED (no-op in RUN). */
+        bringup_gate_tick_input(&s_bringup, &in);
+
         /* 3. Execute the 8-step 500 Hz balance control pipeline */
         BalanceTickOutput out;
         balance_ctrl_tick(&s_ctrl, &in, &out);
 
-        /* 4. Service the PD11 watchdog heartbeat and flush 3-bus FDCAN TX queues */
-        target_estop_set_permit(out.safety_out.permit_out);
+        /* FW10: a torque request from the controller in a bench image is a
+         * defect; latch the wired-stop path (disable frames on all axes). */
+        if (bringup_check_tick_output(&s_bringup, &out) != 0u) {
+            target_estop_force_trip();
+        }
+
+        /* FW10: bring-up step (encoder poll, MOTOR_ID pulse) behind the wired stop. */
+        BringupTickInput bin;
+        memset(&bin, 0, sizeof(bin));
+        target_estop_get_state(&estop_st);
+        bin.now_us          = target_micros();
+        bin.estop_pin_open  = estop_st.pin_open;
+        bin.estop_latched   = estop_st.latched;
+        bin.estop_pending   = target_estop_is_tripped();
+        bin.fsm_disarmed    = (s_ctrl.safety.state == SAFETY_STATE_DISARMED) ? 1u : 0u;
+        bin.req.valid       = usb_cmd.motor_id_valid;
+        bin.req.seq         = usb_cmd.motor_id_seq;
+        bin.req.rx_us       = usb_cmd.motor_id_rx_us;
+        bin.req.axis        = usb_cmd.motor_id_axis;
+        bin.req.torque_nm   = usb_cmd.motor_id_torque_nm;
+        bin.req.duration_ms = usb_cmd.motor_id_duration_ms;
+        bringup_step(&s_bringup, &bin, &s_bringup_out);
+
+        /* 4. Service the PD11 watchdog heartbeat and flush 3-bus FDCAN TX queues.
+         * FW10: RUN = FSM permit (FW9); BENCH = always LOW; MOTOR_ID = wired
+         * stop chain healthy. */
+        target_estop_set_permit(bringup_permit(&s_bringup, out.safety_out.permit_out, &bin));
         can_sched_service_tx(&s_ctrl.can_sched, now_us);
         target_fdcan_flush_tx(&s_ctrl.can_sched, out.safety_out.can_abort_tx);
+        for (uint8_t f = 0u; f < s_bringup_out.n_frames; ++f) {
+            const BringupFrame *bf = &s_bringup_out.frames[f];
+            (void)target_fdcan_send_direct(bf->bus, bf->std_id, bf->dlc, bf->data);
+        }
 
         /* 5. Service independent watchdog (only refreshes if balance_heartbeat advanced) */
         target_iwdg_service(now_us, out.balance_heartbeat);
 
-        /* 6. Stream COBS + CRC-32C telemetry over USB CDC (250 Hz fast, 10 Hz health) */
+        /* 6. Stream COBS + CRC-32C telemetry over USB CDC. One frame per tick so
+         * the single in-flight bulk IN transfer is never contended (FW10; FW9
+         * sent health on a fast tick, where it was always dropped as busy):
+         * even ticks TELEM_FAST 250 Hz; tick % 50 == 1 TELEM_HEALTH 10 Hz;
+         * other odd ticks BENCH_RAW_LOG (~240 Hz) in BENCH / MOTOR_ID images. */
         if ((tick_seq & 1u) == 0u) {
             target_emit_telem_fast(now_us64, &in, &out);
-        }
-        if ((tick_seq % 50u) == 0u) {
+        } else if ((tick_seq % 50u) == 1u) {
             target_emit_telem_health(now_us64, &rc_snap, &estop_st, &iwdg_st, &out);
+        } else if (s_bringup.mode != BRINGUP_MODE_RUN) {
+            target_emit_bench_raw(now_us64, &out);
+        }
+
+        /* FW10 indicators: RUN LED 2 Hz blink = loop alive; FAULT LED = wired
+         * stop tripped, IMU sensor init failed, or bench-gate violation. */
+        TargetImuStatus imu_st;
+        target_imu_get_status(&imu_st);
+        target_led_set(((tick_seq / 125u) & 1u) != 0u ? 1u : 0u,
+                       (estop_st.latched != 0u || estop_st.pin_open != 0u
+                        || imu_st.init_ok == 0u || s_bringup.bench_violations != 0u) ? 1u : 0u);
+
+        const uint32_t busy_us = target_micros() - now_us;
+        if (busy_us > s_busy_max_us) {
+            s_busy_max_us = busy_us;
         }
     }
 }

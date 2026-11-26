@@ -27,6 +27,7 @@
 #include "control/h5_balance.h"
 #include "control/s10_estimator.h"
 #include "control/yaw_track.h"
+#include "control/grip_limit.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -150,6 +151,10 @@ typedef struct {
     uint8_t  step_declaration;     /* BALANCE_STEP_DECL_NONE / _CURB / _FIELD */
     float    step_decl_height_m;   /* declared edge height; <= 0 uses cfg.step_height_m */
     float    step_field_length_m;  /* FIELD length; unused while FIELD is refused (FW6FIX D1) */
+
+    /* TRAC3: optional host floor-grip hint, mu in (0, 1); 0 = no hint. Read only
+     * while host_valid; a lost host keeps the last hint. */
+    float    floor_mu_hint;
 } BalanceTickInput;
 
 typedef struct {
@@ -210,6 +215,9 @@ typedef struct {
     float             trac_v_m_s;    /* governed speed reference */
     uint32_t          trac_events_n; /* governor activations (diagnostic) */
     uint32_t          trac_mask_block_n; /* FW9: ticks with slip alarm ignored (S11 frozen/advisory) */
+    /* TRAC3: floor-grip estimate + friction-aware host-command limiter. */
+    GripLimit         grip;
+    float             fil_floor_hint; /* FIL-only host hint passed to the tick */
 } BalanceCtrl;
 
 BalanceCtrlConfig balance_ctrl_default_config(void);
@@ -236,6 +244,9 @@ void balance_ctrl_fil_torque_feedback(void *state_buf, const float torque_nm[6])
 void balance_ctrl_fil_step_diag(void *state_buf, float diag[8]);
 void balance_ctrl_fil_step_config(void *state_buf, const float p[11]);
 void balance_ctrl_fil_disable_stuck(void *state_buf);
+void balance_ctrl_fil_body_pitch(void *state_buf, const float p[11]);
+void balance_ctrl_fil_body_inject(void *state_buf, float tp_nm, float out_body[3]);
+void balance_ctrl_fil_com_trim(void *state_buf, const float p[14], float out_com[4]);
 void balance_ctrl_fil_step_declare(void *state_buf, uint8_t declaration,
                                    float height_m, float field_length_m);
 void balance_ctrl_fil_s11_diag(void *state_buf, float diag[10]);
@@ -256,6 +267,11 @@ void balance_ctrl_fil_yaw_pose(void *state_buf, float x_m, float y_m, float yaw_
 /* YAW1 FIL diag: [0] e_y m, [1] e_psi rad, [2] s_total m, [3] kappa, [4] seg idx,
  * [5] done, [6] odom x m, [7] odom y m, [8] yaw-rate cmd rad/s, [9] mode. */
 void balance_ctrl_fil_yaw_diag(void *state_buf, float diag[10]);
+/* TRAC3 FIL: host floor-grip hint for the following ticks (0 = none). */
+void balance_ctrl_fil_floor_hint(void *state_buf, float mu_hint);
+/* TRAC3 FIL diag: [0] mu used, [1] slip estimate, [2] hint, [3] limiter active,
+ * [4] accel limit m/s^2, [5] slip events, [6] limited ticks, [7] util peak. */
+void balance_ctrl_fil_grip_diag(void *state_buf, float diag[8]);
 void    balance_ctrl_fil_init(void *state_buf, float mass_kg, float length_ref_m,
                               uint8_t radio_loss_policy);
 void    balance_ctrl_fil_imu_1khz(void *state_buf, int32_t tick_ms,

@@ -127,6 +127,20 @@ HAL_StatusTypeDef HAL_PCD_EP_Receive(PCD_HandleTypeDef *, uint8_t, uint8_t *, ui
 HAL_StatusTypeDef HAL_PCD_EP_Transmit(PCD_HandleTypeDef *, uint8_t, uint8_t *, uint32_t);
 HAL_StatusTypeDef HAL_PCD_SetAddress(PCD_HandleTypeDef *, uint8_t);
 uint32_t HAL_PCD_EP_GetRxCount(PCD_HandleTypeDef *, uint8_t);
+/* FW10 EP0 / enumeration stubs and observation points. */
+HAL_StatusTypeDef HAL_PCD_EP_SetStall(PCD_HandleTypeDef *, uint8_t);
+HAL_StatusTypeDef HAL_PCD_EP_ClrStall(PCD_HandleTypeDef *, uint8_t);
+HAL_StatusTypeDef HAL_PCD_EP_Close(PCD_HandleTypeDef *, uint8_t);
+uint32_t HAL_GetUIDw0(void);
+uint32_t HAL_GetUIDw1(void);
+uint32_t HAL_GetUIDw2(void);
+extern uint8_t  stub_ep0_in[512];       /* concatenated EP0 IN data packets */
+extern uint32_t stub_ep0_in_len, stub_ep0_in_pkts, stub_ep0_zlp, stub_ep0_stalls;
+extern uint32_t stub_ep0_status_out_armed, stub_ep_open_mask, stub_usb_address;
+extern uint8_t *stub_ep0_out_buf;       /* buffer armed by EP0 OUT data stage */
+extern uint32_t stub_ep0_out_len, stub_rx_count;
+void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *);
+void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *, uint8_t);
 HAL_StatusTypeDef HAL_IWDG_Init(IWDG_HandleTypeDef *);
 HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *);
 

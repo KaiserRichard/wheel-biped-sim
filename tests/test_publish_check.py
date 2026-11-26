@@ -258,3 +258,48 @@ def test_sensor_name_in_filename_with_underscores(tmp_path):
 @pytest.mark.parametrize('key,value', [('student_id', '2099' + '9999'), ('license_number', '1234' + '5678')])
 def test_private_identifiers_in_json(tmp_path, key, value):
     check_case(tmp_path, 'doc.json', json.dumps({key: value}), json.dumps({'version': '26.2.0.3433840', 'date': '2026-11-17'}))
+
+
+# Batch 9 adds no binary or PNG, so no new byte pin is needed. Its new file
+# types are a hand-written CubeMX description and plain SVG figures; both are
+# scanned as text. These tests keep the shipped copies passing and show that
+# the usual rules still reach inside both formats.
+BATCH9_TEXT_FILES = [
+    "docs/studies/push-window.md",
+    "docs/studies/grip-aware-braking.md",
+    "docs/studies/figures/push-window-peak-pitch.svg",
+    "docs/studies/figures/grip-aware-braking-falls.svg",
+    "firmware/board/ctrl_rev4.ioc",
+    "firmware/firmware/control/grip_limit.c",
+    "firmware/firmware/bringup_mode.h",
+    "firmware/firmware/imu_sensor_codec.c",
+    "firmware/firmware/target/target_imu.c",
+]
+
+
+@pytest.mark.parametrize("rel", BATCH9_TEXT_FILES)
+def test_batch9_files_scan_clean(tmp_path, rel):
+    target = tmp_path / rel
+    target.parent.mkdir(parents=True)
+    shutil.copyfile(ROOT / rel, target)
+    assert scan(tmp_path) == []
+
+
+@pytest.mark.parametrize("value", [
+    "ProjectManager.ProjectFileName=" + "C:" + "/Us" + "ers/example/ctrl.ioc",
+    "SPI4.UserLabel=" + "BMI" + "088_CS",
+    "ProjectManager.ProjectName=" + "a" + "gy",
+])
+def test_cubemx_description_is_scanned(tmp_path, value):
+    check_case(tmp_path, "firmware/board/ctrl.ioc", "Mcu.Family=STM32H7\n" + value + "\n",
+               "Mcu.Family=STM32H7\n", "firmware/board/ctrl.ioc")
+
+
+@pytest.mark.parametrize("value", [
+    "/" + "home/example/plot.py",
+    "IMU " + "ICM" + "-42688-P",
+])
+def test_svg_figure_text_is_scanned(tmp_path, value):
+    svg = '<svg xmlns="http://www.w3.org/2000/svg"><title>{}</title></svg>\n'
+    check_case(tmp_path, "docs/studies/figures/fig.svg", svg.format(value),
+               svg.format("IMU sensor"), "docs/studies/figures/fig.svg")

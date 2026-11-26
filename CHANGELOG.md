@@ -1,5 +1,9 @@
 # Changelog
 
+## 26 November 2026 — batch 9
+
+- Firmware updated to FW11: bench bring-up images (BENCH / RUN / MOTOR_ID) with IMU sensor codec and USB enumeration, the standing-push window and grip-aware braking (73 host tests). Study pages for the [push window](docs/studies/push-window.md) and [grip-aware braking](docs/studies/grip-aware-braking.md), one figure each. Simulation and host tests only.
+
 ## 26 November 2026 — batch 8
 
 - Firmware updated to FW9: heading/path tracking, lateral-push replay test, degraded-stop trim, three safety fixes, slip-gated estimator and traction governor (52 host tests). Study pages for [figure-8 tracking](docs/studies/figure-8-path-tracking.md), [lateral push](docs/studies/lateral-push-low-friction.md), [safety fixes](docs/studies/firmware-safety-fixes.md) and [wheel slip](docs/studies/slip-estimator-and-traction-governor.md) (2 of 16 slip cases still fall); two simulation clips. Simulation and host tests only.

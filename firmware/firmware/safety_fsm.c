@@ -323,6 +323,7 @@ SafetyConfig safety_default_config(void)
 {
     SafetyConfig c;
     c.radio_loss_policy         = (uint8_t)RADIO_LOSS_POLICY;
+    c.diagnostic_only           = 0u;
     c.precharge_timeout_ms      = 600u;
     c.radio_timeout_ms          = 150u;
     c.host_timeout_ms           = 150u;
@@ -396,6 +397,25 @@ void safety_fsm_step(SafetyFsm *fsm, const SafetyInputs *in, SafetyOutput *out)
 
     const SafetyConfig *cfg = &fsm->config;
     const uint8_t radio_lost = (in->radio_age_ms > cfg->radio_timeout_ms) ? 1u : 0u;
+
+    /* Diagnostic images never operate the power path or enter torque states.
+     * Do not fabricate a passed power self-test or a discharged measured bus.
+     * MOTOR_ID has a separate wired-stop-gated single-axis pulse sequencer. */
+    if (cfg->diagnostic_only != 0u && fsm->state == SAFETY_STATE_DISARMED) {
+        if (in->bor3_fault != 0u) {
+            enter_fault(fsm, SAFETY_REASON_BOR3);
+        } else if (in->wdg_fault != 0u) {
+            enter_fault(fsm, SAFETY_REASON_WDG_FAULT);
+        } else if (in->can_bus_off != 0u) {
+            enter_fault(fsm, SAFETY_REASON_CAN_BUS_OFF);
+        } else if (in->clamp_fault != 0u) {
+            enter_fault(fsm, SAFETY_REASON_CLAMP_FAULT);
+        } else if (in->radio_estop_sw != 0u) {
+            enter_fault(fsm, SAFETY_REASON_RADIO_ESTOP_SW);
+        }
+        populate_output(fsm, in, 0u, 0u, out);
+        return;
+    }
 
     /* Check active-state faults first when in ARMED, BALANCING, CONTROLLED_STOP, REST. */
     if (is_active_state(fsm->state) != 0u) {

@@ -29,6 +29,8 @@ typedef struct {
 } TargetCanRxRing;
 static TargetCanRxRing s_rx[CAN_SCHED_NUM_BUSES];
 static volatile uint8_t s_emergency_active;
+static const BringupCtx *s_tx_gate = NULL;      /* FW10 bring-up TX gate */
+static volatile uint32_t s_tx_gate_blocked = 0u;
 static uint8_t s_disable_pending[CAN_SCHED_NUM_BUSES];
 static uint8_t s_repeat_sent;
 static uint32_t s_emergency_us;
@@ -128,6 +130,13 @@ static HAL_StatusTypeDef send_hw(uint8_t bus_idx, const CanFrame *frame)
 {
     if ((s_emergency_active != 0u || target_estop_is_tripped() != 0u)
         && frame_is_disable(frame) == 0u) {
+        return HAL_ERROR;
+    }
+    /* FW10: bring-up gate (BENCH: disable frames only; MOTOR_ID: plus the one
+     * authorised axis, kp = kd = 0, |tau| <= 0.2 Nm). Unbound only in host tests. */
+    if (s_tx_gate != NULL
+        && bringup_tx_allowed(s_tx_gate, bus_idx, frame->std_id, frame->dlc, frame->data) == 0u) {
+        s_tx_gate_blocked++;
         return HAL_ERROR;
     }
     FDCAN_TxHeaderTypeDef hdr;
@@ -237,6 +246,11 @@ HAL_StatusTypeDef target_fdcan_init(CanSched *sched)
     if (sched == NULL) {
         return HAL_ERROR;
     }
+#ifndef TARGET_HOST_TEST
+    if (s_tx_gate == NULL) {
+        return HAL_ERROR; /* FW10: never start the buses without the bring-up gate */
+    }
+#endif
     s_bound_sched = sched;
     memset(s_rx, 0, sizeof(s_rx));
 
@@ -598,4 +612,37 @@ CanSchedStatus target_fdcan_recover_bus_off(CanSched *sched, uint8_t is_disarmed
         }
     }
     return CAN_SCHED_OK;
+}
+
+void target_fdcan_bind_tx_gate(const BringupCtx *gate)
+{
+    uint32_t saved = target_irq_save();
+    s_tx_gate = gate;
+    target_irq_restore(saved);
+}
+
+uint32_t target_fdcan_tx_gate_blocked(void)
+{
+    return s_tx_gate_blocked;
+}
+
+HAL_StatusTypeDef target_fdcan_send_direct(uint8_t bus_idx, uint16_t std_id, uint8_t dlc,
+                                           const uint8_t data[8])
+{
+    if (bus_idx >= CAN_SCHED_NUM_BUSES || data == NULL || dlc > 8u
+        || g_hfdcan[bus_idx].Instance == NULL) {
+        return HAL_ERROR;
+    }
+    CanFrame frame;
+    memset(&frame, 0, sizeof(frame));
+    frame.std_id = std_id;
+    frame.dlc = dlc;
+    memcpy(frame.data, data, dlc);
+    HAL_StatusTypeDef st = HAL_ERROR;
+    uint32_t saved = target_irq_save();
+    if (HAL_FDCAN_GetTxFifoFreeLevel(&g_hfdcan[bus_idx]) > 0u) {
+        st = send_hw(bus_idx, &frame);
+    }
+    target_irq_restore(saved);
+    return st;
 }

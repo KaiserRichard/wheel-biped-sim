@@ -23,6 +23,7 @@ typedef enum {
     USB_MSG_CMD_MODE       = 0x02u,
     USB_MSG_TIME_SYNC_REQ  = 0x03u,
     USB_MSG_PARAM_OP       = 0x04u,
+    USB_MSG_CMD_MOTOR_ID   = 0x05u, /* FW10: MOTOR_ID image only, see bringup_mode.h */
     USB_MSG_TELEM_FAST     = 0x81u,
     USB_MSG_TELEM_HEALTH   = 0x82u,
     USB_MSG_TIME_SYNC_RESP = 0x83u,

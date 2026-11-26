@@ -23,6 +23,7 @@
 #include "target_hw.h"
 #include "usb_link.h"
 #include "log_packer.h"
+#include "control/balance_ctrl.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -35,9 +36,11 @@
 #define TARGET_USB_TX_BUF_SIZE          512u
 
 #define TARGET_USB_CMD_TWIST_SIZE       52u
+#define TARGET_USB_CMD_TWIST_FF_SIZE    60u /* Optional accel/jerk f32 LE suffix */
 #define TARGET_USB_CMD_MODE_SIZE        8u
 #define TARGET_USB_TIME_SYNC_REQ_SIZE   8u
 #define TARGET_USB_TIME_SYNC_RESP_SIZE  24u
+#define TARGET_USB_CMD_MOTOR_ID_SIZE    8u  /* FW10 */
 
 #define TARGET_USB_MIN_TWIST_INTERVAL_US 20000u /* S12 50 Hz rate clamp */
 #define TARGET_USB_HOST_TIMEOUT_MS       150u   /* 150 ms freshness TTL */
@@ -50,6 +53,8 @@ typedef struct {
     uint32_t pose_seq;
     float    v_cmd_m_s;
     float    yaw_rate_cmd_rad_s;
+    float    accel_ref_m_s2;
+    float    jerk_ref_m_s3;
     float    height_cmd_m;
     float    roll_cmd_rad;
     float    pose_x_m;
@@ -64,6 +69,14 @@ typedef struct {
     uint8_t  reset_fault_req;
     uint8_t  jump_req;
     uint8_t  bench_mode_active;
+
+    /* FW10 latest CMD_MOTOR_ID (0x05) request (validated by bringup_step) */
+    uint8_t  motor_id_valid;
+    uint8_t  motor_id_axis;
+    uint16_t motor_id_duration_ms;
+    float    motor_id_torque_nm;
+    uint32_t motor_id_seq;
+    uint32_t motor_id_rx_us;
 
     /* Freshness & link diagnostics for BalanceTickInput */
     uint32_t host_age_ms;
@@ -87,6 +100,9 @@ void target_usb_cdc_rx_push_bytes_isr(const uint8_t *data, uint32_t len);
 
 /* Poll and decode pending COBS+CRC32C frames from the USB RX ring buffer. */
 void target_usb_cdc_poll(uint32_t now_us, uint64_t now_us64, TargetUsbHostCmd *out_cmd);
+/* Shared by main and host tests: stale host feed-forward never reaches control. */
+void target_usb_apply_motion(const TargetUsbHostCmd *cmd, float radio_v, float radio_yaw,
+                             BalanceTickInput *in);
 
 /* Frame arbitrary payload with COBS + CRC-32C (`usb_link_encode`) and transmit over Bulk IN. */
 UsbLinkStatus target_usb_cdc_send_frame(uint8_t msg_type, uint8_t flags,

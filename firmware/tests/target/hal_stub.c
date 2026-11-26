@@ -29,6 +29,9 @@ void stub_reset(void) {
  memset(stub_rx_ready, 0, sizeof(stub_rx_ready));
  for (unsigned i = 0; i < 3; ++i) { stub_free[i] = 8u; }
  stub_usb_active = NULL; stub_usb_len = stub_usb_calls = stub_usb_fail = 0u;
+ stub_ep0_in_len = stub_ep0_in_pkts = stub_ep0_zlp = stub_ep0_stalls = 0u;
+ stub_ep0_status_out_armed = stub_ep_open_mask = stub_usb_address = 0u;
+ stub_ep0_out_buf = NULL; stub_ep0_out_len = stub_rx_count = 0u;
  stub_iwdg_refreshes = 0u;
  stub_halt_polls = 0u; stub_halt_polls_max = 0u;
 }
@@ -123,10 +126,33 @@ HAL_StatusTypeDef HAL_UART_Receive_IT(UART_HandleTypeDef *h, uint8_t *p, uint32_
 void HAL_PWREx_EnableUSBVoltageDetector(void) { }
 void HAL_PCDEx_SetRxFiFo(PCD_HandleTypeDef *h, uint32_t n) { (void)h; (void)n; }
 void HAL_PCDEx_SetTxFiFo(PCD_HandleTypeDef *h, uint32_t n, uint32_t m) { (void)h; (void)n; (void)m; }
-HAL_StatusTypeDef HAL_PCD_EP_Open(PCD_HandleTypeDef *h, uint8_t ep, uint32_t n, uint32_t type) { (void)h; (void)ep; (void)n; (void)type; return HAL_OK; }
-HAL_StatusTypeDef HAL_PCD_EP_Receive(PCD_HandleTypeDef *h, uint8_t ep, uint8_t *p, uint32_t n) { (void)h; (void)ep; (void)p; (void)n; return HAL_OK; }
+uint8_t  stub_ep0_in[512];
+uint32_t stub_ep0_in_len, stub_ep0_in_pkts, stub_ep0_zlp, stub_ep0_stalls;
+uint32_t stub_ep0_status_out_armed, stub_ep_open_mask, stub_usb_address;
+uint8_t *stub_ep0_out_buf;
+uint32_t stub_ep0_out_len, stub_rx_count;
+static uint32_t ep_bit(uint8_t ep) { return 1u << ((ep & 0x0Fu) + ((ep & 0x80u) != 0u ? 16u : 0u)); }
+HAL_StatusTypeDef HAL_PCD_EP_Open(PCD_HandleTypeDef *h, uint8_t ep, uint32_t n, uint32_t type) { (void)h; (void)n; (void)type; stub_ep_open_mask |= ep_bit(ep); return HAL_OK; }
+HAL_StatusTypeDef HAL_PCD_EP_Close(PCD_HandleTypeDef *h, uint8_t ep) { (void)h; stub_ep_open_mask &= ~ep_bit(ep); return HAL_OK; }
+HAL_StatusTypeDef HAL_PCD_EP_SetStall(PCD_HandleTypeDef *h, uint8_t ep) { (void)h; if ((ep & 0x7Fu) == 0u) { stub_ep0_stalls++; } return HAL_OK; }
+HAL_StatusTypeDef HAL_PCD_EP_ClrStall(PCD_HandleTypeDef *h, uint8_t ep) { (void)h; (void)ep; return HAL_OK; }
+uint32_t HAL_GetUIDw0(void) { return 0x00390041u; }
+uint32_t HAL_GetUIDw1(void) { return 0x31385111u; }
+uint32_t HAL_GetUIDw2(void) { return 0x37363534u; }
+HAL_StatusTypeDef HAL_PCD_EP_Receive(PCD_HandleTypeDef *h, uint8_t ep, uint8_t *p, uint32_t n) {
+ (void)h;
+ if (ep == 0x00u) {
+  if (n == 0u) { stub_ep0_status_out_armed++; } else { stub_ep0_out_buf = p; stub_ep0_out_len = n; }
+ }
+ return HAL_OK;
+}
 HAL_StatusTypeDef HAL_PCD_EP_Transmit(PCD_HandleTypeDef *h, uint8_t ep, uint8_t *p, uint32_t n) {
  (void)h;
+ if (ep == 0x80u) {
+  assert(n <= 64u); /* EP0 is fed one max-size packet at a time */
+  if (n == 0u) { stub_ep0_zlp++; }
+  else { assert(stub_ep0_in_len + n <= sizeof(stub_ep0_in)); memcpy(&stub_ep0_in[stub_ep0_in_len], p, n); stub_ep0_in_len += n; stub_ep0_in_pkts++; }
+ }
  if (ep == 0x81u) {
   assert(stub_primask == 1u);
   if (stub_usb_fail != 0u) { return HAL_ERROR; }
@@ -134,6 +160,6 @@ HAL_StatusTypeDef HAL_PCD_EP_Transmit(PCD_HandleTypeDef *h, uint8_t ep, uint8_t 
  }
  return HAL_OK;
 }
-HAL_StatusTypeDef HAL_PCD_SetAddress(PCD_HandleTypeDef *h, uint8_t addr) { (void)h; (void)addr; return HAL_OK; }
-uint32_t HAL_PCD_EP_GetRxCount(PCD_HandleTypeDef *h, uint8_t ep) { (void)h; (void)ep; return 0u; }
+HAL_StatusTypeDef HAL_PCD_SetAddress(PCD_HandleTypeDef *h, uint8_t addr) { (void)h; stub_usb_address = addr; return HAL_OK; }
+uint32_t HAL_PCD_EP_GetRxCount(PCD_HandleTypeDef *h, uint8_t ep) { (void)h; (void)ep; return stub_rx_count; }
 HAL_StatusTypeDef HAL_IWDG_Refresh(IWDG_HandleTypeDef *h) { (void)h; stub_iwdg_refreshes++; return HAL_OK; }

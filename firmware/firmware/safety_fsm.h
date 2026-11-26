@@ -83,6 +83,9 @@ typedef enum {
 
 typedef struct {
     uint8_t  radio_loss_policy;       /* SAFETY_RADIO_LOSS_TORQUE_OFF or _BRAKE_BALANCE */
+    uint8_t  diagnostic_only;        /* FW10: stay DISARMED, no power-path arming.
+                                       * Unknown power inputs remain unknown. Wired
+                                       * stop, CAN, watchdog and reset faults apply. */
     uint32_t precharge_timeout_ms;    /* Default 600 ms (S13) */
     uint32_t radio_timeout_ms;        /* Default 150 ms (S12) */
     uint32_t host_timeout_ms;         /* Default 150 ms (S12) */

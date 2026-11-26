@@ -49,6 +49,7 @@ SECTIONS
   .rodata :
   {
     . = ALIGN(4);
+    KEEP(*(.rodata.g_wbr_build_id))
     *(.rodata)
     *(.rodata*)
     . = ALIGN(4);

@@ -38,6 +38,11 @@ Click any clip for the full MP4. All clips are played back from simulation runs,
 <td align="center"><a href="media/lateral-push-low-friction.mp4"><img src="media/preview/lateral-push-low-friction.gif" width="260" alt="30 N sideways push on friction 0.25, earlier and current firmware side by side"></a><br>Firmware in the loop: <a href="docs/studies/lateral-push-low-friction.md">30 N push on a slippery floor</a></td>
 <td></td>
 </tr>
+<tr>
+<td align="center"><a href="docs/studies/push-window.md"><img src="docs/studies/figures/push-window-peak-pitch.svg" width="260" alt="Peak pitch after a 30 N standing push in 64 cases: worst 9.33 degrees before, 1.35 degrees with the push window"></a><br>Firmware in the loop: <a href="docs/studies/push-window.md">push window, worst pitch 9.3° → 1.4°</a></td>
+<td align="center"><a href="docs/studies/grip-aware-braking.md"><img src="docs/studies/figures/grip-aware-braking-falls.svg" width="260" alt="Commanded-brake falls by floor friction: 37 of 96 before, 0 of 96 with grip-aware braking when grip is known"></a><br>Firmware in the loop: <a href="docs/studies/grip-aware-braking.md">grip-aware braking, falls 37/96 → 0/96</a></td>
+<td></td>
+</tr>
 </table>
 
 The full clip list, the MATLAB figures and the control story are in [docs/DETAILS.md](docs/DETAILS.md).

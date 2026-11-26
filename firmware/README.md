@@ -1,8 +1,8 @@
-**Tóm tắt [FROM FILE / COMPUTED].** Đã đóng gói mã C, lớp phần cứng STM32H723, kiểm thử host và mô hình FIL. Bản FW9 thêm bám hướng/đường đi, ba sửa lỗi an toàn, bộ ước lượng có chặn trượt và bộ điều tốc bám đường; có 52 kiểm thử host (52/52 đạt, 0 cảnh báo khi build mới). Các kết quả FIL được trích dẫn riêng và chỉ là mô phỏng; chưa chạy trên board thật.
+**Tóm tắt [FROM FILE / COMPUTED].** Đã đóng gói mã C, lớp phần cứng STM32H723, kiểm thử host và mô hình FIL. Bản FW11 thêm các ảnh nạp bring-up (BENCH/RUN/MOTOR_ID), cửa sổ phản xạ chống đẩy khi đứng yên và phanh theo độ bám sàn, trên nền FW9 (bám hướng/đường đi, sửa lỗi an toàn, ước lượng có chặn trượt, bộ điều tốc bám đường); có 73 kiểm thử host (73/73 đạt, 0 cảnh báo khi build mới). Các kết quả FIL được trích dẫn riêng và chỉ là mô phỏng; chưa chạy trên board thật.
 
 # Portable robot firmware
 
-[FROM FILE] This is the FW9 source snapshot: FW6FIX (slice 7 and the STM32H723 hardware layer) plus the changes in the second table below. The nested `firmware/` directory contains portable C11 modules; `firmware/target/` adapts them to the CTRL rev4 board. No flashed robot image is included, and the vendor STM32 HAL is not distributed. [Verification receipts](evidence/README.md).
+[FROM FILE] This is the FW11 source snapshot: FW6FIX (slice 7 and the STM32H723 hardware layer) plus the changes in the second table below. The nested `firmware/` directory contains portable C11 modules; `firmware/target/` adapts them to the CTRL rev4 board. No flashed robot image is included, and the vendor STM32 HAL is not distributed. [Verification receipts](evidence/README.md).
 
 | Development slice | Change retained in this snapshot [FROM FILE] |
 | --- | --- |
@@ -22,8 +22,11 @@
 | Safety fixes | Arm switch LOW brakes to `CONTROLLED_STOP` instead of a torque-off FAULT; the fatal halt keeps sending motor-disable frames; estimator startup accepts only still samples. Tests `fw8_*`, `target_fatal_halt_repeat`. [Study](../docs/studies/firmware-safety-fixes.md). |
 | Slip-gated estimator | The S10 slip alarm blocks wheel-speed recapture. [Study](../docs/studies/slip-estimator-and-traction-governor.md). |
 | Traction governor | On a slip alarm the speed reference follows the estimated speed (development values 0.10 m/s, 0.5 m/s², 300 ms) and is off while S11 flags a frozen or advisory encoder. 2 of 16 slip-matrix cases still fall. [Study](../docs/studies/slip-estimator-and-traction-governor.md). |
+| Bench bring-up images | `bringup_mode.c`: compile-time image `WBR_BRINGUP_MODE` 0 RUN, 1 BENCH (default; torque impossible, only the drive-disable frame leaves the CAN choke point), 2 MOTOR_ID (one pure-torque pulse, at most 0.20 N·m for 200 ms, gated by the wired stop). Adds USB CDC enumeration (`usb_cdc_ep0.c`), the IMU sensor codec and SPI driver (`imu_sensor_codec.c`, `target/target_imu.c`), HEX/BIN output and `board/ctrl_rev4.ioc`, a hand-written pin and clock description not opened in CubeMX. Tests `fw10_*`. |
+| Push window | `control/h5_balance.c`: the push-yield reflex and body-pitch loop run only inside a window opened by an IMU sensor push detector at commanded standstill; outside it the output is identical to FW9. Default on. [Study](../docs/studies/push-window.md). |
+| Grip-aware braking | `control/grip_limit.c`: floor-grip estimate from slip history and an optional host floor hint; a jerk-limited limiter keeps commanded brakes within 0.48·μ·g; the traction governor may not start while the limiter owns the reference. Host test `test_grip_limit`. [Study](../docs/studies/grip-aware-braking.md). |
 
-[COMPUTED: fresh native Release build of this folder] 0 compiler warnings; CTest **52/52** passed.
+[COMPUTED: fresh native Release build of this folder] 0 compiler warnings; CTest **73/73** passed.
 
 [FROM FILE] The slice summaries are edited from the development reports; internal working reports and prebuilt binaries are omitted. The independent S11 suite lives in `s11_verified/`; the runtime implementation is `firmware/s11_packet_policy.c`. The runtime includes the later quantization correction, so it is not byte-identical to the archival round-two policy. See [packet review evidence](../docs/evidence/s11-packet-policy-fix.md).
 
@@ -79,6 +82,6 @@ Without that directory, the host build and all host tests still run; only the li
 
 [UNKNOWN] Target scheduling, interrupt/cache behavior, encoder conventions, drive limits, physical contact, radio-loss stopping and actual balance have not been established by these host checks. A passing FIL fixture is simulation evidence only.
 
-[UNKNOWN] The hardware layer has not run on a board. Still to confirm: the J5/J6/J7 harness, drive CAN IDs, termination and loaded-bus timing; wired-stop trip levels, bounce and the external watchdog cutting the permit; crystal, HSI48 and LSI tolerances and the actual USART6 baud; USB enumeration (the descriptor/EP0 path is a stub); wheel-drive MIT register limits; and the IMU sensor SPI driver, whose single-slot mailbox must grow to a ring buffer when it is wired.
+[UNKNOWN] The hardware layer has not run on a board. Still to confirm: the J5/J6/J7 harness, drive CAN IDs, termination and loaded-bus timing; wired-stop trip levels, bounce and the external watchdog cutting the permit; crystal, HSI48 and LSI tolerances and the actual USART6 baud; USB enumeration and the IMU sensor SPI driver, both tested only against the host HAL stub; wheel-drive MIT register limits; and every bring-up image, none of which has been flashed.
 
 [FROM FILE] DM-jump-derived PID, VMC and motor-driver code retains credit to Tran Nguyen Binh (DM-jump) and dmBots and the full [MIT notice](firmware/DM_JUMP_LICENSE.txt).

@@ -38,9 +38,36 @@ set(WBR_FIRMWARE_SOURCES
     firmware/control/h5_balance.c
     firmware/control/balance_ctrl.c
     firmware/control/yaw_track.c
+    firmware/control/grip_limit.c
 )
 
+# FW10 bring-up modules. Linked into the host test library and the ARM image,
+# deliberately NOT into the FIL shared library (wbr_balance_ctrl), which keeps
+# the FIL library built from exactly the FW9 source list.
+set(WBR_BRINGUP_SOURCES
+    firmware/bringup_mode.c
+    firmware/usb_cdc_ep0.c
+    firmware/imu_sensor_codec.c
+)
+
+# FW10 ARM image selection (see build_flash.sh):
+#   WBR_BRINGUP_MODE 0 = RUN, 1 = BENCH (default, torque impossible), 2 = MOTOR_ID
+#   WBR_ARM_BUILD    Release (-O2 -g, FW9 flags) | Debug (-Og -g3)
+set(WBR_BRINGUP_MODE "1" CACHE STRING "FW10 bring-up image: 0 RUN, 1 BENCH, 2 MOTOR_ID")
+set(WBR_ARM_BUILD "Release" CACHE STRING "FW10 ARM image build type: Release or Debug")
+if(NOT WBR_BRINGUP_MODE MATCHES "^[012]$")
+    message(FATAL_ERROR "WBR_BRINGUP_MODE must be 0, 1 or 2 (got '${WBR_BRINGUP_MODE}')")
+endif()
+if(WBR_ARM_BUILD STREQUAL "Release")
+    set(WBR_ARM_OPT_FLAGS -O2 -g)
+elseif(WBR_ARM_BUILD STREQUAL "Debug")
+    set(WBR_ARM_OPT_FLAGS -Og -g3)
+else()
+    message(FATAL_ERROR "WBR_ARM_BUILD must be Release or Debug (got '${WBR_ARM_BUILD}')")
+endif()
+
 set(WBR_STM32H723_TARGET_SOURCES
+    firmware/target/target_imu.c
     firmware/target/target_fdcan.c
     firmware/target/target_crsf.c
     firmware/target/target_usb_cdc.c
@@ -76,6 +103,8 @@ set(WBR_STM32H723_HAL_SOURCES
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c
+    Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c
+    Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c
     Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c
@@ -117,12 +146,13 @@ set(WBR_STM32H723_MCU_FLAGS
 set(WBR_STM32H723_COMMON_CFLAGS
     ${WBR_STM32H723_MCU_FLAGS}
     -std=c11
-    -O2
-    -g
+    ${WBR_ARM_OPT_FLAGS}
     -ffp-contract=off
     -ffunction-sections
     -fdata-sections
     -fno-common
+    "-ffile-prefix-map=${CMAKE_CURRENT_SOURCE_DIR}=."
+    "-fdebug-prefix-map=${CMAKE_CURRENT_BINARY_DIR}=./build"
     -DUSE_HAL_DRIVER
     -DSTM32H723xx
 )
@@ -134,6 +164,8 @@ set(WBR_STM32H723_FW_CFLAGS
     -Wextra
     -Wconversion
     -Werror
+    -DWBR_BRINGUP_MODE=${WBR_BRINGUP_MODE}
+    "-DWBR_BUILD_TYPE=\"${WBR_ARM_BUILD}\""
 )
 
 # Relaxed warnings (-w, no -Werror) for unmodified vendor HAL sources
@@ -160,7 +192,7 @@ endif()
 if(NOT CMAKE_CROSSCOMPILING)
     find_package(Threads REQUIRED)
 
-    add_library(wbr_firmware STATIC ${WBR_FIRMWARE_SOURCES})
+    add_library(wbr_firmware STATIC ${WBR_FIRMWARE_SOURCES} ${WBR_BRINGUP_SOURCES})
     set_target_properties(wbr_firmware PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_include_directories(wbr_firmware PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/firmware"
@@ -200,6 +232,12 @@ if(NOT CMAKE_CROSSCOMPILING)
             opto_pending_permit opto_pending_clear opto_pending_tx
             rev4_mapping emergency_clock watchdog_config fatal_halt_repeat)
         add_test(NAME target_${scenario} COMMAND test_target_hal ${scenario})
+    endforeach()
+    # FW10: bring-up TX gate at the FDCAN choke point, USB enumeration via the
+    # HAL PCD callbacks, CMD_MOTOR_ID decoding.
+    foreach(scenario bench_tx_gate motor_id_tx_gate usb_enum usb_motor_id_cmd
+            usb_feedforward diagnostic_power loss_boundary)
+        add_test(NAME fw10_target_${scenario} COMMAND test_target_hal ${scenario})
     endforeach()
 
     # Mandatory -UNDEBUG guard on all test targets so assert() never compiles away in Release builds
@@ -241,6 +279,9 @@ if(NOT CMAKE_CROSSCOMPILING)
     add_fw_test(test_balance_ctrl      test_balance_ctrl.c)
     # YAW1: heading wrap, rate limit, path geometry/progress, default-off pass-through
     add_fw_test(test_yaw_track         test_yaw_track.c)
+    # TRAC3: grip estimate (slip history, demonstrated grip, hint, decay, S11 gate),
+    # brake limiter (peak accel <= k*mu*g, stretch, pass-through), balance_ctrl wiring
+    add_fw_test(test_grip_limit        test_grip_limit.c)
 
     # FW8: confirmed should-fix findings of the firmware safety review (F-04, F-06).
     add_executable(test_fw8_safety tests/test_fw8_safety.c)
@@ -249,6 +290,19 @@ if(NOT CMAKE_CROSSCOMPILING)
     apply_undebug_guard(test_fw8_safety)
     foreach(scenario arm_stop startup_motion startup_gravity)
         add_test(NAME fw8_${scenario} COMMAND test_fw8_safety ${scenario})
+    endforeach()
+
+    # FW10: bring-up mode gating (torque impossible in BENCH), MOTOR_ID e-stop
+    # gate, USB CDC EP0 enumeration logic, IMU sensor codec.
+    add_executable(test_fw10_bringup tests/test_fw10_bringup.c)
+    target_link_libraries(test_fw10_bringup PRIVATE wbr_firmware m)
+    target_compile_options(test_fw10_bringup PRIVATE ${FW_COMMON_WARNINGS})
+    apply_undebug_guard(test_fw10_bringup)
+    foreach(scenario bench_input_gate bench_end_to_end run_positive_control
+            bench_tx_fuzz bench_step_fuzz motor_id_estop_gate motor_id_limits
+            motor_id_pulse motor_id_tx_gate usb_descriptors usb_requests
+            usb_ep0_chunking imu_codec)
+        add_test(NAME fw10_${scenario} COMMAND test_fw10_bringup ${scenario})
     endforeach()
 
     # FW6: STEP3RC part-B frozen-encoder detector (ported host tests) and the
@@ -313,8 +367,10 @@ if(NOT CMAKE_CROSSCOMPILING)
 
         set(STM32_FW_C_SOURCES
             ${WBR_FIRMWARE_SOURCES}
+            ${WBR_BRINGUP_SOURCES}
             ${WBR_STM32H723_TARGET_SOURCES}
         )
+        find_program(ARM_NONE_EABI_OBJCOPY arm-none-eabi-objcopy)
 
         set(STM32_OBJECTS "")
         foreach(src_rel IN LISTS STM32_FW_C_SOURCES)
@@ -329,6 +385,7 @@ if(NOT CMAKE_CROSSCOMPILING)
                         -c "${src_abs}"
                         -o "${obj_file}"
                 DEPENDS "${src_abs}"
+                IMPLICIT_DEPENDS C "${src_abs}"
                 COMMENT "[STM32H723] Cross-compiling ${src_rel} (-Wall -Wextra -Wconversion -Werror)"
                 VERBATIM
             )
@@ -369,12 +426,23 @@ if(NOT CMAKE_CROSSCOMPILING)
 
         set(STM32_ELF "${CMAKE_CURRENT_BINARY_DIR}/wbr_stm32h723.elf")
         set(STM32_MAP "${CMAKE_CURRENT_BINARY_DIR}/wbr_stm32h723.map")
+        set(STM32_HEX "${CMAKE_CURRENT_BINARY_DIR}/wbr_stm32h723.hex")
+        set(STM32_BIN "${CMAKE_CURRENT_BINARY_DIR}/wbr_stm32h723.bin")
+        set(STM32_OUTPUTS "${STM32_ELF}")
         set(STM32_SIZE_COMMAND "")
         if(ARM_NONE_EABI_SIZE)
             set(STM32_SIZE_COMMAND COMMAND "${ARM_NONE_EABI_SIZE}" "${STM32_ELF}")
         endif()
+        set(STM32_OBJCOPY_COMMANDS "")
+        if(ARM_NONE_EABI_OBJCOPY)
+            # FW10: also emit Intel HEX and raw BIN (load address 0x08000000).
+            list(APPEND STM32_OUTPUTS "${STM32_HEX}" "${STM32_BIN}")
+            set(STM32_OBJCOPY_COMMANDS
+                COMMAND "${ARM_NONE_EABI_OBJCOPY}" -O ihex "${STM32_ELF}" "${STM32_HEX}"
+                COMMAND "${ARM_NONE_EABI_OBJCOPY}" -O binary "${STM32_ELF}" "${STM32_BIN}")
+        endif()
         add_custom_command(
-            OUTPUT "${STM32_ELF}"
+            OUTPUT ${STM32_OUTPUTS}
             COMMAND "${ARM_NONE_EABI_GCC}"
                     ${WBR_STM32H723_MCU_FLAGS}
                     "-T${WBR_STM32H723_LINKER_SCRIPT}"
@@ -386,6 +454,7 @@ if(NOT CMAKE_CROSSCOMPILING)
                     -lm
                     -o "${STM32_ELF}"
             ${STM32_SIZE_COMMAND}
+            ${STM32_OBJCOPY_COMMANDS}
             DEPENDS ${STM32_OBJECTS} "${WBR_STM32H723_LINKER_SCRIPT}"
             COMMENT "[STM32H723] Linking wbr_stm32h723.elf"
             VERBATIM
@@ -420,6 +489,7 @@ else()
     )
     add_executable(wbr_stm32h723
         ${WBR_FIRMWARE_SOURCES}
+        ${WBR_BRINGUP_SOURCES}
         ${WBR_STM32H723_TARGET_SOURCES}
         ${WBR_STM32H723_STARTUP_ABS}
         $<TARGET_OBJECTS:wbr_stm32h723_hal>

@@ -101,6 +101,7 @@ void balance_ctrl_init(BalanceCtrl *ctrl, const BalanceCtrlConfig *cfg)
     safety_fsm_init_with_config(&ctrl->safety, &ctrl->cfg.safety_cfg);
     h5_balance_init(&ctrl->h5, &ctrl->cfg.h5_cfg);
     yaw_track_init(&ctrl->yaw_track, NULL);
+    grip_limit_init(&ctrl->grip, NULL);
 }
 
 void balance_ctrl_set_yaw_mode(BalanceCtrl *ctrl, uint8_t mode, float heading_target_rad)
@@ -303,6 +304,40 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         out->est_frame.air     = (int32_t)est_air;
     }
 
+    /* TRAC3: floor-grip estimate and friction-aware host-command limiter.
+     * Evidence uses the previous-tick FSM state (same convention as yaw_track).
+     * The S10 slip alarm is not grip evidence while S11 reports a frozen or
+     * advisory axis (FW9 rule for the governor) or while airborne. The limiter
+     * acts on the host speed/accel/jerk reference before the supervisor, so a
+     * commanded brake is stretched to peak |accel| <= k*mu*g; it is bypassed
+     * bit-for-bit when no low grip is known, and under host loss (supervisor
+     * stop, already within the limit and slip-governed by TRAC2). */
+    float host_v = in->v_target_m_s;
+    float host_a = in->accel_ref_m_s2;
+    float host_j = in->jerk_ref_m_s3;
+    uint8_t grip_owns_ref = 0u;   /* TRAC4: limiter active before and after this tick */
+    {
+        const uint8_t grip_eligible = (ctrl->cfg.use_s10_estimator != 0u
+            && est_valid != 0u && est_air == 0u
+            && out->s11_frame.degraded_mask == 0u
+            && out->s11_frame.advisory_mask == 0u
+            && (ctrl->safety.state == SAFETY_STATE_BALANCING
+                || ctrl->safety.state == SAFETY_STATE_CONTROLLED_STOP
+                || ctrl->safety.state == SAFETY_STATE_REST)) ? 1u : 0u;
+        if (in->host_valid != 0u) {
+            grip_limit_set_hint(&ctrl->grip, in->floor_mu_hint);
+        }
+        grip_limit_observe(&ctrl->grip, BALANCE_CTRL_DT_S, grip_eligible,
+                           (ctrl->s10.alarm != 0) ? 1u : 0u, (float)ctrl->s10.gate);
+        const uint8_t grip_was_active = ctrl->grip.active;
+        (void)grip_limit_ref(&ctrl->grip, BALANCE_CTRL_DT_S,
+                             (in->host_valid != 0u
+                              && ctrl->safety.state == SAFETY_STATE_BALANCING) ? 1u : 0u,
+                             in->v_target_m_s, in->accel_ref_m_s2, in->jerk_ref_m_s3,
+                             &host_v, &host_a, &host_j);
+        grip_owns_ref = (grip_was_active != 0u && ctrl->grip.active != 0u) ? 1u : 0u;
+    }
+
     /* =========================================================================
      * STEP 4: Safety Supervisor FSM
      * ========================================================================= */
@@ -347,7 +382,7 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
     s_in.radio_estop_sw     = in->radio_estop_sw;
     s_in.host_age_ms        = in->host_age_ms;
     s_in.host_valid         = in->host_valid;
-    s_in.v_target_m_s       = in->v_target_m_s;
+    s_in.v_target_m_s       = host_v;   /* TRAC3: grip-limited host target */
     /* YAW1: in the default YAW_MODE_RATE this returns in->yaw_target_rad_s
      * unchanged. HEADING/PATH modes act only while BALANCING (previous-tick FSM
      * state); every stop/rest/fault path keeps its existing yaw handling.
@@ -582,7 +617,13 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
             && ctrl->trac_mask_block_n < UINT32_MAX) {
             ctrl->trac_mask_block_n++;
         }
+        /* TRAC4: the governor may not START while the TRAC3 limiter already
+         * owns a grip-limited reference: its restart from est_v (which a
+         * sub-threshold wheel lock drags below the true speed) would step the
+         * reference down and re-brake at once. A governor that started first
+         * (reactive case) keeps running; host loss releases the limiter. */
         const uint8_t eligible = (ctrl->cfg.use_s10_estimator != 0u
+            && (grip_owns_ref == 0u || ctrl->trac_active != 0u)
             && out->safety_out.torque_enable != 0u
             && est_air == 0u
             && s11_suspect == 0u
@@ -674,8 +715,8 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         h5_in.v_set_m_s        = runup != 0u ? ctrl->step_v_m_s : out->safety_out.v_ref_m_s;
         h5_in.yaw_ref_rad_s    = out->safety_out.yaw_ref_rad_s;
         h5_in.accel_ref_m_s2   = (out->safety_out.host_lost != 0u) ? 0.0f
-                               : (runup != 0u ? ctrl->step_a_m_s2 : in->accel_ref_m_s2);
-        h5_in.jerk_ref_m_s3    = (out->safety_out.host_lost != 0u) ? 0.0f : in->jerk_ref_m_s3;
+                               : (runup != 0u ? ctrl->step_a_m_s2 : host_a);
+        h5_in.jerk_ref_m_s3    = (out->safety_out.host_lost != 0u) ? 0.0f : host_j;
         if (trac_on != 0u) {
             /* Governed reference: no host lean/jerk feed-forward under slip. */
             h5_in.accel_ref_m_s2 = (out->safety_out.host_lost != 0u) ? 0.0f : trac_a;
@@ -687,6 +728,10 @@ void balance_ctrl_tick(BalanceCtrl *ctrl, const BalanceTickInput *in, BalanceTic
         }
         h5_in.air              = est_air;
         h5_in.host_lost        = out->safety_out.host_lost;
+        h5_in.push_inhibit = (ctrl->safety.state != SAFETY_STATE_BALANCING
+            || out->safety_out.host_lost != 0u
+            || ctrl->s11.frozen_mask != 0u || ctrl->s11.advisory_mask != 0u
+            || ctrl->s11.latched != 0u || all_genuine_fresh == 0u) ? 1u : 0u;
         h5_in.inhibit_trim     = (out->safety_out.inhibit_trim != 0u
                                   || in->external_inhibit_trim != 0u) ? 1u : 0u;
         h5_in.inhibit_jump     = out->safety_out.inhibit_jump;
@@ -902,6 +947,76 @@ void balance_ctrl_fil_step_config(void *state_buf, const float p[11])
     }
 }
 
+void balance_ctrl_fil_body_pitch(void *state_buf, const float p[11])
+{
+    /* FIL-only (PUSH10): [kp, kp_hi, sched_rad, kd, rate_fc_hz, washout_s,
+     *                     pred_delay_s, pred_lag_s, pred_inertia, pred_damp, pred_stiff]. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL && p != NULL) {
+        ctrl->h5.cfg.body_kp = p[0];
+        ctrl->h5.cfg.body_kp_hi = p[1];
+        ctrl->h5.cfg.body_sched_rad = p[2];
+        ctrl->h5.cfg.body_kd = p[3];
+        ctrl->h5.cfg.body_rate_fc_hz = p[4];
+        ctrl->h5.cfg.body_washout_s = p[5];
+        ctrl->h5.cfg.body_pred_delay_s = p[6];
+        ctrl->h5.cfg.body_pred_lag_s = p[7];
+        ctrl->h5.cfg.body_pred_inertia = p[8];
+        ctrl->h5.cfg.body_pred_damp = p[9];
+        ctrl->h5.cfg.body_pred_stiff = p[10];
+    }
+}
+
+void balance_ctrl_fil_body_inject(void *state_buf, float tp_nm, float out_body[3])
+{
+    /* FIL-only (PUSH10): add tp_nm to aggregate Tp from the next tick; returns the
+     * last [body-loop Tp, pitch correction, rate correction]. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        ctrl->h5.fil_body_inj = tp_nm;
+        if (out_body != NULL) {
+            out_body[0] = ctrl->h5.body_tp;
+            out_body[1] = ctrl->h5.body_pred_dp;
+            out_body[2] = ctrl->h5.body_pred_dv;
+        }
+    }
+}
+
+void balance_ctrl_fil_com_trim(void *state_buf, const float p[14], float out_com[4])
+{
+    /* FIL-only (PUSH11): p = [lean_ki, lean_lim_rad, learn_vmax, learn_wmax,
+     * x_ff_m, lean_ff_rad, pitch_ff_rad, tp_ff_nm,
+     * yield_v, yield_release_v, yield_release_s, yield_return_s, yield_max_s,
+     * yield_v_scale]
+     * (p may be NULL to only read); returns [learned lean reference rad,
+     * learning flag, yield offset m, yield events]. */
+    BalanceCtrl *ctrl = (BalanceCtrl *)state_buf;
+    if (ctrl != NULL) {
+        if (p != NULL) {
+            ctrl->h5.cfg.com_lean_ki = p[0];
+            ctrl->h5.cfg.com_lean_lim_rad = p[1];
+            ctrl->h5.cfg.com_learn_vmax = p[2];
+            ctrl->h5.cfg.com_learn_wmax = p[3];
+            ctrl->h5.cfg.com_x_ff_m = p[4];
+            ctrl->h5.cfg.com_lean_ff_rad = p[5];
+            ctrl->h5.cfg.com_pitch_ff_rad = p[6];
+            ctrl->h5.cfg.com_tp_ff_nm = p[7];
+            ctrl->h5.cfg.yield_v_m_s = p[8];
+            ctrl->h5.cfg.yield_release_v_m_s = p[9];
+            ctrl->h5.cfg.yield_release_s = p[10];
+            ctrl->h5.cfg.yield_return_s = p[11];
+            ctrl->h5.cfg.yield_max_s = p[12];
+            ctrl->h5.cfg.yield_v_scale = p[13];
+        }
+        if (out_com != NULL) {
+            out_com[0] = ctrl->h5.com_lean_i;
+            out_com[1] = (float)ctrl->h5.com_learning;
+            out_com[2] = ctrl->h5.yield_x_off;
+            out_com[3] = (float)ctrl->h5.yield_events;
+        }
+    }
+}
+
 void balance_ctrl_fil_disable_stuck(void *state_buf)
 {
     /* FIL-only (STEP3RC part B): disable the S11 frozen-encoder detector to
@@ -1054,6 +1169,30 @@ void balance_ctrl_fil_init(void *state_buf, float mass_kg, float length_ref_m,
     balance_ctrl_init(ctrl, &cfg);
 }
 
+void balance_ctrl_fil_floor_hint(void *state_buf, float mu_hint)
+{
+    if (state_buf == NULL) {
+        return;
+    }
+    ((BalanceCtrl *)state_buf)->fil_floor_hint = mu_hint;
+}
+
+void balance_ctrl_fil_grip_diag(void *state_buf, float diag[8])
+{
+    if (state_buf == NULL || diag == NULL) {
+        return;
+    }
+    const GripLimit *g = &((const BalanceCtrl *)state_buf)->grip;
+    diag[0] = g->mu_used;
+    diag[1] = g->mu_slip;
+    diag[2] = g->mu_hint;
+    diag[3] = (float)g->active;
+    diag[4] = grip_limit_accel_max(g);
+    diag[5] = (float)g->slip_events_n;
+    diag[6] = (float)g->limit_ticks_n;
+    diag[7] = g->util_peak;
+}
+
 void balance_ctrl_fil_imu_1khz(void *state_buf, int32_t tick_ms,
                                const double gyro_rad_s[3],
                                const double accel_m_s2[3])
@@ -1167,6 +1306,7 @@ int32_t balance_ctrl_fil_step_500hz_ex(void *state_buf, uint32_t tick_us, int32_
     in.step_declaration      = ctrl->fil_step_decl;
     in.step_decl_height_m    = ctrl->fil_step_decl_h_m;
     in.step_field_length_m   = ctrl->fil_step_field_m;
+    in.floor_mu_hint         = ctrl->fil_floor_hint;
 
     BalanceTickOutput out;
     balance_ctrl_tick(ctrl, &in, &out);

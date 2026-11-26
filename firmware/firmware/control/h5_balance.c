@@ -57,6 +57,41 @@ H5BalanceConfig h5_balance_default_config(void)
     c.use_s9_blend          = 1u;
     c.enable_s9_trim        = 1u;
     c.enable_s7_loss_adapt  = 1u;
+    c.enable_push_window    = 1u;
+    c.push_rate_rad_s       = 0.04f;
+    c.push_accel_rad_s2     = 8.0f;
+    c.push_confirm_s       = 0.004f;
+    c.push_arm_s           = 1.5f;
+    c.push_fade_in_s       = 0.004f;
+    c.push_hold_s          = 3.0f;
+    c.push_fade_out_s      = 2.0f;
+    c.push_quiet_rate_rad_s = 0.04f;
+    c.push_quiet_s         = 0.5f;
+    c.body_kp               = 55.0f;
+    c.body_kp_hi            = 0.0f;
+    c.body_sched_rad        = 0.0f;
+    c.body_kd               = 0.4f;
+    c.body_rate_fc_hz       = 0.0f;
+    c.body_washout_s        = 2.0f;
+    c.body_pred_delay_s     = 0.005f;
+    c.body_pred_lag_s       = 0.003f;
+    c.body_pred_inertia     = 0.0075f;
+    c.body_pred_damp        = 0.49f;
+    c.body_pred_stiff       = 5.4f;
+    c.com_lean_ki           = 0.0f;
+    c.com_lean_lim_rad      = 0.0f;
+    c.com_learn_vmax        = 0.0f;
+    c.com_learn_wmax        = 0.0f;
+    c.com_x_ff_m            = 0.0f;
+    c.com_lean_ff_rad       = 0.0f;
+    c.com_pitch_ff_rad      = 0.0f;
+    c.com_tp_ff_nm          = 0.0f;
+    c.yield_v_m_s           = 0.4f;
+    c.yield_release_v_m_s   = 0.08f;
+    c.yield_release_s       = 0.2f;
+    c.yield_return_s        = 2.0f;
+    c.yield_max_s           = 1.0f;
+    c.yield_v_scale         = 0.7f;
     return c;
 }
 
@@ -110,6 +145,104 @@ void h5_balance_reset_disabled(H5BalanceState *st)
     st->x_set_m = 0.0f;
     st->x_filter_eff = 0.0f;
     st->x_set_eff = 0.0f;
+    st->push_open = 0u;
+    st->push_weight = 0.0f;
+    st->push_ready_s = 0.0f;
+    st->push_evidence_s = 0.0f;
+    st->push_quiet_lpf = 0.0f;
+    st->body_active = 0u;
+    st->body_tp = 0.0f;
+    st->body_pred_dp = 0.0f;
+    st->body_pred_dv = 0.0f;
+    st->body_pred_act = 0.0f;
+    st->yield_on = 0u;
+    st->yield_x_off = 0.0f;
+}
+
+static float push_smooth(float t)
+{
+    const float z = clamp_f(t, 0.0f, 1.0f);
+    return z * z * (3.0f - 2.0f * z);
+}
+
+static void push_window(H5BalanceState *st, const H5BalanceInput *in, bool standing)
+{
+    /* Conservative command veto, including settling after motion. This version
+     * only arms at commanded standstill. No simulator push flag is an input.
+     * The IMU sensor rate and its derivative are residuals against the quiet
+     * commanded motion model; acceleration/jerk veto prevents interpreting
+     * commanded pitch transients as disturbances. */
+    const bool eligible = st->cfg.enable_push_window != 0u && standing
+        && in->push_inhibit == 0u && in->host_lost == 0u
+        && fabsf(in->v_set_m_s) <= 0.015f
+        && fabsf(in->accel_ref_m_s2) < 0.06f
+        && fabsf(in->jerk_ref_m_s3) < 0.1f
+        && fabsf(in->yaw_ref_rad_s) < 0.02f;
+    st->push_rate_residual = fabsf(in->pitch_rate_rad_s);
+    /* Positive only when rate magnitude grows coherently: this rejects slow
+     * encoder-induced drift and alternating differentiated IMU sensor noise. */
+    const float rate_delta = in->pitch_rate_rad_s - st->push_previous_rate;
+    st->push_accel_residual = (rate_delta * in->pitch_rate_rad_s > 0.0f)
+        ? fabsf(rate_delta) / S4_DT : 0.0f;
+    st->push_previous_rate = in->pitch_rate_rad_s;
+    if (!eligible) {
+        /* Safety exclusions take priority over a normal fade-out. */
+        st->push_open = 0u;
+        st->push_weight = 0.0f;
+        st->push_ready_s = 0.0f;
+        st->push_evidence_s = 0.0f;
+        st->push_quiet_lpf = 0.0f;
+    } else {
+        st->push_ready_s += S4_DT;
+        if (st->push_open == 0u && st->push_ready_s >= st->cfg.push_arm_s) {
+            const bool evidence = st->push_rate_residual > st->cfg.push_rate_rad_s
+                && st->push_accel_residual > st->cfg.push_accel_rad_s2;
+            /* A push strikes a quiet robot: the slow (push_quiet_s) low-pass of
+             * |IMU sensor pitch rate| barely moves during a 10-20 ms onset, while
+             * sustained rocking (e.g. an encoder fault S11 has not masked) raises it. */
+            const bool quiet = st->push_quiet_lpf < st->cfg.push_quiet_rate_rad_s;
+            st->push_evidence_s = (evidence && quiet) ? st->push_evidence_s + S4_DT : 0.0f;
+            if (st->push_evidence_s >= st->cfg.push_confirm_s) {
+                st->push_open = 1u;
+                st->push_age_s = 0.0f;
+                st->push_events++;
+                st->body_pitch_base = st->push_previous_pitch;
+                st->body_active = 0u;
+            }
+        }
+        if (st->push_open != 0u) {
+            st->push_age_s += S4_DT;
+            const float release = st->cfg.push_fade_in_s + st->cfg.push_hold_s;
+            if (st->push_age_s < st->cfg.push_fade_in_s) {
+                st->push_weight = push_smooth(st->push_age_s / st->cfg.push_fade_in_s);
+            } else if (st->push_age_s <= release) {
+                st->push_weight = 1.0f;
+            } else if (st->push_age_s < release + st->cfg.push_fade_out_s) {
+                st->push_weight = 1.0f - push_smooth(
+                    (st->push_age_s - release) / st->cfg.push_fade_out_s);
+            } else {
+                st->push_open = 0u;
+                st->push_weight = 0.0f;
+                st->push_ready_s = 0.0f;
+                st->push_evidence_s = 0.0f;
+            }
+        }
+        if (st->push_open == 0u) {
+            st->push_quiet_lpf += (S4_DT / (st->cfg.push_quiet_s + S4_DT))
+                                * (st->push_rate_residual - st->push_quiet_lpf);
+        }
+    }
+    st->push_previous_pitch = in->pitch_rad;
+    if (st->push_open == 0u) {
+        st->body_active = 0u;
+        st->body_pred_dp = 0.0f;
+        st->body_pred_dv = 0.0f;
+        st->body_pred_act = 0.0f;
+        st->yield_on = 0u;
+        st->yield_x_off = 0.0f;
+    } else {
+        st->push_active_ticks++;
+    }
 }
 
 void h5_balance_step_brake_and_trim(H5BalanceState *st, const H5BalanceInput *in)
@@ -292,6 +425,69 @@ void h5_balance_step_compute(H5BalanceState *st, const H5BalanceInput *in, H5Bal
         st->s7_loss.quiet_ticks = 0u;
     }
 
+    push_window(st, in, standing);
+    const bool push_active = st->push_open != 0u;
+    const float push_w = st->push_weight;
+
+    /* PUSH11: CoM-offset lean trim. Integrates the standing position error into
+     * a leg-lean reference while standing still and commanded still; frozen
+     * otherwise (driving, turning, airborne, jumping, inhibited trim). */
+    const float com_x_err = st->x_filter_eff - st->x_set_eff;
+    const bool commanded_still = standing && in->host_lost == 0u && in->inhibit_trim == 0u
+        && fabsf(in->v_set_m_s) <= 0.015f && fabsf(in->accel_ref_m_s2) < 0.06f
+        && fabsf(in->yaw_ref_rad_s) < 0.02f;
+
+    /* PUSH11 push-yield (see H5BalanceConfig). */
+    if (push_active && st->cfg.yield_v_m_s > 0.0f) {
+        const float v_err = fabsf(in->v_m_s - in->v_set_m_s);
+        if (st->yield_on == 0u) {
+            if (commanded_still && v_err > st->cfg.yield_v_m_s) {
+                st->yield_on = 1u;
+                st->yield_quiet_ticks = 0u;
+                st->yield_ticks = 0u;
+                st->yield_events++;
+                st->yield_x_obs = com_x_err - st->yield_x_off;
+            } else if (st->cfg.yield_return_s > 0.0f) {
+                st->yield_x_off -= (S4_DT / (st->cfg.yield_return_s + S4_DT)) * st->yield_x_off;
+            }
+        }
+        if (st->yield_on != 0u) {
+            if (!commanded_still) {
+                /* any command, host loss or lift-off ends the yield and drops the offset */
+                st->yield_on = 0u;
+                st->yield_x_off = 0.0f;
+            } else {
+                st->yield_x_off = com_x_err - st->yield_x_obs;
+                st->yield_quiet_ticks = (v_err < st->cfg.yield_release_v_m_s) ? (st->yield_quiet_ticks + 1u) : 0u;
+                st->yield_ticks++;
+                if ((float)st->yield_quiet_ticks * S4_DT >= st->cfg.yield_release_s
+                    || (st->cfg.yield_max_s > 0.0f && (float)st->yield_ticks * S4_DT >= st->cfg.yield_max_s)) {
+                    st->yield_on = 0u;
+                }
+            }
+        } else if (!commanded_still) {
+            st->yield_x_off = 0.0f;
+        }
+    } else {
+        st->yield_on = 0u;
+        st->yield_x_off = 0.0f;
+    }
+
+    st->com_learning = 0u;
+    if (push_active && st->cfg.com_lean_ki > 0.0f && standing && in->inhibit_trim == 0u && st->yield_on == 0u
+        && fabsf(in->v_set_m_s) <= 0.015f && fabsf(in->accel_ref_m_s2) < 0.06f
+        && fabsf(in->yaw_ref_rad_s) < 0.02f
+        && (st->cfg.com_learn_vmax <= 0.0f || fabsf(in->v_m_s - in->v_set_m_s) < st->cfg.com_learn_vmax)
+        && (st->cfg.com_learn_wmax <= 0.0f || fabsf(ins.Gyro[0]) < st->cfg.com_learn_wmax)) {
+        st->com_learning = 1u;
+        /* sign from the FIL settle test: a robot held behind its set point
+         * (x error < 0) by the S7 rows needs a positive lean reference; the
+         * opposite sign runs away (x error pinned at the stop-position clamp) */
+        st->com_lean_i = clamp_f(st->com_lean_i - st->cfg.com_lean_ki * com_x_err * S4_DT,
+                                 -st->cfg.com_lean_lim_rad, st->cfg.com_lean_lim_rad);
+    }
+    const float com_lean = st->com_lean_i + st->cfg.com_lean_ff_rad;
+
     /* 2. Assemble 6-element standing observation and run S7/S5 predictor */
     float obs[S5_OBS] = {
         st->x_filter_eff - st->x_set_eff,
@@ -301,6 +497,14 @@ void h5_balance_step_compute(H5BalanceState *st, const H5BalanceInput *in, H5Bal
         standing ? (ins.Pitch - st->s9_pitch_reference) : ins.Pitch,
         ins.Gyro[0]
     };
+    if (push_active) {
+        obs[0] -= push_w * (st->cfg.com_x_ff_m + st->yield_x_off);
+        if (st->yield_on != 0u && st->cfg.yield_v_scale > 0.0f) {
+            obs[1] *= 1.0f + push_w * (st->cfg.yield_v_scale - 1.0f);
+        }
+        obs[2] -= push_w * com_lean;
+        obs[4] -= push_w * st->cfg.com_pitch_ff_rad;
+    }
 
     s7_reference_t s7_ref;
     s7_ref.speed_m_s        = in->v_set_m_s;
@@ -316,8 +520,82 @@ void h5_balance_step_compute(H5BalanceState *st, const H5BalanceInput *in, H5Bal
                   st->h5_length, obs, &s7_ref, standing,
                   in->inhibit_trim != 0u, s5_effort, s5_fb);
 
+    /* PUSH10: delay-tolerant body-pitch loop on the hips (aggregate Tp). The
+     * pitch term acts on washed-out pitch, so it changes no steady-state lean
+     * or trim; the rate term uses a low-passed gyro. Same sign convention as
+     * the S7 hip row (positive gain on pitch and pitch rate). */
+    st->body_tp = 0.0f;
+    if (push_active) {
+        if (st->body_active == 0u) {
+            st->body_rate_f = ins.Gyro[0];
+            st->body_active = 1u;
+            /* clear the body-loop Tp history so the in-flight correction starts at zero */
+            for (uint32_t i = 0u; i < H5_BODY_PRED_HIST; ++i) {
+                st->body_u_hist[i] = 0.0f;
+            }
+            st->body_pred_act = 0.0f;
+            st->body_pred_dv = 0.0f;
+            st->body_pred_dp = 0.0f;
+        }
+        if (st->cfg.body_washout_s > 0.0f) {
+            st->body_pitch_base += (S4_DT / (st->cfg.body_washout_s + S4_DT))
+                                 * (ins.Pitch - st->body_pitch_base);
+        } else {
+            st->body_pitch_base = st->s9_pitch_reference;
+        }
+        if (st->cfg.body_rate_fc_hz > 0.0f) {
+            const float w = 6.2831853f * st->cfg.body_rate_fc_hz * S4_DT;
+            st->body_rate_f += (w / (1.0f + w)) * (ins.Gyro[0] - st->body_rate_f);
+        } else {
+            st->body_rate_f = ins.Gyro[0];
+        }
+        /* Lag-aware prediction: commands u[k-1..] that have not yet acted.
+         * d_act = u_undelayed - lag(u_delayed) drives the body-pitch model. */
+        if (st->cfg.body_pred_inertia > 0.0f) {
+            const uint32_t n = H5_BODY_PRED_HIST;
+            float nd_f = st->cfg.body_pred_delay_s / S4_DT;
+            nd_f = clamp_f(nd_f, 0.0f, (float)(n - 2u));
+            const uint32_t nd = (uint32_t)(nd_f + 0.5f);
+            const float u_last = st->body_u_hist[(st->body_u_idx + n - 1u) % n];
+            const float u_del  = st->body_u_hist[(st->body_u_idx + n - 1u - nd) % n];
+            const float a = (st->cfg.body_pred_lag_s > 0.0f)
+                ? (1.0f - expf(-S4_DT / st->cfg.body_pred_lag_s)) : 1.0f;
+            st->body_pred_act += a * (u_del - st->body_pred_act);
+            const float d_act = u_last - st->body_pred_act;
+            const float acc = (-d_act - st->cfg.body_pred_damp * st->body_pred_dv
+                               - st->cfg.body_pred_stiff * st->body_pred_dp) / st->cfg.body_pred_inertia;
+            st->body_pred_dv += S4_DT * acc;
+            st->body_pred_dp += S4_DT * st->body_pred_dv;
+        } else {
+            st->body_pred_dv = 0.0f;
+            st->body_pred_dp = 0.0f;
+        }
+        const float e = ins.Pitch - st->body_pitch_base + st->body_pred_dp;
+        float kp = st->cfg.body_kp;
+        if (st->cfg.body_sched_rad > 0.0f) {
+            const float s = fminf(1.0f, fabsf(e) / st->cfg.body_sched_rad);
+            kp += (st->cfg.body_kp_hi - st->cfg.body_kp) * s;
+        }
+        st->body_tp = push_w * (kp * e + st->cfg.body_kd * (st->body_rate_f + st->body_pred_dv));
+    } else {
+        st->body_active = 0u;
+        st->body_pred_dv = 0.0f;
+        st->body_pred_dp = 0.0f;
+    }
+
+    float leg_total = s5_effort[1];
+    if (push_active) {
+        leg_total += st->body_tp + push_w * (st->fil_body_inj + st->cfg.com_tp_ff_nm);
+    }
+    if (push_active) {
+        /* the identified model already contains the S7 hip row, so only the
+         * body-loop torque drives the prediction (never the FIL injection) */
+        st->body_u_hist[st->body_u_idx] = st->body_tp;
+        st->body_u_idx = (st->body_u_idx + 1u) % H5_BODY_PRED_HIST;
+    }
+
     const float half_wheel = 0.5f * s5_effort[0];
-    const float half_leg   = 0.5f * s5_effort[1];
+    const float half_leg   = 0.5f * leg_total;
 
     /* 3. Radial Jacobian rate d_L0 (H5 Stage >= 2) */
     VMC_calc_2(&st->right);

@@ -8,6 +8,7 @@
 
 #include "target_usb_cdc.h"
 #include "target_sync.h"
+#include "usb_cdc_ep0.h"
 #include <math.h>
 #include <string.h>
 
@@ -18,7 +19,10 @@ static volatile uint32_t s_usb_rx_head = 0u;
 static volatile uint32_t s_usb_rx_tail = 0u;
 
 static uint8_t           s_ep1_rx_pkt[TARGET_USB_FS_MAX_PACKET_SIZE];
-static uint8_t           s_ep0_ctrl_buf[64];
+static uint8_t           s_ep0_out_buf[16];
+static uint8_t           s_ep0_out_pending = 0u;
+static UsbCdcEp0         s_ep0;      /* FW10: chapter-9 + CDC request handling */
+static UsbEp0InXfer      s_ep0_in;
 static uint8_t           s_usb_tx_wire_buf[TARGET_USB_TX_BUF_SIZE];
 static volatile uint8_t  s_usb_tx_busy = 0u;
 static volatile uint8_t  s_usb_configured = 0u;
@@ -34,14 +38,6 @@ static uint32_t          s_tx_seq_fast = 0u;
 static uint32_t          s_tx_seq_health = 0u;
 static uint32_t          s_tx_seq_bench = 0u;
 static uint32_t          s_tx_seq_generic = 0u;
-
-/* Default 115200 8N1 CDC line coding structure (7 bytes) for EP0 GET_LINE_CODING. */
-static uint8_t s_cdc_line_coding[7] = {
-    0x00u, 0xC2u, 0x01u, 0x00u, /* 115200 baud LE */
-    0x00u,                      /* 1 stop bit */
-    0x00u,                      /* No parity */
-    0x08u                       /* 8 data bits */
-};
 
 /* Little-endian helpers matching firmware/log_packer.c */
 static uint32_t unpack_u32_le(const uint8_t *p)
@@ -134,6 +130,11 @@ HAL_StatusTypeDef target_usb_cdc_init(void)
     s_tx_seq_bench     = 0u;
     s_tx_seq_generic   = 0u;
 
+    const uint32_t uid[3] = { HAL_GetUIDw0(), HAL_GetUIDw1(), HAL_GetUIDw2() };
+    usb_cdc_ep0_init(&s_ep0, uid);
+    memset(&s_ep0_in, 0, sizeof(s_ep0_in));
+    s_ep0_out_pending  = 0u;
+
     usb_link_rx_init(&s_rx_parser);
     memset(&s_host_state, 0, sizeof(s_host_state));
     s_host_state.host_age_ms = 0xFFFFFFFFu;
@@ -172,68 +173,91 @@ HAL_StatusTypeDef target_usb_cdc_init(void)
 
 void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
 {
-    /* Open EP0 control endpoints */
+    /* Bus reset: address 0, unconfigured, only EP0 open (FW10; the data
+     * endpoints open on SET_CONFIGURATION(1), not on reset). */
     (void)HAL_PCD_EP_Open(hpcd, 0x00u, USB_OTG_MAX_EP0_SIZE, EP_TYPE_CTRL);
     (void)HAL_PCD_EP_Open(hpcd, 0x80u, USB_OTG_MAX_EP0_SIZE, EP_TYPE_CTRL);
+    usb_cdc_ep0_bus_reset(&s_ep0);
+    memset(&s_ep0_in, 0, sizeof(s_ep0_in));
+    s_ep0_out_pending = 0u;
+    s_usb_configured  = 0u;
+    s_usb_tx_busy     = 0u;
+}
 
-    /* Open CDC ACM Bulk OUT (0x01), Bulk IN (0x81), and Notification IN (0x82) */
+static void usb_open_data_endpoints(PCD_HandleTypeDef *hpcd)
+{
     (void)HAL_PCD_EP_Open(hpcd, TARGET_USB_CDC_OUT_EP, TARGET_USB_FS_MAX_PACKET_SIZE, EP_TYPE_BULK);
     (void)HAL_PCD_EP_Open(hpcd, TARGET_USB_CDC_IN_EP,  TARGET_USB_FS_MAX_PACKET_SIZE, EP_TYPE_BULK);
-    (void)HAL_PCD_EP_Open(hpcd, TARGET_USB_CDC_CMD_EP, 16u, EP_TYPE_INTR);
-
-    s_usb_configured = 1u;
+    (void)HAL_PCD_EP_Open(hpcd, TARGET_USB_CDC_CMD_EP, USB_CDC_NOTIFY_MPS, EP_TYPE_INTR);
     s_usb_tx_busy    = 0u;
-
+    s_usb_configured = 1u;
     /* Arm Bulk OUT endpoint for the first incoming packet */
     (void)HAL_PCD_EP_Receive(hpcd, TARGET_USB_CDC_OUT_EP,
                              s_ep1_rx_pkt, TARGET_USB_FS_MAX_PACKET_SIZE);
 }
 
-/* TODO F-04: replace this partial EP0 implementation with ST USBD core + CDC
- * descriptors/class. Handle full standard request state machine, configuration 0,
- * and defer SET_LINE_CODING status IN until its 7-byte OUT data stage completes.
- * This driver does NOT provide a working enumerating USB CDC device yet. */
+static void usb_close_data_endpoints(PCD_HandleTypeDef *hpcd)
+{
+    s_usb_configured = 0u;
+    (void)HAL_PCD_EP_Close(hpcd, TARGET_USB_CDC_OUT_EP);
+    (void)HAL_PCD_EP_Close(hpcd, TARGET_USB_CDC_IN_EP);
+    (void)HAL_PCD_EP_Close(hpcd, TARGET_USB_CDC_CMD_EP);
+    s_usb_tx_busy = 0u;
+}
+
+static void usb_ep0_send_next(PCD_HandleTypeDef *hpcd)
+{
+    const uint8_t *chunk = NULL;
+    uint16_t len = 0u;
+    const UsbEp0InStep st = usb_ep0_in_next(&s_ep0_in, &chunk, &len);
+    if (st == USB_EP0_IN_SEND) {
+        (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, (uint8_t *)chunk, len);
+    } else if (st == USB_EP0_IN_STATUS) {
+        (void)HAL_PCD_EP_Receive(hpcd, 0x00u, NULL, 0u); /* zero-length status OUT */
+    }
+}
+
+/* FW10 (closes the FW9 "TODO F-04" partial EP0): chapter-9 standard requests,
+ * descriptors and CDC class requests come from firmware/usb_cdc_ep0.c. */
 void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
 {
-    const uint8_t *setup = (const uint8_t *)hpcd->Setup;
-    uint8_t  bmRequestType = setup[0];
-    uint8_t  bRequest      = setup[1];
-    uint16_t wValue        = (uint16_t)((uint16_t)setup[2] | ((uint16_t)setup[3] << 8u));
-    uint16_t wLength       = (uint16_t)((uint16_t)setup[6] | ((uint16_t)setup[7] << 8u));
+    UsbEp0Action act;
+    usb_cdc_ep0_setup(&s_ep0, (const uint8_t *)hpcd->Setup, &act);
+    s_ep0_out_pending = 0u;
+    memset(&s_ep0_in, 0, sizeof(s_ep0_in));
 
-    if ((bmRequestType & 0x60u) == 0x00u) {
-        /* Standard USB requests */
-        if (bRequest == 0x05u) { /* SET_ADDRESS */
-            (void)HAL_PCD_SetAddress(hpcd, (uint8_t)(wValue & 0x7Fu));
-            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
-            return;
+    switch (act.kind) {
+    case USB_EP0_ACT_STATUS_IN:
+        if (act.set_address != 0u) {
+            (void)HAL_PCD_SetAddress(hpcd, act.address);
         }
-        if (bRequest == 0x09u) { /* SET_CONFIGURATION */
-            s_usb_configured = 1u;
-            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
-            return;
+        if (act.configure == 1u) {
+            usb_open_data_endpoints(hpcd);
+        } else if (act.configure == 2u) {
+            usb_close_data_endpoints(hpcd);
         }
-    } else if ((bmRequestType & 0x60u) == 0x20u) {
-        /* CDC Class requests */
-        if (bRequest == 0x20u) { /* SET_LINE_CODING */
-            uint16_t rx_len = (wLength < sizeof(s_ep0_ctrl_buf)) ? wLength : (uint16_t)sizeof(s_ep0_ctrl_buf);
-            (void)HAL_PCD_EP_Receive(hpcd, 0x00u, s_ep0_ctrl_buf, rx_len);
-            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
-            return;
+        if (act.clear_halt_ep != 0u) {
+            (void)HAL_PCD_EP_ClrStall(hpcd, act.clear_halt_ep);
         }
-        if (bRequest == 0x21u) { /* GET_LINE_CODING */
-            uint16_t tx_len = (wLength < sizeof(s_cdc_line_coding)) ? wLength : (uint16_t)sizeof(s_cdc_line_coding);
-            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, s_cdc_line_coding, tx_len);
-            return;
+        if (act.set_halt_ep != 0u) {
+            (void)HAL_PCD_EP_SetStall(hpcd, act.set_halt_ep);
         }
-        if (bRequest == 0x22u) { /* SET_CONTROL_LINE_STATE */
-            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
-            return;
-        }
+        (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
+        break;
+    case USB_EP0_ACT_DATA_IN:
+        usb_ep0_in_begin(&s_ep0_in, act.data, act.len, act.zlp);
+        usb_ep0_send_next(hpcd);
+        break;
+    case USB_EP0_ACT_DATA_OUT:
+        s_ep0_out_pending = 1u;
+        (void)HAL_PCD_EP_Receive(hpcd, 0x00u, s_ep0_out_buf, act.len);
+        break;
+    case USB_EP0_ACT_STALL:
+    default:
+        (void)HAL_PCD_EP_SetStall(hpcd, 0x80u);
+        (void)HAL_PCD_EP_SetStall(hpcd, 0x00u);
+        break;
     }
-
-    /* Default zero-length status ack for unhandled control transfers */
-    (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
 }
 
 void target_usb_cdc_rx_push_bytes_isr(const uint8_t *data, uint32_t len)
@@ -259,6 +283,20 @@ void target_usb_cdc_rx_push_bytes_isr(const uint8_t *data, uint32_t len)
 
 void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
+    if (epnum == 0u) {
+        if (s_ep0_out_pending != 0u) {
+            /* SET_LINE_CODING data stage complete -> status IN. */
+            uint32_t n = HAL_PCD_EP_GetRxCount(hpcd, 0x00u);
+            if (n > sizeof(s_ep0_out_buf)) {
+                n = sizeof(s_ep0_out_buf);
+            }
+            s_ep0_out_pending = 0u;
+            (void)usb_cdc_ep0_out_data(&s_ep0, s_ep0_out_buf, (uint16_t)n);
+            (void)HAL_PCD_EP_Transmit(hpcd, 0x80u, NULL, 0u);
+        }
+        /* else: zero-length status OUT of an IN transfer; HAL re-arms SETUP. */
+        return;
+    }
     if (epnum == (TARGET_USB_CDC_OUT_EP & 0x7Fu)) {
         uint32_t rx_cnt = HAL_PCD_EP_GetRxCount(hpcd, TARGET_USB_CDC_OUT_EP);
         if (rx_cnt > TARGET_USB_FS_MAX_PACKET_SIZE) {
@@ -274,7 +312,10 @@ void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 
 void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
 {
-    (void)hpcd;
+    if (epnum == 0u) {
+        usb_ep0_send_next(hpcd); /* next 64-byte chunk, ZLP, or arm status OUT */
+        return;
+    }
     if (epnum == (TARGET_USB_CDC_IN_EP & 0x7Fu)) {
         s_usb_tx_busy = 0u;
     }
@@ -291,7 +332,8 @@ static void target_usb_handle_cmd_twist(uint32_t now_us,
                                         const UsbLinkHeader *hdr,
                                         const uint8_t *payload)
 {
-    if (hdr->payload_len < TARGET_USB_CMD_TWIST_SIZE) {
+    if (hdr->payload_len != TARGET_USB_CMD_TWIST_SIZE
+        && hdr->payload_len != TARGET_USB_CMD_TWIST_FF_SIZE) {
         s_host_state.rx_proto_errors++;
         return;
     }
@@ -317,8 +359,16 @@ static void target_usb_handle_cmd_twist(uint32_t now_us,
     float roll_cmd = unpack_f32_le(&payload[40]);
     float px       = unpack_f32_le(&payload[44]);
     float py       = unpack_f32_le(&payload[48]);
+    /* Legacy twist means constant velocity (zero feed-forward). A host running
+     * the FIL trajectory can supply its analytic acceleration and jerk. */
+    float accel    = hdr->payload_len == TARGET_USB_CMD_TWIST_FF_SIZE
+                   ? unpack_f32_le(&payload[52]) : 0.0f;
+    float jerk     = hdr->payload_len == TARGET_USB_CMD_TWIST_FF_SIZE
+                   ? unpack_f32_le(&payload[56]) : 0.0f;
 
-    if (!isfinite(v_cmd) || !isfinite(yaw_cmd) || !isfinite(h_cmd) || !isfinite(roll_cmd)) {
+    if (!isfinite(v_cmd) || !isfinite(yaw_cmd) || !isfinite(h_cmd) || !isfinite(roll_cmd)
+        || !isfinite(accel) || !isfinite(jerk)
+        || fabsf(accel) > 1.5f || fabsf(jerk) > 10.0f) {
         s_host_state.rx_proto_errors++;
         return;
     }
@@ -329,6 +379,8 @@ static void target_usb_handle_cmd_twist(uint32_t now_us,
     s_host_state.pose_seq            = unpack_u32_le(&payload[24]);
     s_host_state.v_cmd_m_s           = v_cmd;
     s_host_state.yaw_rate_cmd_rad_s  = yaw_cmd;
+    s_host_state.accel_ref_m_s2      = accel;
+    s_host_state.jerk_ref_m_s3       = jerk;
     s_host_state.height_cmd_m        = h_cmd;
     s_host_state.roll_cmd_rad        = roll_cmd;
     s_host_state.pose_x_m            = isfinite(px) ? px : 0.0f;
@@ -357,6 +409,26 @@ static void target_usb_handle_cmd_mode(const UsbLinkHeader *hdr,
     s_host_state.reset_fault_req    = payload[4];
     s_host_state.jump_req           = payload[5];
     s_host_state.bench_mode_active  = ((hdr->flags & USB_LINK_FLAG_BENCH_MODE) != 0u) ? 1u : 0u;
+}
+
+/* FW10 CMD_MOTOR_ID (0x05), 8-byte payload: [0] axis, [1] reserved,
+ * [2..3] duration_ms u16 LE, [4..7] torque_nm f32 LE. Stored as a request only;
+ * bringup_step() validates it (MOTOR_ID image, wired stop, cap, duration). */
+static void target_usb_handle_cmd_motor_id(uint32_t now_us,
+                                           const UsbLinkHeader *hdr,
+                                           const uint8_t *payload)
+{
+    if (hdr->payload_len < TARGET_USB_CMD_MOTOR_ID_SIZE) {
+        s_host_state.rx_proto_errors++;
+        return;
+    }
+    s_host_state.motor_id_axis        = payload[0];
+    s_host_state.motor_id_duration_ms = (uint16_t)((uint16_t)payload[2]
+                                                   | ((uint16_t)payload[3] << 8u));
+    s_host_state.motor_id_torque_nm   = unpack_f32_le(&payload[4]);
+    s_host_state.motor_id_seq         = hdr->seq;
+    s_host_state.motor_id_rx_us       = now_us;
+    s_host_state.motor_id_valid       = 1u;
 }
 
 static void target_usb_handle_time_sync_req(uint64_t now_us64,
@@ -406,6 +478,8 @@ void target_usb_cdc_poll(uint32_t now_us, uint64_t now_us64, TargetUsbHostCmd *o
                 target_usb_handle_cmd_mode(&hdr, payload);
             } else if (hdr.msg_type == (uint8_t)USB_MSG_TIME_SYNC_REQ) {
                 target_usb_handle_time_sync_req(now_us64, &hdr, payload);
+            } else if (hdr.msg_type == (uint8_t)USB_MSG_CMD_MOTOR_ID) {
+                target_usb_handle_cmd_motor_id(now_us, &hdr, payload);
             }
         }
     }
@@ -433,6 +507,17 @@ void target_usb_cdc_poll(uint32_t now_us, uint64_t now_us64, TargetUsbHostCmd *o
         *out_cmd = s_host_state;
     }
     s_host_state.reset_fault_req = 0u; /* Consumed hint, never hardware authorization. */
+}
+
+void target_usb_apply_motion(const TargetUsbHostCmd *cmd, float radio_v, float radio_yaw,
+                             BalanceTickInput *in)
+{
+    in->host_age_ms = cmd->host_age_ms;
+    in->host_valid = cmd->host_valid;
+    in->v_target_m_s = cmd->host_valid != 0u ? cmd->v_cmd_m_s : radio_v;
+    in->yaw_target_rad_s = cmd->host_valid != 0u ? cmd->yaw_rate_cmd_rad_s : radio_yaw;
+    in->accel_ref_m_s2 = cmd->host_valid != 0u ? cmd->accel_ref_m_s2 : 0.0f;
+    in->jerk_ref_m_s3 = cmd->host_valid != 0u ? cmd->jerk_ref_m_s3 : 0.0f;
 }
 
 static UsbLinkStatus target_usb_cdc_transmit_wire(const uint8_t *wire_buf, size_t wire_len)

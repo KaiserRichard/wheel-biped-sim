@@ -31,6 +31,7 @@ extern "C" {
 #define HAL_PCD_MODULE_ENABLED
 #define HAL_PWR_MODULE_ENABLED
 #define HAL_RCC_MODULE_ENABLED
+#define HAL_SPI_MODULE_ENABLED /* FW10: IMU sensor on SPI4 */
 #define HAL_TIM_MODULE_ENABLED
 #define HAL_UART_MODULE_ENABLED
 
@@ -192,6 +193,10 @@ extern "C" {
 
 #ifdef HAL_PCD_MODULE_ENABLED
 #include "stm32h7xx_hal_pcd.h"
+#endif
+
+#ifdef HAL_SPI_MODULE_ENABLED
+#include "stm32h7xx_hal_spi.h"
 #endif
 
 #ifdef __cplusplus

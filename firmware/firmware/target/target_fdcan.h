@@ -20,6 +20,7 @@
 
 #include "target_hw.h"
 #include "can_sched.h"
+#include "bringup_mode.h"
 
 #include <stdint.h>
 
@@ -58,5 +59,16 @@ void target_fdcan_clear_emergency(void);
 
 /* DISARMED-only manual bus-off recovery (HAL_FDCAN_Stop -> HAL_FDCAN_Start). */
 CanSchedStatus target_fdcan_recover_bus_off(CanSched *sched, uint8_t is_disarmed);
+
+/* FW10: bind the bring-up TX gate consulted by the single hardware choke point
+ * (send_hw) for every frame, including the emergency path. On the target,
+ * target_fdcan_init() refuses to start without a bound gate. */
+void target_fdcan_bind_tx_gate(const BringupCtx *gate);
+uint32_t target_fdcan_tx_gate_blocked(void);
+
+/* FW10: thread-context single-frame send through the same gates (bring-up
+ * encoder poll and MOTOR_ID frames). HAL_ERROR if blocked or FIFO full. */
+HAL_StatusTypeDef target_fdcan_send_direct(uint8_t bus_idx, uint16_t std_id, uint8_t dlc,
+                                           const uint8_t data[8]);
 
 #endif /* WBR_TARGET_FDCAN_H */
